@@ -1,4 +1,4 @@
-package node;
+package cs455.overlay.node;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,15 +7,11 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class MessagingNode extends Node {
+public class MessagingNode extends Node implements Runnable {
 
     MessagingNode() {
-
-    }
-
-    public static void main(String[] args){
         String hostName = "localhost";
-        int portNumber = 42069;
+        int portNumber = 1090;
 
         try (
                 Socket echoSocket = new Socket(hostName, portNumber);
@@ -29,10 +25,11 @@ public class MessagingNode extends Node {
                                 new InputStreamReader(System.in))
         ) {
             String userInput;
-            while ((userInput = stdIn.readLine()) != null) {
+//            while ((userInput = stdIn.readLine()) != null) {
+                userInput = "This is a test from the client.";
                 out.println(userInput);
-                System.out.println("echo: " + in.readLine());
-            }
+                System.out.println("CLIENT SAYS: " + in.readLine());
+//            }
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + hostName);
             System.exit(1);
@@ -41,5 +38,14 @@ public class MessagingNode extends Node {
                     hostName);
             System.exit(1);
         }
+    }
+
+    public void run() {
+        System.out.println("Hello from a CLIENT thread!");
+
+    }
+
+    public static void main(String[] args){
+
     }
 }

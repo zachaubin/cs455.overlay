@@ -1,4 +1,4 @@
-package node;
+package cs455.overlay.node;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,14 +7,11 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Registry extends Node {
+public class Registry extends Node implements Runnable {
 
     Registry() {
-
-    }
-
-    public static void main(String[] args){
-        int portNumber = 42069;
+        System.out.println("Hello from a SERVER thread!");
+        int portNumber = 1090;
         System.out.println("Reg open on port " + portNumber);
         try (
                 ServerSocket serverSocket =
@@ -27,14 +24,23 @@ public class Registry extends Node {
         ) {
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
-                out.println(inputLine);
-                System.out.println(inputLine);
+
+                out.println("inputLine");
+                System.out.println("SERVER SAYS: " + inputLine);
             }
         } catch (IOException e) {
             System.out.println("Exception caught when trying to listen on port "
                     + portNumber + " or listening for a connection");
             System.out.println(e.getMessage());
         }
+    }
+
+    public void run() {
+
+    }
+
+    public static void main(String[] args){
+
     }
 
 }
