@@ -24,10 +24,10 @@ public class Node  {
             String command = args[0];
 
             if (command.compareTo("server") == 0) {
-                Node server = new Registry();
+                Node server = new Registry(0);
             }
             if (command.compareTo("client") == 0) {
-                Node client = new MessagingNode();
+               // Node client = new MessagingNode("localhost",0);
             }
         }
 
@@ -38,10 +38,10 @@ public class Node  {
         //general test
         //Node server = new Registry();
         if(rd.nextBoolean()) {
-            new Thread(new Registry());
+            new Thread(new Registry(0));
         } else {
             //Node client = new MessagingNode();
-            new Thread(new MessagingNode());
+            //new Thread(new MessagingNode("localhost",0));
         }
 
 

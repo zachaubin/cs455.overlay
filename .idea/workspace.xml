@@ -2,31 +2,57 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="95b628ad-c660-4cf4-81a4-dd1020efb54b" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gradle/4.4.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.4.1/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.4.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.4.1/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.4.1/taskHistory/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.4.1/taskHistory/taskHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.4.1/taskHistory/taskHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.4.1/taskHistory/taskHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/routing/RoutingEntry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/routing/RoutingEntry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/routing/RoutingTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/routing/RoutingTable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/transport/TCPConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPConnection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/transport/TCPConnectionsCache.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPConnectionsCache.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/transport/TCPReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPReceiver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/transport/TCPSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPSender.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/transport/TCPioThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPioThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/util/InteractiveCommandParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/util/InteractiveCommandParser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/util/StatisticsCollectorAndDisplay.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/util/StatisticsCollectorAndDisplay.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/wireformats/Event.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/Event.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/wireformats/EventFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/EventFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/wireformats/NodeReportsOverlaySetupStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/NodeReportsOverlaySetupStatus.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/wireformats/OverlayNodeReportsTaskFinished.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/OverlayNodeReportsTaskFinished.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/wireformats/OverlayNodeReportsTrafficSummary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/OverlayNodeReportsTrafficSummary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/wireformats/OverlayNodeSendsData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/OverlayNodeSendsData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/wireformats/OverlayNodeSendsDeregistration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/OverlayNodeSendsDeregistration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/wireformats/OverlayNodeSendsRegistration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/OverlayNodeSendsRegistration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/wireformats/Protocol.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/Protocol.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/wireformats/RegistryReportsDeregistrationStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/RegistryReportsDeregistrationStatus.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/wireformats/RegistryReportsRegistrationStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/RegistryReportsRegistrationStatus.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/wireformats/RegistryRequestsTaskInitiate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/RegistryRequestsTaskInitiate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/wireformats/RegistryRequestsTrafficSummary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/RegistryRequestsTrafficSummary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/wireformats/RegistrySendsNodeManifest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/RegistrySendsNodeManifest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/wireformats/WireFormatWidget.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/WireFormatWidget.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NOTES" beforeDir="false" afterPath="$PROJECT_DIR$/NOTES" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/cs455/overlay/node/MessagingNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/cs455/overlay/node/MessagingNode.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/cs455/overlay/node/Node.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/cs455/overlay/node/Node.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/cs455/overlay/node/Registry.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/cs455/overlay/node/Registry.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/routing/RoutingEntry.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/routing/RoutingTable.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/transport/EchoClient.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/transport/EchoServer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/transport/TCPConnection.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/transport/TCPConnectionsCache.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/transport/TCPReceiver.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/transport/TCPSender.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/transport/TCPioThread.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/util/InteractiveCommandParser.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/util/StatisticsCollectorAndDisplay.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/wireformats/Event.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/wireformats/EventFactory.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/wireformats/NodeReportsOverlaySetupStatus.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/wireformats/OverlayNodeReportsTaskFinished.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/wireformats/OverlayNodeReportsTrafficSummary.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/wireformats/OverlayNodeSendsData.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/wireformats/OverlayNodeSendsDeregistration.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/wireformats/OverlayNodeSendsRegistration.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/wireformats/Protocol.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/wireformats/RegistryReportsDeregistrationStatus.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/wireformats/RegistryReportsRegistrationStatus.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/wireformats/RegistryRequestsTaskInitiate.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/wireformats/RegistryRequestsTrafficSummary.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/wireformats/RegistrySendsNodeManifest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/wireformats/WireFormatWidget.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/distributions/cs455.overlay-1.0-SNAPSHOT.tar" beforeDir="false" afterPath="$PROJECT_DIR$/build/distributions/cs455.overlay-1.0-SNAPSHOT.tar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/distributions/cs455.overlay-1.0-SNAPSHOT.zip" beforeDir="false" afterPath="$PROJECT_DIR$/build/distributions/cs455.overlay-1.0-SNAPSHOT.zip" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/cs455.overlay-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/cs455.overlay-1.0-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/scripts/cs455.overlay" beforeDir="false" afterPath="$PROJECT_DIR$/build/scripts/cs455.overlay" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/scripts/cs455.overlay.bat" beforeDir="false" afterPath="$PROJECT_DIR$/build/scripts/cs455.overlay.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/MessagingNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/MessagingNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/Node.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/Node.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/Registry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/Registry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPConnection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/Event.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/Event.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/OverlayNodeSendsRegistration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/OverlayNodeSendsRegistration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/RegistryReportsRegistrationStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/RegistryReportsRegistrationStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/RegistryRequestsTaskInitiate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/RegistryRequestsTaskInitiate.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,7 +107,7 @@
       <updated>1580010910348</updated>
       <workItem from="1580010913897" duration="1265000" />
       <workItem from="1580012223081" duration="5019000" />
-      <workItem from="1580181157619" duration="1784000" />
+      <workItem from="1580181157619" duration="12917000" />
     </task>
     <servers />
   </component>

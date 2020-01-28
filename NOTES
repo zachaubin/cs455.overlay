@@ -3,3 +3,12 @@ https://www.oracle.com/technetwork/java/socket-140484.html
 
 
 https://docs.oracle.com/javase/tutorial/networking/sockets/clientServer.html
+
+
+start registry on port x
+
+start msgnode at registry host on port x
+
+. msgnode sends it's info to reg
+. reg sends registration status
+. reg sends node manifest
