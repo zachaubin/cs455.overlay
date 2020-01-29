@@ -10,12 +10,26 @@ import java.net.UnknownHostException;
 public class OverlayNodeSendsRegistration extends Event{
 
     public OverlayNodeSendsRegistration(String hostname, int portNumber, int nodeId) {
+
+        //really we need to:
+        // connect to registry
+        // send nodeId
+        // that's it, registry will report success through another method
+
+        //for now this is all node will send, keep int nodeId change to b[] message later
+
+
+
         try (
 
                 Socket socket = new Socket(hostname, portNumber);
 
+
+
                 PrintWriter out =
                         new PrintWriter(socket.getOutputStream(), true);
+
+
                 BufferedReader in =
                         new BufferedReader(
                                 new InputStreamReader(socket.getInputStream()));

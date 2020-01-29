@@ -3,6 +3,7 @@ package cs455.overlay.node;
 import cs455.overlay.wireformats.Event;
 import cs455.overlay.wireformats.OverlayNodeSendsRegistration;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,6 +11,8 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
+import java.util.Random;
 
 //Upon starting up, each messaging node should register its IP address, and port number with the registry.
 /*
@@ -47,18 +50,86 @@ directions or overshoot the sink: in such a case, packets may continually traver
 
 public class MessagingNode extends Node implements Runnable {
 
-    //byte messageType;
-    //byte ipAddressLength;
-    //byte[] ipAddress; //InetAddress.getAddress();
-    String hostname;
+    byte messageType;
+    byte ipAddressLength;
+    byte[] ipAddress;
     int portNumber;
+
+    String hostname;
+    InetAddress ip;
     int nodeId;
 
-    MessagingNode(String host, int port, int id) {
+//    private class Registry(){
+    String registryHostname;
+
+
+
+    MessagingNode(String host, int port) {
+        try {
+            ip = InetAddress.getByName(host);
+        } catch(UnknownHostException e){
+            System.out.println("Unknown host exception: " + e);
+        }
+
         hostname = host;
         portNumber  = port;
-        nodeId = id;
+        nodeId = 0;//newNodeId();
+
     }
+
+    private int newNodeId(){
+        Random rand = new Random();
+        int max = 1024;
+        int min = 1;
+        return rand.nextInt((max - min) + 1) + min;
+    }
+
+    public void registerNode(){
+        Event sendReg = new Event();
+
+        while(!sendReg.success){
+            this.nodeId = newNodeId();
+            new OverlayNodeSendsRegistration(this.hostname,this.portNumber,this.nodeId);
+        }
+        //nodeId is now finalized
+
+    }
+
+    //messageType , ipAddressLength , ipAddressSource , ipdestlen , ipAddressDest , checksum
+    //1send 0rec  ,      get len    , get byte[]
+    //0000 0000   ,    0000 0000    , 0000 ... 0000   , 0000 0000 , 0000 ... 0000
+    private byte[] Message(byte send1rec0, String dest){
+        byte[] messageRaw = {0};
+
+        messageType = send1rec0;//register is 0b10101010
+
+        //source IP
+        ipAddress = ip.getAddress();
+        ipAddressLength = (byte) ipAddress.length;
+
+        //dest IP
+//        InetAddress destIp = InetAddress.getByName(dest);
+//        byte[] destIpAddress = InetAddress.get
+
+
+        //port max is 16 bit
+        byte[] port = ByteBuffer.allocate(16).putInt(portNumber).array();
+
+        byte[] payload = ByteBuffer.allocate(16).putInt(0).array();
+        byte checksum = 0;//this needs to be a real checksum later
+
+
+
+        return messageRaw;
+
+    }
+
+    //destIpAddress, payload
+    public void sendMessage(){
+        int destinationIpAddress;
+
+    }
+
 
     public void run() {
         System.out.println("Hello from a CLIENT thread!");
@@ -68,8 +139,8 @@ public class MessagingNode extends Node implements Runnable {
     public static void main(String[] args){
 
         //new node on (host,port)
-        MessagingNode client = new MessagingNode(args[0],Integer.parseInt(args[1]),Integer.parseInt(args[2]));
-        Event sendReg = new OverlayNodeSendsRegistration(client.hostname,client.portNumber,client.nodeId);
+        MessagingNode currentNode = new MessagingNode(args[0],Integer.parseInt(args[1]));
+        currentNode.registerNode();
 
 
 

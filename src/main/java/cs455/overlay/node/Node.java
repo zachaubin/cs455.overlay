@@ -5,44 +5,26 @@ import java.util.Random;
 
 public class Node  {
 
-//    void onEvent(Event) {
-//        //switch to say what kind of node to use based on event
-//
-//        //event==reg
-//            //new reg
-//        //event=msg
-//            //new msgnode
-//
-//    }
-
-
     public static void main(String[] args) throws InterruptedException {
 
         System.out.println("!!!!!!node started!!!!!!!!!!");
 
-        if(args.length > 0) {
-            String command = args[0];
+        System.out.println("starting registry::");
 
-            if (command.compareTo("server") == 0) {
-                Node server = new Registry(0);
-            }
-            if (command.compareTo("client") == 0) {
-               // Node client = new MessagingNode("localhost",0);
-            }
-        }
+        Registry registry = new Registry(0);
 
-        Random rd = new Random(); // creating Random object
-        System.out.println(rd.nextBoolean()); // displaying a random boolean
+        System.out.println("success, open on port: " + registry.portNumber);
+
+        System.out.println("trying to register two nodes...");
+
+        MessagingNode node1 = new MessagingNode("localhost",registry.portNumber);
+        node1.registerNode();
+        MessagingNode node2 = new MessagingNode("localhost",registry.portNumber);
+        node2.registerNode();
 
 
-        //general test
-        //Node server = new Registry();
-        if(rd.nextBoolean()) {
-            new Thread(new Registry(0));
-        } else {
-            //Node client = new MessagingNode();
-            //new Thread(new MessagingNode("localhost",0));
-        }
+        System.out.println("printing routing table:");
+        registry.nodes.printTable();
 
 
 

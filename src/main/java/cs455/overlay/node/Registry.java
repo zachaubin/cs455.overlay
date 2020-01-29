@@ -1,5 +1,6 @@
 package cs455.overlay.node;
 
+import cs455.overlay.routing.RoutingTable;
 import cs455.overlay.wireformats.Event;
 import cs455.overlay.wireformats.RegistryReportsRegistrationStatus;
 import cs455.overlay.wireformats.RegistryRequestsTaskInitiate;
@@ -37,10 +38,10 @@ while (true) {
 
 public class Registry extends Node implements Runnable {
 
-    private int portNumber;
-    private Socket socket;
+    public int portNumber;
+    public Socket socket;
 
-    Node[] nodes;
+    public RoutingTable nodes;
 
     //when started, it listens on a given port
     Registry(int port) {
@@ -49,6 +50,7 @@ public class Registry extends Node implements Runnable {
         try {
 
             ServerSocket serverSocket = new ServerSocket(portNumber);
+            portNumber = serverSocket.getLocalPort();
             System.out.println("listening on port["+portNumber+"]");
             socket = serverSocket.accept();
 
@@ -66,6 +68,7 @@ public class Registry extends Node implements Runnable {
 //        System.out.println("Reg made on port " + registry.portNumber);
 //        //Event reportReg = new RegistryReportsRegistrationStatus(this.);
     }
+
 
     public static void main(String[] args){
 
