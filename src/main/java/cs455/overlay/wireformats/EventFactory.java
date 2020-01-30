@@ -44,9 +44,31 @@ public class EventFactory {
     :13: WireFormatWidget ?? just example or..
      */
 
+    //jk, use this
+    /*
+    Please use the following values for your message types.
+        OVERLAY_NODE_SENDS_REGISTRATION 2
+        REGISTRY_REPORTS_REGISTRATION_STATUS 3
+
+        OVERLAY_NODE_SENDS_DEREGISTRATION 4
+        REGISTRY_REPORTS_DEREGISTRATION_STATUS  5
+
+        REGISTRY_SENDS_NODE_MANIFEST 6
+        NODE_REPORTS_OVERLAY_SETUP_STATUS  7
+
+        REGISTRY_REQUESTS_TASK_INITIATE 8
+        OVERLAY_NODE_SENDS_DATA 9
+        OVERLAY_NODE_REPORTS_TASK_FINISHED  10
+
+        REGISTRY_REQUESTS_TRAFFIC_SUMMARY 11
+        OVERLAY_NODE_REPORTS_TRAFFIC_SUMMARY 12
+     */
+
     public Event createEvent(byte[] marshalledBytes) throws EventOutOfRangeException {
         int type = ByteBuffer.wrap( marshalledBytes ).getInt();
 
+
+        //TODO fix numbers to match those in assignment
 
         switch(type){
             case 0: return new OverlayNodeReceivesData();

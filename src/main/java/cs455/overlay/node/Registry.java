@@ -68,7 +68,10 @@ public class Registry extends Node implements Runnable {
         Thread server = new Thread(new TCPServerThread(registry.portNumber));
         server.start();
 
-        //overlay sends node registration
+        //overlay sends node registration, we receive........
+
+
+        // and add to reg table if id available
 
 
 
