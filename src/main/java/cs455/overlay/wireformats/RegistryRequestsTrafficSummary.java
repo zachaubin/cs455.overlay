@@ -1,4 +1,4 @@
 package cs455.overlay.wireformats;
 
-public class RegistryRequestsTrafficSummary {
+public class RegistryRequestsTrafficSummary extends Event {
 }

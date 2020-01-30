@@ -1,5 +1,6 @@
 package cs455.overlay.node;
 
+import cs455.overlay.transport.TCPServerThread;
 import cs455.overlay.wireformats.Event;
 import cs455.overlay.wireformats.OverlayNodeSendsRegistration;
 
@@ -8,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -50,12 +52,19 @@ directions or overshoot the sink: in such a case, packets may continually traver
 
 public class MessagingNode extends Node implements Runnable {
 
-    byte messageType;
+    byte[] byteMessageLength;
+    byte byteMessageType;
+
     byte ipAddressLength;
     byte[] ipAddress;
+
     int portNumber;
+    byte[] bytePortNumber;
 
     String hostname;
+    byte[] byteHostName;
+    byte[] byteHostNameLength;
+
     InetAddress ip;
     int nodeId;
 
@@ -72,8 +81,13 @@ public class MessagingNode extends Node implements Runnable {
         }
 
         hostname = host;
+        byteHostName = hostname.getBytes();
+        byteHostNameLength = BigInteger.valueOf(byteHostName.length).toByteArray();
+
         portNumber  = port;
-        nodeId = 0;//newNodeId();
+        bytePortNumber = BigInteger.valueOf(port).toByteArray();
+
+        nodeId = 0;//newNodeId() sets this during registration
 
     }
 
@@ -95,34 +109,34 @@ public class MessagingNode extends Node implements Runnable {
 
     }
 
-    //messageType , ipAddressLength , ipAddressSource , ipdestlen , ipAddressDest , checksum
-    //1send 0rec  ,      get len    , get byte[]
-    //0000 0000   ,    0000 0000    , 0000 ... 0000   , 0000 0000 , 0000 ... 0000
-    private byte[] Message(byte send1rec0, String dest){
-        byte[] messageRaw = {0};
-
-        messageType = send1rec0;//register is 0b10101010
-
-        //source IP
-        ipAddress = ip.getAddress();
-        ipAddressLength = (byte) ipAddress.length;
-
-        //dest IP
-//        InetAddress destIp = InetAddress.getByName(dest);
-//        byte[] destIpAddress = InetAddress.get
-
-
-        //port max is 16 bit
-        byte[] port = ByteBuffer.allocate(16).putInt(portNumber).array();
-
-        byte[] payload = ByteBuffer.allocate(16).putInt(0).array();
-        byte checksum = 0;//this needs to be a real checksum later
-
-
-
-        return messageRaw;
-
-    }
+//    //messageType , ipAddressLength , ipAddressSource , ipdestlen , ipAddressDest , checksum
+//    //1send 0rec  ,      get len    , get byte[]
+//    //0000 0000   ,    0000 0000    , 0000 ... 0000   , 0000 0000 , 0000 ... 0000
+//    private byte[] Message(byte send1rec0, String dest){
+//        byte[] messageRaw = {0};
+//
+//        messageType = send1rec0;//register is 0b10101010
+//
+//        //source IP
+//        ipAddress = ip.getAddress();
+//        ipAddressLength = (byte) ipAddress.length;
+//
+//        //dest IP
+////        InetAddress destIp = InetAddress.getByName(dest);
+////        byte[] destIpAddress = InetAddress.get
+//
+//
+//        //port max is 16 bit
+//        byte[] port = ByteBuffer.allocate(16).putInt(portNumber).array();
+//
+//        byte[] payload = ByteBuffer.allocate(16).putInt(0).array();
+//        byte checksum = 0;//this needs to be a real checksum later
+//
+//
+//
+//        return messageRaw;
+//
+//    }
 
     //destIpAddress, payload
     public void sendMessage(){
@@ -140,6 +154,11 @@ public class MessagingNode extends Node implements Runnable {
 
         //new node on (host,port)
         MessagingNode currentNode = new MessagingNode(args[0],Integer.parseInt(args[1]));
+        Thread server = new Thread(new TCPServerThread(currentNode.portNumber));
+        server.start();
+
+        
+
         currentNode.registerNode();
 
 

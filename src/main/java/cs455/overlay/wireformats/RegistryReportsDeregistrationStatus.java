@@ -1,4 +1,4 @@
 package cs455.overlay.wireformats;
 
-public class RegistryReportsDeregistrationStatus {
+public class RegistryReportsDeregistrationStatus extends Event {
 }

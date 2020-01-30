@@ -4,8 +4,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-public class TCPSender extends TCPioThread {
-    //we are client
+public class TCPSender extends TCPConnection {
 
     private Socket socket;
     private DataOutputStream dout;
@@ -20,5 +19,10 @@ public class TCPSender extends TCPioThread {
         dout.writeInt(dataLength);
         dout.write(dataToSend, 0, dataLength);
         dout.flush();
+    }
+
+    @Override
+    public void run() {
+
     }
 }

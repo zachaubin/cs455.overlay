@@ -1,4 +1,4 @@
 package cs455.overlay.wireformats;
 
-public class OverlayNodeReportsTrafficSummary {
+public class OverlayNodeReportsTrafficSummary extends Event {
 }

@@ -1,4 +1,4 @@
 package cs455.overlay.wireformats;
 
-public class OverlayNodeSendsData {
+public class OverlayNodeSendsData extends Event {
 }

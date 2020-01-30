@@ -1,4 +1,4 @@
 package cs455.overlay.wireformats;
 
-public class RegistrySendsNodeManifest {
+public class RegistrySendsNodeManifest extends Event {
 }

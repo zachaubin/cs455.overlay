@@ -5,14 +5,18 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
 
-public class TCPReceiver extends TCPioThread {
-    //we are server
+public class TCPReceiver extends TCPConnection {
 
     private Socket socket;
     private DataInputStream din;
+
     public TCPReceiver(Socket socket) throws IOException {
         this.socket = socket;
         din = new DataInputStream(socket.getInputStream());
+    }
+
+    public Socket getSocket() {
+        return socket;
     }
 
     public void run() {

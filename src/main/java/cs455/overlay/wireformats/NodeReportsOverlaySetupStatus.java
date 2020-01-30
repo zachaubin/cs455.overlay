@@ -1,4 +1,4 @@
 package cs455.overlay.wireformats;
 
-public class NodeReportsOverlaySetupStatus {
+public class NodeReportsOverlaySetupStatus extends Event {
 }

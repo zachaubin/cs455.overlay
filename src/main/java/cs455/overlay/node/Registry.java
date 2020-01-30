@@ -1,6 +1,7 @@
 package cs455.overlay.node;
 
 import cs455.overlay.routing.RoutingTable;
+import cs455.overlay.transport.TCPServerThread;
 import cs455.overlay.wireformats.Event;
 import cs455.overlay.wireformats.RegistryReportsRegistrationStatus;
 import cs455.overlay.wireformats.RegistryRequestsTaskInitiate;
@@ -47,18 +48,6 @@ public class Registry extends Node implements Runnable {
     Registry(int port) {
         portNumber = port;
 
-        try {
-
-            ServerSocket serverSocket = new ServerSocket(portNumber);
-            portNumber = serverSocket.getLocalPort();
-            System.out.println("listening on port["+portNumber+"]");
-            socket = serverSocket.accept();
-
-        } catch (IOException e) {
-            System.out.println("Exception caught when trying to listen on port "
-                    + portNumber + " or listening for a connection");
-            System.out.println(e.getMessage());
-        }
     }
 
     public void run() {
@@ -72,12 +61,19 @@ public class Registry extends Node implements Runnable {
 
     public static void main(String[] args){
 
+        System.out.println("create registry on CLI specified port number, this will listen");
+
         //create registry on CLI specified port number, this will listen
         Registry registry = new Registry(Integer.parseInt(args[0]));
+        Thread server = new Thread(new TCPServerThread(registry.portNumber));
+        server.start();
 
         //overlay sends node registration
 
-        Event reportReg = new RegistryReportsRegistrationStatus(registry.socket, registry.portNumber);
+
+
+
+        //Event reportReg = new RegistryReportsRegistrationStatus(registry.socket, registry.portNumber);
 
 
     }

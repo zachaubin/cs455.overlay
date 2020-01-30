@@ -1,8 +1,4 @@
 package cs455.overlay.transport;
 
-public class TCPConnection {
-
-
-
-
+public abstract class TCPConnection implements Runnable {
 }

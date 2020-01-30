@@ -11,8 +11,7 @@ public class WireFormatWidget {
     public byte[] getBytes() throws IOException {
         byte[] marshalledBytes = null;
         ByteArrayOutputStream baOutputStream = new ByteArrayOutputStream();
-        DataOutputStream dout =
-                new DataOutputStream(new BufferedOutputStream(baOutputStream));
+        DataOutputStream dout = new DataOutputStream(new BufferedOutputStream(baOutputStream));
 
         dout.writeInt(type);
         dout.writeLong(timestamp);
@@ -33,10 +32,8 @@ public class WireFormatWidget {
     }
 
     public WireFormatWidget(byte[] marshalledBytes) throws IOException {
-        ByteArrayInputStream baInputStream =
-                new ByteArrayInputStream(marshalledBytes);
-        DataInputStream din =
-                new DataInputStream(new BufferedInputStream(baInputStream));
+        ByteArrayInputStream baInputStream = new ByteArrayInputStream(marshalledBytes);
+        DataInputStream din = new DataInputStream(new BufferedInputStream(baInputStream));
 
         type = din.readInt();
         timestamp = din.readLong();

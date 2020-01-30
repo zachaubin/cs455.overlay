@@ -7,7 +7,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class OverlayNodeSendsRegistration extends Event{
+public class OverlayNodeSendsRegistration extends Event {
 
     public OverlayNodeSendsRegistration(String hostname, int portNumber, int nodeId) {
 

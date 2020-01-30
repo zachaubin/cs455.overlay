@@ -1,4 +1,4 @@
 package cs455.overlay.wireformats;
 
-public class OverlayNodeReportsTaskFinished {
+public class OverlayNodeReportsTaskFinished extends Event {
 }

@@ -3,6 +3,13 @@ package cs455.overlay.node;
 
 import java.util.Random;
 
+//
+// !!
+// !! FROM SLIDES
+// !! Node [Interface with the onEvent(Event)  method]
+// !!
+//
+
 public class Node  {
 
     public static void main(String[] args) throws InterruptedException {
