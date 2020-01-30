@@ -1,5 +1,7 @@
 package cs455.overlay.node;
 
+import cs455.overlay.transport.TCPConnection;
+import cs455.overlay.transport.TCPSender;
 import cs455.overlay.transport.TCPServerThread;
 import cs455.overlay.wireformats.Event;
 import cs455.overlay.wireformats.OverlayNodeSendsRegistration;
@@ -68,6 +70,8 @@ public class MessagingNode extends Node implements Runnable {
     InetAddress ip;
     int nodeId;
 
+    Socket nodeSocket;
+
 //    private class Registry(){
     String registryHostname;
 
@@ -103,7 +107,7 @@ public class MessagingNode extends Node implements Runnable {
 
         while(!sendReg.success){
             this.nodeId = newNodeId();
-            new OverlayNodeSendsRegistration(this.hostname,this.portNumber,this.nodeId);
+            new OverlayNodeSendsRegistration(this.nodeSocket,this.hostname,this.portNumber,this.nodeId);
         }
         //nodeId is now finalized
 
@@ -146,23 +150,46 @@ public class MessagingNode extends Node implements Runnable {
 
 
     public void run() {
-        System.out.println("Hello from a CLIENT thread!");
-        Event sendReg = new OverlayNodeSendsRegistration(this.hostname,this.portNumber,this.nodeId);
+//        System.out.println("Hello from a CLIENT thread!");
+//        Event sendReg = new OverlayNodeSendsRegistration(this.hostname,this.portNumber,this.nodeId);
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException {
 
-        //new node on (host,port)
-        MessagingNode currentNode = new MessagingNode(args[0],Integer.parseInt(args[1]));
+        //new node opens server on (host,port)
+        MessagingNode currentNode = new MessagingNode(args[0], Integer.parseInt(args[1]));
         Thread server = new Thread(new TCPServerThread(currentNode.portNumber));
         server.start();
 
-        
+        //thread sender for register this node
 
-        currentNode.registerNode();
+//        Thread registration = new Thread(new TCPSender(Socket regSocket = new Socket(host,port)) {
+//            @Override
+//            public void run() {
+////////////////event "registration" send should handle connection, I think
+//            }
+//        })
+
+        //marshal registration info into byte pack?? here or in event??
+        // would rather it be in event
+        Thread registration = new Thread(new TCPConnection() {
+            @Override
+            public void run() {
+                try {
+                    currentNode.nodeSocket = new Socket(InetAddress.getLocalHost(), currentNode.portNumber);
+                } catch (UnknownHostException e){
+                    System.err.println("unknown host exception: " + e);
+                } catch (IOException e) {
+                    System.err.println("io exception, printing stacktrace:...");
+                    e.printStackTrace();
+                }
+                currentNode.registerNode();
+            }
+        });
 
 
-
-
+//        currentNode.registerNode();
     }
+
+
 }

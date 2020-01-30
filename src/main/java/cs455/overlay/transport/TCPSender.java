@@ -11,7 +11,11 @@ public class TCPSender extends TCPConnection {
 
     public TCPSender(Socket socket) throws IOException {
         this.socket = socket;
-        dout = new DataOutputStream(socket.getOutputStream());
+        try {
+            dout = new DataOutputStream(socket.getOutputStream());
+        } catch(IOException e){
+            System.err.println("TCPSender IOException on obj init: " + e);
+        }
     }
 
     public void sendData(byte[] dataToSend) throws IOException {

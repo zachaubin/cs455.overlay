@@ -9,7 +9,8 @@ import java.net.UnknownHostException;
 
 public class OverlayNodeSendsRegistration extends Event {
 
-    public OverlayNodeSendsRegistration(String hostname, int portNumber, int nodeId) {
+    public OverlayNodeSendsRegistration(Socket socket, String hostname, int portNumber, int nodeId) {
+//        super(socket);
 
         //really we need to:
         // connect to registry
@@ -22,7 +23,7 @@ public class OverlayNodeSendsRegistration extends Event {
 
         try (
 
-                Socket socket = new Socket(hostname, portNumber);
+//                Socket socket = new Socket(hostname, portNumber);
 
 
 
