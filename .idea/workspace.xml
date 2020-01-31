@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="95b628ad-c660-4cf4-81a4-dd1020efb54b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/Server.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NOTES" beforeDir="false" afterPath="$PROJECT_DIR$/NOTES" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/Registry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/Registry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPServerThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPServerThread.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,7 +70,7 @@
       <workItem from="1580319444911" duration="9692000" />
       <workItem from="1580400308269" duration="1925000" />
       <workItem from="1580402482974" duration="10479000" />
-      <workItem from="1580438302399" duration="10923000" />
+      <workItem from="1580438302399" duration="11243000" />
     </task>
     <servers />
   </component>

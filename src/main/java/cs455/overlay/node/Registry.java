@@ -2,20 +2,9 @@ package cs455.overlay.node;
 
 import cs455.overlay.routing.RoutingTable;
 import cs455.overlay.transport.TCPServerThread;
-import cs455.overlay.wireformats.Event;
-import cs455.overlay.wireformats.RegistryReportsRegistrationStatus;
-import cs455.overlay.wireformats.RegistryRequestsTaskInitiate;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.ByteBuffer;
-import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
+
 
 /*
 There is exactly one registry in the system. The registry provides the following functions:
@@ -98,26 +87,5 @@ public class Registry extends Node implements Runnable {
     }
 
 }
-
-//public class SelectionKey(){
-//
-//        }
-
-
-{{
-    //keys are ready
-        Set<SelectionKey> selectedKeys = selector.selectedKeys();
-        //loop over ready keys
-        Iterator<SelectionKeys> iter = selectedKeys.iteratior();
-        while(iter.hasNext()){
-                //grab current key
-            SelectionKey key = iter.next();
-
-            //optional
-
-
-        }
-}}
-
 
 
