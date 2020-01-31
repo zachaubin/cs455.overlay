@@ -65,10 +65,22 @@ public class Registry extends Node implements Runnable {
 
         //create registry on CLI specified port number, this will listen
         Registry registry = new Registry(Integer.parseInt(args[0]));
-        Thread server = new Thread(new TCPServerThread(registry.portNumber));
-        server.start();
+        registry.nodes = new RoutingTable();
+//        Thread server = new Thread(new TCPServerThread(registry.portNumber)){
+//            run();
+//        };
 
-        //overlay sends node registration, we receive........
+        TCPServerThread server = new TCPServerThread(registry.portNumber);
+
+
+        while(true){
+            System.out.println("listening?");
+            registry.socket = TCPServerThread.listen;
+            registry.nodes.printTable();
+        }
+
+
+        // >>> overlay sends node registration, we receive........
 
 
         // and add to reg table if id available

@@ -97,12 +97,12 @@ public class MessagingNode extends Node implements Runnable {
 
     private int newNodeId(){
         Random rand = new Random();
-        int max = 1024;
-        int min = 1;
+        int max = 255;
+        int min = 0;
         return rand.nextInt((max - min) + 1) + min;
     }
 
-    public void registerNode(){
+    public void registerNode() throws IOException {
         Event sendReg = new Event();
 
         while(!sendReg.success){
@@ -161,15 +161,6 @@ public class MessagingNode extends Node implements Runnable {
         Thread server = new Thread(new TCPServerThread(currentNode.portNumber));
         server.start();
 
-        //thread sender for register this node
-
-//        Thread registration = new Thread(new TCPSender(Socket regSocket = new Socket(host,port)) {
-//            @Override
-//            public void run() {
-////////////////event "registration" send should handle connection, I think
-//            }
-//        })
-
         //marshal registration info into byte pack?? here or in event??
         // would rather it be in event
         Thread registration = new Thread(new TCPConnection() {
@@ -180,12 +171,19 @@ public class MessagingNode extends Node implements Runnable {
                 } catch (UnknownHostException e){
                     System.err.println("unknown host exception: " + e);
                 } catch (IOException e) {
-                    System.err.println("io exception, printing stacktrace:...");
+                    System.err.println("io exception making socket for node registration, printing stacktrace:...");
                     e.printStackTrace();
                 }
-                currentNode.registerNode();
+                try {
+                    currentNode.registerNode();
+                } catch (IOException e) {
+                    System.err.println("could not register THIS node, stacktrace:...");
+                    e.printStackTrace();
+                }
             }
         });
+
+        System.out.println("made to end of main in MSGNODE");
 
 
 //        currentNode.registerNode();

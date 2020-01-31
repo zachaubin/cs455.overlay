@@ -2,10 +2,13 @@ package cs455.overlay.transport;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 
 public class TCPServerThread implements Runnable {
 
     int portNumber;
+    public static Socket listen;
+    public Server
 
     public TCPServerThread(int port) {
         portNumber = port;
@@ -14,9 +17,12 @@ public class TCPServerThread implements Runnable {
     public void run() {
         try {
             ServerSocket serverSocket = new ServerSocket(portNumber);
+//            listen = new Socket(portNumber);
             System.out.println("listening on port[" + portNumber + "]");
             while(true) {
-                new TCPReceiver(serverSocket.accept());
+                listen = serverSocket.accept();
+//                listen.accept();
+//                yield listen;
             }
 
         } catch (IOException e) {

@@ -10,7 +10,7 @@ public class RoutingTable {
     //position 0 should be registry
 
     public RoutingTable(){
-
+        table = new ArrayList<>();
     }
 
     public boolean addRoutingEntry(String host, int port, int id){
@@ -30,6 +30,9 @@ public class RoutingTable {
     }
 
     public void printTable(){
+        if(table.isEmpty()){
+            return;
+        }
         for(RoutingEntry e : table){
             System.out.println("id["+e.nodeId+"]");
             System.out.println("host["+e.nodeHost+"]");

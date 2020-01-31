@@ -12,3 +12,14 @@ start msgnode at registry host on port x
 . msgnode sends it's info to reg
 . reg sends registration status
 . reg sends node manifest
+
+
+
+// as of thursday
+registry node listens
+msging node opens thread to send
+
+
+
+
+https://www.youtube.com/watch?v=CcLOj3uhb0A
