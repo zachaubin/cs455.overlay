@@ -27,3 +27,75 @@ https://www.youtube.com/watch?v=CcLOj3uhb0A
 oh no, use nio socketchannels instead of sockets oh my
 https://infospaces.cs.colostate.edu/watch.php?id=177
 
+LAB2:
+registry must start first
+can init app in terminal or TMUX sessions
+
+we run from jar file
+
+create a start-nodes.sh
+identify list of peers to start messagingnodes on a with a conf/machine_list file
+used to test in lab
+THIS .sh lives in same directory as build bin src
+
+conf dir contains 'log4j2.xml' 'machine_list'
+
+see slides for contents of start-nodes.sh
+for machine in 'cat machine list'::: this iterates over machines in list
+do line sshs into each and runs
+
+::
+
+need to do in parallel:
+accept new connect
+list....
+^this all in slides
+
+tcp rec thread
+one per connection
+terminate when connection terminates
+
+tcp server thread
+one per node
+thread dies when node dies
+
+tcp sender
+"thread-optional"
+
+tcpConnection
+made to encapsulate the other three tcp things
+this is an optional class
+
+::
+
+THREADS
+implements Runnable
+Probably don't want to extend Thread since cannot extend other stuff
+
+call Thread's .start() to run the run()
+
+
+concurrency issues are handled with Synchronization
+synchronized ensures thread is unique while running....<<see slide
+TAKES TIME
+
+see
+
+relay tracker is counting how many you forward
+send tracker counts initial sends
+
+Q&A
+deregistering only happens BEFORE routing table has been established
+this means network topology is established with a set number of nodes and stays
+
+
+start script is good for spawning 10 nodes
+    after that works get list nodes command working in concurrency
+        rest will come together after you can build from there
+       initial topology is hardest
+
+
+when receiving message in thread, PASS REFERENCE TO CALLING NODE!!!!!
+
+TCPConnectionsCache can be useful to add connection, remove connection, print all messaging nodes
+

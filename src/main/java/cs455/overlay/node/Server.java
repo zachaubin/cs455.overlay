@@ -52,14 +52,16 @@ public class Server {
         Selector selector = Selector.open();
         //create input channel
         ServerSocketChannel serverSocket = ServerSocketChannel.open();
-        serverSocket.bind(new InetSocketAddress("localhost",1090));
+        String hostname = "localhost";
+        int port = 1090;
+        serverSocket.bind(new InetSocketAddress(hostname,port));
         serverSocket.configureBlocking(false);
         //register our channel to the selector
         serverSocket.register(selector, SelectionKey.OP_ACCEPT);
 
         //loop on selector
         while(true) {
-            System.out.println("listening for new connectiosn or new messages.");
+            System.out.println("listening for new connection or new messages on >>> host["+hostname+"]:port["+port+"]");
             //block here
             selector.select();
             System.out.println("\tActivity on selector!");
