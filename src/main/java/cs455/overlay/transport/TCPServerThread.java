@@ -8,7 +8,6 @@ public class TCPServerThread implements Runnable {
 
     int portNumber;
     public static Socket listen;
-    public Server
 
     public TCPServerThread(int port) {
         portNumber = port;
