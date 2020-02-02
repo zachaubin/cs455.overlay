@@ -70,7 +70,7 @@ public class TCPRegistryServerThread implements Runnable {
 //                byte[] bytes_headgarbage = is.readAllBytes();
 
 //                System.out.println("\t\t\tbyte in size::" + bytes_headgarbage.length);
-                System.out.println("\t\t\tbyte in size::" + bytes.length);
+                System.out.println("\t\t\tbyte in sizeMOD::" + bytes.length);
 
 //                // Get the slice of the Array
 //                byte[] bytes = new byte[bytes_headgarbage.length - 4];
