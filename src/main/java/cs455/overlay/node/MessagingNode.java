@@ -52,7 +52,7 @@ directions or overshoot the sink: in such a case, packets may continually traver
  */
 
 
-public class MessagingNode extends Node implements Runnable {
+public class MessagingNode extends Node {
 
     byte[] byteMessageLength;
     byte byteMessageType;
@@ -78,21 +78,8 @@ public class MessagingNode extends Node implements Runnable {
 
 
     MessagingNode(String host, int port) {
-        try {
-            ip = InetAddress.getByName(host);
-        } catch(UnknownHostException e){
-            System.out.println("Unknown host exception: " + e);
-        }
-
-        hostname = host;
-        byteHostName = hostname.getBytes();
-        byteHostNameLength = BigInteger.valueOf(byteHostName.length).toByteArray();
-
+        registryHostname = host;
         portNumber  = port;
-        bytePortNumber = BigInteger.valueOf(port).toByteArray();
-
-        nodeId = 0;//newNodeId() sets this during registration
-
     }
 
     private int newNodeId(){
@@ -102,77 +89,29 @@ public class MessagingNode extends Node implements Runnable {
         return rand.nextInt((max - min) + 1) + min;
     }
 
-//    public void registerNode() throws IOException {
-//        Event sendReg = new Event();
-//
-//        while(!sendReg.success){
-//            this.nodeId = newNodeId();
-//            new OverlayNodeSendsRegistration(this.nodeSocket,this.hostname,this.portNumber,this.nodeId);
-//        }
-//        //nodeId is now finalized
-//
-//    }
-
-//    //messageType , ipAddressLength , ipAddressSource , ipdestlen , ipAddressDest , checksum
-//    //1send 0rec  ,      get len    , get byte[]
-//    //0000 0000   ,    0000 0000    , 0000 ... 0000   , 0000 0000 , 0000 ... 0000
-//    private byte[] Message(byte send1rec0, String dest){
-//        byte[] messageRaw = {0};
-//
-//        messageType = send1rec0;//register is 0b10101010
-//
-//        //source IP
-//        ipAddress = ip.getAddress();
-//        ipAddressLength = (byte) ipAddress.length;
-//
-//        //dest IP
-////        InetAddress destIp = InetAddress.getByName(dest);
-////        byte[] destIpAddress = InetAddress.get
-//
-//
-//        //port max is 16 bit
-//        byte[] port = ByteBuffer.allocate(16).putInt(portNumber).array();
-//
-//        byte[] payload = ByteBuffer.allocate(16).putInt(0).array();
-//        byte checksum = 0;//this needs to be a real checksum later
-//
-//
-//
-//        return messageRaw;
-//
-//    }
-
-    //destIpAddress, payload
-    public void sendMessage(){
-        int destinationIpAddress;
-
-    }
-
-
-    public void run() {
-//        System.out.println("Hello from a CLIENT thread!");
-//        Event sendReg = new OverlayNodeSendsRegistration(this.hostname,this.portNumber,this.nodeId);
-    }
 
     public static void main(String[] args) throws IOException {
 
-        //new node opens server on (host,port)
+        //new node opens server on (reghost,port)
+        System.out.println("starting node");
         MessagingNode currentNode = new MessagingNode(args[0], Integer.parseInt(args[1]));
-//        Thread server = new Thread(new TCPServerThread(currentNode.portNumber));
-//        server.start();
 
-        //marshal registration info into byte pack?? here or in event??
-        // would rather it be in event
+
+        //// register ////
+
+        //socket for registration
+        Socket regSock = new Socket(currentNode.registryHostname,currentNode.portNumber);
+        TCPConnection registerMe = new TCPConnection(regSock,1);
 
         //pack info
-        OverlayNodeSendsRegistration reg = new OverlayNodeSendsRegistration();
-        reg.packBytes(2,InetAddress.getLocalHost().getHostName(),currentNode.portNumber);
-        //socket for registration
-        Socket regSock = new Socket("localhost",currentNode.portNumber);
-        TCPConnection registerMe = new TCPConnection(regSock,1);
-        currentNode.connections.addConnection(registerMe);
-        //thread for registration
-        Thread registration = new Thread(registerMe);
+        OverlayNodeSendsRegistration regEvent = new OverlayNodeSendsRegistration(  regSock, currentNode.registryHostname , currentNode.portNumber  );
+        //external not needed, stored in marshallbytes in overlayevent
+        System.out.println("about to PACK");
+        byte[] bytes = regEvent.packBytes(2,InetAddress.getLocalHost().getHostName(),currentNode.portNumber);
+//        currentNode.connections.addConnection(registerMe);
+
+        //thread for registration USED WITH EVENT
+        Thread registration = new Thread(regEvent);
         registration.start();
         //we are registered
 

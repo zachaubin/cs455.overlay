@@ -59,8 +59,9 @@ public class Registry extends Node {
         //new registry
         //create registry on CLI specified port number, this will listen
         Registry registry = new Registry(Integer.parseInt(args[0]));
+        System.out.println("port:"+registry.port);
         registry.nodes = new RoutingTable();
-        registry.socket = new Socket("localhost",registry.port);
+        registry.socket = null;
 
         //listen server
         //make tcp , add to cache , and registry server thread
@@ -69,20 +70,15 @@ public class Registry extends Node {
 //        Thread tcpThread = new Thread(registry.tcp);
 //        tcpThread.start();
 
-        //serverthread runs on loop to tcp receive and register nodes
-        TCPRegistryServerThread serverthreadsocket = new TCPRegistryServerThread(registry.socket,registry);
+        System.out.println("server thread runs on loop to tcp receive and register nodes");
+        TCPRegistryServerThread serverthreadsocket = new TCPRegistryServerThread(registry.socket,registry,registry.port);
         Thread serverThread = new Thread(serverthreadsocket);
         serverThread.run();
 
 
+        registry.nodes.printTable();
 
 
-
-        while(true){
-            System.out.println("listening?");
-            registry.socket = TCPServerThread.listen;
-            registry.nodes.printTable();
-        }
 
 
         // >>> overlay sends node registration, we receive........

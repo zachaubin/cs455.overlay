@@ -8,6 +8,7 @@ public class TCPSender extends TCPConnection {
 
     private Socket socket;
     private DataOutputStream dout;
+    private byte[] msg;
 
     public TCPSender(Socket socket) throws IOException {
         this.socket = socket;
@@ -18,6 +19,17 @@ public class TCPSender extends TCPConnection {
         }
     }
 
+    public TCPSender(Socket socket, byte[] msg){
+        this.socket = socket;
+        this.msg = msg;
+        try {
+            dout = new DataOutputStream(socket.getOutputStream());
+        } catch(IOException e){
+            System.err.println("TCPSender IOException on obj init: " + e);
+        }
+
+    }
+
     public void sendData(byte[] dataToSend) throws IOException {
         int dataLength = dataToSend.length;
         dout.writeInt(dataLength);
@@ -25,8 +37,17 @@ public class TCPSender extends TCPConnection {
         dout.flush();
     }
 
-    @Override
-    public void run() {
+    public void run(){
+        try {
+            this.sendData(msg);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void run(byte[] b) throws IOException {
+        sendData(b);
+
 
     }
 }

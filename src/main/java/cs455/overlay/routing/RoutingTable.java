@@ -48,7 +48,9 @@ public class RoutingTable {
     }
 
     public void printTable(){
+        System.out.println("Printing table:");
         if(table.isEmpty()){
+            System.out.println("?table is empty?");
             return;
         }
         for(RoutingEntry e : table){

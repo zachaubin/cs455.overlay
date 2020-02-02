@@ -16,9 +16,10 @@ public class TCPRegistryServerThread implements Runnable {
     public static Socket listen;
     public Registry registry;
 
-    public TCPRegistryServerThread(Socket socket, Registry registry) {
+    public TCPRegistryServerThread(Socket socket, Registry registry,int port) {
         this.listen = socket;
         this.registry = registry;
+        this.port = port;
     }
 
     public void run() {
@@ -32,11 +33,12 @@ public class TCPRegistryServerThread implements Runnable {
                 listen = serverSocket.accept();
                 //got incoming connection
 
+                System.out.println("receiver thread start");
                 //receiver thread start
                 //pass socket to read from
                 TCPConnection rec = new TCPConnection(listen,0);
                 //add to cache ;
-                registry.connections.addConnection((rec));
+//                registry.connections.addConnection((rec));
                 Thread receive =  new Thread(rec);
                 receive.start();
                 //writes to socket stream
@@ -46,14 +48,39 @@ public class TCPRegistryServerThread implements Runnable {
                 OutputStream bos = listen.getOutputStream();
                 InputStream is = listen.getInputStream();
 
-                byte[] bytes = is.readAllBytes();
+
+                byte[] bytes_headgarbage = is.readAllBytes();
+                System.out.println("\t\t\tbyte in size::"+bytes_headgarbage.length);
+
+                // Get the slice of the Array
+                byte[] bytes = new byte[bytes_headgarbage.length - 4];
+
+                // Copy elements of arr to slice
+                for (int i = 0; i < bytes.length; i++) {
+                    bytes[i] = bytes_headgarbage[4 + i];
+                }
+
+                System.out.println("==READALLBYTESINPUTSTREAMINRSTHREAD==");
+                int fourcount = 0;
+                for (byte b : bytes) {
+                    System.out.println(Integer.toBinaryString(b & 255 | 256).substring(1));
+                    fourcount++;
+                    if(fourcount == 4) {
+                        System.out.println("--------");
+                        fourcount = 0;
+                    }
+                }
 
                 OverlayNodeSendsRegistration marshall = new OverlayNodeSendsRegistration();
                 marshall.unpackBytes(bytes);
 
+                System.out.println("marshalled hostname: ");
+                System.out.println("marshalled port: ");
+
                 // host port
                 int nodeId = registry.nodes.addRoutingEntry(marshall.hostname,marshall.port);
                 System.out.println("registered node with id="+nodeId);
+                registry.nodes.printTable();
 
             }
 

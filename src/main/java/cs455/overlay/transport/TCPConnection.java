@@ -20,9 +20,6 @@ public class TCPConnection implements Runnable {
     public Socket getSocket(){
         return socket;
     }
-    public Thread getThread(){
-        return thread;
-    }
 
     @Override
     public void run() {

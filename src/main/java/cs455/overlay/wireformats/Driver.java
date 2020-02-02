@@ -2,7 +2,7 @@ package cs455.overlay.wireformats;
 
 import java.nio.ByteBuffer;
 
-public class Driver {
+public class Driver implements Runnable {
 
     public static void main(String[] args) throws EventFactory.EventOutOfRangeException {
 
@@ -13,5 +13,10 @@ public class Driver {
 
         Event event = factory.createEvent( marshalledBytes );
         System.out.println("Event Factory Created \'" + event.action() + "\'");
+    }
+
+    @Override
+    public void run() {
+
     }
 }
