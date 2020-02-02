@@ -75,6 +75,7 @@ public class OverlayNodeSendsRegistration extends Event {
         int hostlen = hostname.length();
         byte[] hostbytes = hostname.getBytes();
 
+        dout.writeInt(-1);
         dout.writeInt(type);
         dout.writeInt(hostlen);
         dout.write(hostbytes);
@@ -115,6 +116,8 @@ public class OverlayNodeSendsRegistration extends Event {
                 fourcount = 0;
             }
         }
+
+        while(din.readInt() != -1);
 
         type = din.readInt();
         System.out.println("UNPACK:type:"+type);
