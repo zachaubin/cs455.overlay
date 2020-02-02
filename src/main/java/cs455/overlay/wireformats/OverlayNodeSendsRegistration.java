@@ -117,7 +117,9 @@ public class OverlayNodeSendsRegistration extends Event {
             }
         }
 
-        while(din.readInt() != -1);
+        //get to and eat message header
+        while(din.readByte() != -1);
+        din.readByte();din.readByte();din.readByte();
 
         type = din.readInt();
         System.out.println("UNPACK:type:"+type);
