@@ -64,19 +64,21 @@ public class TCPRegistryServerThread implements Runnable {
                 OutputStream bos = listen.getOutputStream();
                 InputStream is = listen.getInputStream();
 
-                byte[] bytes_headgarbage = toByteArray(is);
+//                byte[] bytes_headgarbage = toByteArray(is);
+                byte[] bytes = toByteArray(is);
 
 //                byte[] bytes_headgarbage = is.readAllBytes();
 
-                System.out.println("\t\t\tbyte in size::" + bytes_headgarbage.length);
+//                System.out.println("\t\t\tbyte in size::" + bytes_headgarbage.length);
+                System.out.println("\t\t\tbyte in size::" + bytes.length);
 
 //                // Get the slice of the Array
-                byte[] bytes = new byte[bytes_headgarbage.length - 4];
+//                byte[] bytes = new byte[bytes_headgarbage.length - 4];
 //
                 // Copy elements of arr to slice
-                for (int i = 0; i < bytes.length; i++) {
-                    bytes[i] = bytes_headgarbage[4 + i];
-                }
+//                for (int i = 0; i < bytes.length; i++) {
+//                    bytes[i] = bytes_headgarbage[4 + i];
+//                }
 
                 System.out.println("==READALLBYTESINPUTSTREAMINRSTHREAD==");
                 int fourcount = 0;
