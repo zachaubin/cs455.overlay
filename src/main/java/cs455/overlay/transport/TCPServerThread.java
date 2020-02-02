@@ -20,8 +20,7 @@ public class TCPServerThread implements Runnable {
             System.out.println("listening on port[" + portNumber + "]");
             while(true) {
                 listen = serverSocket.accept();
-//                listen.accept();
-//                yield listen;
+
             }
 
         } catch (IOException e) {

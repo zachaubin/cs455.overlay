@@ -1,6 +1,8 @@
 //import wireformats.Event;
 package cs455.overlay.node;
 
+import cs455.overlay.transport.TCPConnectionsCache;
+
 import java.util.Random;
 
 //
@@ -10,7 +12,9 @@ import java.util.Random;
 // !!
 //
 
-public class Node  {
+public abstract class Node extends Thread {
+
+    public TCPConnectionsCache connections;
 
 //    public static void main(String[] args) throws InterruptedException {
 //

@@ -12,13 +12,16 @@ public class OverlayNodeSendsRegistration extends Event {
     Socket socket;
     int type;
     int hostLength;
-    String hostname;
-    int nodeId;
+    public String hostname;
+    public int nodeId;
+    public int port;
     byte[] messageBytes;
 
-    public OverlayNodeSendsRegistration(Socket socket, String hostname, int portNumber, int nodeId) throws IOException {
+    public OverlayNodeSendsRegistration(){}
+
+    public OverlayNodeSendsRegistration(Socket socket, String hostname, int portNumber) throws IOException {
         this.socket = socket;
-        byte[] msg = packBytes(2,hostname,portNumber,nodeId);
+        byte[] msg = packBytes(2,hostname,portNumber);
         //sendBytes opens data output stream on socket passed to us
         if(!sendBytes(msg)){
             System.err.println("-could not send bytes in registration-");
@@ -48,7 +51,7 @@ public class OverlayNodeSendsRegistration extends Event {
     }
 
     //packs primitives into a byte[]
-    public byte[] packBytes(int type, String hostname, int portNumber, int nodeId) throws IOException {
+    public byte[] packBytes(int type, String hostname, int portNumber) throws IOException {
         byte[] marshalledBytes = null;
         ByteArrayOutputStream baOutputStream = new ByteArrayOutputStream();
         DataOutputStream dout = new DataOutputStream(new BufferedOutputStream(baOutputStream));
@@ -62,7 +65,7 @@ public class OverlayNodeSendsRegistration extends Event {
         dout.writeInt(hostlen);
         dout.write(hostbytes);
         dout.writeInt(portNumber);
-        dout.writeInt(nodeId);
+
 
         dout.flush();
         marshalledBytes = baOutputStream.toByteArray();
@@ -83,7 +86,7 @@ public class OverlayNodeSendsRegistration extends Event {
         byte[] hostbytes = new byte[hostLength];
         din.readFully(hostbytes, 0, hostLength);
         hostname = new String(hostbytes);
-        nodeId = din.readInt();
+        port =  din.readInt();
 
         baInputStream.close();
         din.close();

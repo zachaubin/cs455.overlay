@@ -1,9 +1,14 @@
 package cs455.overlay.node;
 
 import cs455.overlay.routing.RoutingTable;
+import cs455.overlay.transport.TCPConnection;
+import cs455.overlay.transport.TCPRegistryServerThread;
 import cs455.overlay.transport.TCPServerThread;
 
+import java.io.IOException;
 import java.net.Socket;
+import java.lang.Thread;
+import java.util.ArrayList;
 
 
 /*
@@ -30,40 +35,47 @@ while (true) {
 >from oracle tutorial
  */
 
-public class Registry extends Node implements Runnable {
+public class Registry extends Node {
 
-    public int portNumber;
+
+    public int port;
     public Socket socket;
 
     public RoutingTable nodes;
 
+    public TCPConnection tcp;
+
+    public ArrayList<TCPConnection> tcpcache;
+
     //when started, it listens on a given port
     Registry(int port) {
-        portNumber = port;
-
+        this.port = port;
     }
 
-    public void run() {
-//        Registry registry = new Registry(0);//0 looks for any free port
-//        Event startRegistry = new RegistryRequestsTaskInitiate(registry.portNumber);
-//
-//        System.out.println("Reg made on port " + registry.portNumber);
-//        //Event reportReg = new RegistryReportsRegistrationStatus(this.);
-    }
+    public static <TCPRegistryServerThreadServerThread> void main(String[] args) throws IOException {
 
+        System.out.println("Create registry on CLI specified port number, this will listen");
 
-    public static void main(String[] args){
-
-        System.out.println("create registry on CLI specified port number, this will listen");
-
+        //new registry
         //create registry on CLI specified port number, this will listen
         Registry registry = new Registry(Integer.parseInt(args[0]));
         registry.nodes = new RoutingTable();
-//        Thread server = new Thread(new TCPServerThread(registry.portNumber)){
-//            run();
-//        };
+        registry.socket = new Socket("localhost",registry.port);
 
-        TCPServerThread server = new TCPServerThread(registry.portNumber);
+        //listen server
+        //make tcp , add to cache , and registry server thread
+//        registry.tcp = new TCPConnection(registry.socket,0);
+//        registry.connections.addConnection((registry.tcp));
+//        Thread tcpThread = new Thread(registry.tcp);
+//        tcpThread.start();
+
+        //serverthread runs on loop to tcp receive and register nodes
+        TCPRegistryServerThread serverthreadsocket = new TCPRegistryServerThread(registry.socket,registry);
+        Thread serverThread = new Thread(serverthreadsocket);
+        serverThread.run();
+
+
+
 
 
         while(true){
@@ -85,6 +97,7 @@ public class Registry extends Node implements Runnable {
 
 
     }
+
 
 }
 

@@ -76,7 +76,7 @@ call Thread's .start() to run the run()
 
 
 concurrency issues are handled with Synchronization
-synchronized ensures thread is unique while running....<<see slide
+synchronized ensures thread is unique while running.... <<< see slide
 TAKES TIME
 
 see
@@ -98,4 +98,8 @@ start script is good for spawning 10 nodes
 when receiving message in thread, PASS REFERENCE TO CALLING NODE!!!!!
 
 TCPConnectionsCache can be useful to add connection, remove connection, print all messaging nodes
+
+
+
+Probably don't use NIO for now, try just sockets
 

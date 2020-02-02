@@ -102,16 +102,16 @@ public class MessagingNode extends Node implements Runnable {
         return rand.nextInt((max - min) + 1) + min;
     }
 
-    public void registerNode() throws IOException {
-        Event sendReg = new Event();
-
-        while(!sendReg.success){
-            this.nodeId = newNodeId();
-            new OverlayNodeSendsRegistration(this.nodeSocket,this.hostname,this.portNumber,this.nodeId);
-        }
-        //nodeId is now finalized
-
-    }
+//    public void registerNode() throws IOException {
+//        Event sendReg = new Event();
+//
+//        while(!sendReg.success){
+//            this.nodeId = newNodeId();
+//            new OverlayNodeSendsRegistration(this.nodeSocket,this.hostname,this.portNumber,this.nodeId);
+//        }
+//        //nodeId is now finalized
+//
+//    }
 
 //    //messageType , ipAddressLength , ipAddressSource , ipdestlen , ipAddressDest , checksum
 //    //1send 0rec  ,      get len    , get byte[]
@@ -158,30 +158,23 @@ public class MessagingNode extends Node implements Runnable {
 
         //new node opens server on (host,port)
         MessagingNode currentNode = new MessagingNode(args[0], Integer.parseInt(args[1]));
-        Thread server = new Thread(new TCPServerThread(currentNode.portNumber));
-        server.start();
+//        Thread server = new Thread(new TCPServerThread(currentNode.portNumber));
+//        server.start();
 
         //marshal registration info into byte pack?? here or in event??
         // would rather it be in event
-        Thread registration = new Thread(new TCPConnection() {
-            @Override
-            public void run() {
-                try {
-                    currentNode.nodeSocket = new Socket(InetAddress.getLocalHost(), currentNode.portNumber);
-                } catch (UnknownHostException e){
-                    System.err.println("unknown host exception: " + e);
-                } catch (IOException e) {
-                    System.err.println("io exception making socket for node registration, printing stacktrace:...");
-                    e.printStackTrace();
-                }
-                try {
-                    currentNode.registerNode();
-                } catch (IOException e) {
-                    System.err.println("could not register THIS node, stacktrace:...");
-                    e.printStackTrace();
-                }
-            }
-        });
+
+        //pack info
+        OverlayNodeSendsRegistration reg = new OverlayNodeSendsRegistration();
+        reg.packBytes(2,InetAddress.getLocalHost().getHostName(),currentNode.portNumber);
+        //socket for registration
+        Socket regSock = new Socket("localhost",currentNode.portNumber);
+        TCPConnection registerMe = new TCPConnection(regSock,1);
+        currentNode.connections.addConnection(registerMe);
+        //thread for registration
+        Thread registration = new Thread(registerMe);
+        registration.start();
+        //we are registered
 
         System.out.println("made to end of main in MSGNODE");
 
