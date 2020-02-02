@@ -22,6 +22,22 @@ public class TCPRegistryServerThread implements Runnable {
         this.port = port;
     }
 
+    public static byte[] toByteArray(InputStream in) throws IOException {
+
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+
+        byte[] buffer = new byte[1024];
+        int len;
+
+        // read bytes from the input stream and store them in buffer
+        while ((len = in.read(buffer)) != -1) {
+            // write bytes from the buffer into output stream
+            os.write(buffer, 0, len);
+        }
+
+        return os.toByteArray();
+    }
+
     public void run() {
         try {
             ServerSocket serverSocket = new ServerSocket(port);
@@ -48,13 +64,15 @@ public class TCPRegistryServerThread implements Runnable {
                 OutputStream bos = listen.getOutputStream();
                 InputStream is = listen.getInputStream();
 
+                byte[] bytes_headgarbage = toByteArray(is);
 
-                byte[] bytes_headgarbage = is.readAllBytes();
-                System.out.println("\t\t\tbyte in size::"+bytes_headgarbage.length);
+//                byte[] bytes_headgarbage = is.readAllBytes();
 
-                // Get the slice of the Array
+                System.out.println("\t\t\tbyte in size::" + bytes_headgarbage.length);
+
+//                // Get the slice of the Array
                 byte[] bytes = new byte[bytes_headgarbage.length - 4];
-
+//
                 // Copy elements of arr to slice
                 for (int i = 0; i < bytes.length; i++) {
                     bytes[i] = bytes_headgarbage[4 + i];

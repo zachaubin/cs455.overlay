@@ -3,14 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="95b628ad-c660-4cf4-81a4-dd1020efb54b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/MessagingNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/MessagingNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/Registry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/Registry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/routing/RoutingTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/routing/RoutingTable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPConnection.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPRegistryServerThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPRegistryServerThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPSender.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/Driver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/Driver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/OverlayNodeSendsRegistration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/OverlayNodeSendsRegistration.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,7 +74,7 @@
       <workItem from="1580400308269" duration="1925000" />
       <workItem from="1580402482974" duration="10479000" />
       <workItem from="1580438302399" duration="17886000" />
-      <workItem from="1580633157165" duration="15998000" />
+      <workItem from="1580633157165" duration="17181000" />
     </task>
     <servers />
   </component>
