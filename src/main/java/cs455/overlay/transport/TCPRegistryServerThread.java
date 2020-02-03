@@ -4,6 +4,7 @@ import cs455.overlay.node.Registry;
 import cs455.overlay.routing.RoutingTable;
 import cs455.overlay.wireformats.Event;
 import cs455.overlay.wireformats.OverlayNodeSendsRegistration;
+import cs455.overlay.wireformats.RegistryReportsRegistrationStatus;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -41,7 +42,7 @@ public class TCPRegistryServerThread implements Runnable {
     public void run() {
         try {
             ServerSocket serverSocket = new ServerSocket(port);
-            System.out.println("listening on port[" + port + "]");
+            System.out.println("REGISTRY is listening on port[" + port + "]");
 
             while(true) {
 
@@ -49,19 +50,24 @@ public class TCPRegistryServerThread implements Runnable {
                 listen = serverSocket.accept();
                 //got incoming connection
 
-                System.out.println("receiver thread start");
+                System.out.println("Registry: receiver thread start");
                 //receiver thread start
                 //pass socket to read from
                 TCPConnection rec = new TCPConnection(listen,0);
-                //add to cache ;
-//                registry.connections.addConnection((rec));
+                rec.otherHost = listen.getInetAddress().getHostName();
+
+
+
+                System.out.println("Registry: TCP receive thread starting");
                 Thread receive =  new Thread(rec);
                 receive.start();
                 //writes to socket stream
 
 //              register;
                 //read byte[] from listen.socket
-                OutputStream bos = listen.getOutputStream();
+//                OutputStream bos = listen.getOutputStream();
+                System.out.println("Registry: listening for input stream");
+
                 InputStream is = listen.getInputStream();
 
 //                byte[] bytes_headgarbage = toByteArray(is);
@@ -94,13 +100,28 @@ public class TCPRegistryServerThread implements Runnable {
                 OverlayNodeSendsRegistration marshall = new OverlayNodeSendsRegistration();
                 marshall.unpackBytes(bytes);
 
-                System.out.println("marshalled hostname: ");
-                System.out.println("marshalled port: ");
-
                 // host port
                 int nodeId = registry.nodes.addRoutingEntry(marshall.hostname,marshall.port);
                 System.out.println("registered node with id="+nodeId);
                 registry.nodes.printTable();
+
+                //add to cache ;
+//                registry.tcpCache.add( rec, marshall.hostname,marshall.port );
+
+
+                Socket response = new Socket(marshall.hostname,marshall.port);
+                System.out.println("TCPRegistryServerThread: reporting status |0");
+                RegistryReportsRegistrationStatus reportReg = new RegistryReportsRegistrationStatus(response, registry);
+                System.out.println("TCPRegistryServerThread: reporting status |1");
+                reportReg.packBytes(3,1,registry.getNumberOfNodes());
+
+                Thread report = new Thread(reportReg);
+                System.out.println("TCPRegistryServerThread: reporting status |2");
+
+                report.start();
+                System.out.println("TCPRegistryServerThread: reporting status |3");
+
+
 
             }
 

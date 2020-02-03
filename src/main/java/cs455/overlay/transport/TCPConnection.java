@@ -10,6 +10,8 @@ public class TCPConnection implements Runnable {
     Thread thread;
     int rec0send1;
 
+    String otherHost;
+
     //add switch to say if send or rec
     public TCPConnection(){}
     public TCPConnection(Socket socket, int rec0send1) throws IOException {

@@ -61,4 +61,12 @@ public class RoutingTable {
         }
     }
 
+    public int getNumberOfNodes(){
+        int count = 0;
+        for(RoutingEntry e : table){
+            count++;
+        }
+        return count;
+    }
+
 }

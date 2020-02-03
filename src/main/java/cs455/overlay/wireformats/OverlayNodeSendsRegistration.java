@@ -51,7 +51,7 @@ public class OverlayNodeSendsRegistration extends Event {
             dout.write(bytes);
             dout.flush();
 //            dout.close();
-
+//
         } catch(IOException e) {
             System.err.println("Couldn't get I/O for the connection to [" + hostname + "], exiting...");
             return false;
@@ -143,8 +143,15 @@ public class OverlayNodeSendsRegistration extends Event {
 
         System.out.println("this is sending event thread");
         TCPSender out = new TCPSender(this.socket,messageBytes);
+        System.out.println("this is sending event thread|1");
         Thread sendThread = new Thread(out);
-        sendThread.run();
+        System.out.println("this is sending event thread|2");
+
+        sendThread.start();
+        System.out.println("this is sending event thread|3");
+
+
+
 
     }
 

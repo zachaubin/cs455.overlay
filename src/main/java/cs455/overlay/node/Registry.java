@@ -1,9 +1,9 @@
 package cs455.overlay.node;
 
+import cs455.overlay.routing.RoutingEntry;
 import cs455.overlay.routing.RoutingTable;
-import cs455.overlay.transport.TCPConnection;
-import cs455.overlay.transport.TCPRegistryServerThread;
-import cs455.overlay.transport.TCPServerThread;
+import cs455.overlay.transport.*;
+import cs455.overlay.wireformats.RegistryReportsRegistrationStatus;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -45,13 +45,20 @@ public class Registry extends Node {
 
     public TCPConnection tcp;
 
-    public ArrayList<TCPConnection> tcpcache;
+    public TCPConnectionsCache tcpCache;
+//    public ArrayList<TCPReceiver> tcpReceiverCache;
+//    public ArrayList<TCPSender> tcpSenderCache;
+
 
     //when started, it listens on a given port
     Registry(int port) {
         this.port = port;
+        tcpCache = new TCPConnectionsCache();
     }
 
+    public int getNumberOfNodes(){
+        return nodes.getNumberOfNodes();
+    }
     public static <TCPRegistryServerThreadServerThread> void main(String[] args) throws IOException {
 
         System.out.println("Create registry on CLI specified port number, this will listen");
@@ -75,21 +82,7 @@ public class Registry extends Node {
         Thread serverThread = new Thread(serverthreadsocket);
         serverThread.run();
 
-
-        registry.nodes.printTable();
-
-
-
-
-        // >>> overlay sends node registration, we receive........
-
-
-        // and add to reg table if id available
-
-
-
-
-        //Event reportReg = new RegistryReportsRegistrationStatus(registry.socket, registry.portNumber);
+//        RegistryReportsRegistrationStatus reportReg = new RegistryReportsRegistrationStatus(registry.socket, registry);
 
 
     }
