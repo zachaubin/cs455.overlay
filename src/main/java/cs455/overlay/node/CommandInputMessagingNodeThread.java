@@ -16,23 +16,15 @@ public class CommandInputMessagingNodeThread implements Runnable {
         System.out.println("command function called");
         boolean good = false;
         if(  command.equalsIgnoreCase("print-counters-and-diagnostics") ){
-            System.out.println("print-counters-and-diagnostics entered...\n");
+            System.out.println("print-counters-and-diagnostics entered NEED TO DO...\n");
             good = true;
         }
         if(  command.equalsIgnoreCase("exit-overlay") ){
             System.out.println("exit-overlay needs to be implemented\n");
-            good = true;
-        }
-        if(  command.equalsIgnoreCase("list-routing-tables") ){
-            System.out.println("list routing tables entered...\n");
+
             good = true;
         }
 
-        if(  command.equalsIgnoreCase("list-routing-tables") ){
-            System.out.println("list routing tables entered...\n");
-            good = true;
-
-        }
         if(!good){
             System.out.println("");
             System.out.println(":: :: :: :: :: :: :: :: :: :: :: :: :: :: :: ::");
@@ -40,17 +32,12 @@ public class CommandInputMessagingNodeThread implements Runnable {
             System.out.println(":: :: :: :: :: :: :: :: :: :: :: :: :: :: :: ::");
             System.out.println("");
 
-
             System.out.println("  >> Valid commands are: <<");
             System.out.println("");
             System.out.println("print-counters-and-diagnostics\n :: prints number msgs ( sent, received, relayed ), and total *values* ( sent, received )");
             System.out.println("");
             System.out.println("exit-overlay\n :: sets up overlay by reporting [host/port/id] table to each node in table");
             System.out.println("");
-            System.out.println("list-routing-tables\n :: same as list-messaging nodes with note and more spacing");
-            System.out.println("");
-            System.out.println("start number-of-messages (e.g. start 25000)\n :: asks each node to send this many messages to random other nodes");
-
         }
 
     }

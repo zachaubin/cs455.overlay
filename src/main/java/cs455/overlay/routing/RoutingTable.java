@@ -35,6 +35,10 @@ public class RoutingTable {
         return nodeId;
 
     }
+    public void buildEntry(String host, int port, int id){
+        RoutingEntry entry = new RoutingEntry(host,port,id);
+        table.add(entry);
+    }
     private int newNodeId(){
         Random rand = new Random();
         int max = 255;
