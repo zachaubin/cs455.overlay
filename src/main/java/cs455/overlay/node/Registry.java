@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.lang.Thread;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 
 /*
@@ -56,6 +57,13 @@ public class Registry extends Node {
         tcpCache = new TCPConnectionsCache();
     }
 
+    private void command(String command){
+        //list-messaging-nodes
+        if(command.equalsIgnoreCase("list-messaging-nodes")){
+            nodes.printTable();
+        }
+    }
+
     public int getNumberOfNodes(){
         return nodes.getNumberOfNodes();
     }
@@ -80,9 +88,15 @@ public class Registry extends Node {
         System.out.println("server thread runs on loop to tcp receive and register nodes");
         TCPRegistryServerThread serverthreadsocket = new TCPRegistryServerThread(registry.socket,registry,registry.port);
         Thread serverThread = new Thread(serverthreadsocket);
-        serverThread.run();
+        serverThread.start();
 
 //        RegistryReportsRegistrationStatus reportReg = new RegistryReportsRegistrationStatus(registry.socket, registry);
+
+        //command controller
+        CommandInputRegistryThread commands = new CommandInputRegistryThread(registry);
+        Thread commandsThread = new Thread(commands);
+        commandsThread.start();
+
 
 
     }

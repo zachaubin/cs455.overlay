@@ -77,6 +77,11 @@ public class MessagingNode extends Node {
 //    private class Registry(){
     String registryHostname;
 
+    public int msgsSent = 0;
+    public int msgsReceived = 0;
+    public int msgsRelayed = 0;
+
+
 
 
     MessagingNode(String host, int port) {

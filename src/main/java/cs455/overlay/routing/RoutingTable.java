@@ -17,24 +17,19 @@ public class RoutingTable {
     //this will generate node id
     public int addRoutingEntry(String host, int port){
 
-        int nodeId;
-        boolean conflict = false;
-        while(true) {
-            nodeId = newNodeId();
-            //if id already in table return false
-            for (int i = 0; i < table.size(); i++) {
-                if (nodeId == table.get(i).nodeId) {
-                    conflict = true;
-                    break;
-                }
-            }
-            if(!conflict){
-                //is unique so make/add
-                RoutingEntry entry = new RoutingEntry(host, port,nodeId);
-                table.add(entry);
-                break;
+        int nodeId = newNodeId();
+
+        //if id already in table return false
+        //size is 0 ... n
+        for (int i = 1; i <= table.size(); i++) {
+            if (nodeId == table.get(i).nodeId) {
+                nodeId = newNodeId();
+                i=0;
             }
         }
+
+            RoutingEntry entry = new RoutingEntry(host, port,nodeId);
+            table.add(entry);
 
         //success
         return nodeId;
@@ -58,6 +53,26 @@ public class RoutingTable {
             System.out.println("host["+e.nodeHost+"]");
             System.out.println("port["+e.nodePort+"]");
             System.out.println("");
+        }
+    }
+
+    public void printTableSpaced(){
+        System.out.println("Printing routing table, hostname always used over IP and is listed here:");
+        if(table.isEmpty()){
+            System.out.println("?table is empty?");
+            return;
+        }
+        for(RoutingEntry e : table){
+            System.out.println("");
+            System.out.println("");
+            System.out.println("");
+
+            System.out.println("id["+e.nodeId+"]");
+            System.out.println("host["+e.nodeHost+"]");
+            System.out.println("port["+e.nodePort+"]");
+
+            System.out.println("");
+
         }
     }
 
