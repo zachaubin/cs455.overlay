@@ -86,6 +86,7 @@ public class MessagingNode extends Node {
     public int msgsRelayed = 0;
 
     public ArrayList<RoutingEntry> myRoutes;
+    public RoutingTable table;
 
 
 

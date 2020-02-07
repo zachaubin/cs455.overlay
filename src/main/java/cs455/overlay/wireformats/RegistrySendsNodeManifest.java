@@ -37,7 +37,7 @@ public class RegistrySendsNodeManifest extends Event {
             System.out.println(Integer.toBinaryString(b & 255 | 256).substring(1));
             fourcount++;
             if(fourcount == 4) {
-                System.out.println("--------RSNM");
+                System.out.println("--------RSNM" );
                 fourcount = 0;
             }
         }
@@ -175,7 +175,15 @@ public class RegistrySendsNodeManifest extends Event {
         //we should have called packbytes by now
         System.out.println("RegistrySendsNodeManifest: before look for entries");
 
+        int eCount=0;
+
         for(RoutingEntry e : table.table){
+                        System.out.println("::sending table to routing entry::"+eCount);
+                        System.out.println("::                              ::"+eCount);
+
+                        table.printEntry(e);
+                        System.out.println("::                              ::"+eCount);
+                        eCount++;
             sendToEntryThread s = new sendToEntryThread(e);
             Thread sending = new Thread(s);
             sending.start();
@@ -200,9 +208,10 @@ public class RegistrySendsNodeManifest extends Event {
 
         @Override
         public void run() {
-            System.out.println("RegistrySendsNodeManifest: starting entry send to nodeId["+e.nodeId+"]");
+            synchronized (this) {
+                System.out.println("RegistrySendsNodeManifest: starting entry send to nodeId[" + e.nodeId + "]");
 
-            //should get socket from cache
+                //should get socket from cache
 //            Socket tempSock = null;
 //            TCPSender tcpOut = null;
 //            try {
@@ -212,13 +221,13 @@ public class RegistrySendsNodeManifest extends Event {
 //                System.err.println("error making socket connection to node in routing table");
 //                ex.printStackTrace();
 //            }
-            System.out.println("RegistrySendsNodeManifest: establish tcp sender");
+                System.out.println("RegistrySendsNodeManifest: establish tcp sender");
 
-            TCPSender tcpOut = new TCPSender(socket,messageBytes);//SENDS WHOLE TABLE TO NODE IN TABLE
-            Thread sendThread = new Thread(tcpOut);
-            System.out.println("RegistrySendsNodeManifest: start sender thread");
+                TCPSender tcpOut = new TCPSender(socket, messageBytes);//SENDS WHOLE TABLE TO NODE IN TABLE
+                Thread sendThread = new Thread(tcpOut);
+                System.out.println("RegistrySendsNodeManifest: start sender thread");
 
-            sendThread.start();
+                sendThread.start();
 //            try {
 //                sendThread.join();
 //            } catch (InterruptedException ex) {
@@ -231,8 +240,9 @@ public class RegistrySendsNodeManifest extends Event {
 //            } catch (IOException ex) {
 //                ex.printStackTrace();
 //            }
-            System.out.println("RegistrySendsNodeManifest: FINISH sender thread");
+                System.out.println("RegistrySendsNodeManifest: FINISH sender thread");
 
+            }
         }
     }
 

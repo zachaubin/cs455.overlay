@@ -65,6 +65,14 @@ public class RoutingTable {
         }
     }
 
+    public void printEntry(RoutingEntry e){
+        System.out.println("");
+        System.out.println("id["+e.nodeId+"]");
+        System.out.println("host["+e.nodeHost+"]");
+        System.out.println("port["+e.nodePort+"]");
+        System.out.println("");
+    }
+
     public void printTableSpaced(){
         System.out.println("Printing routing table, hostname always used over IP and is listed here:");
         if(table.isEmpty()){

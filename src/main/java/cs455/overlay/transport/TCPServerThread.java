@@ -131,6 +131,11 @@ public class TCPServerThread implements Runnable {
                         RegistrySendsNodeManifest msgRSNM = new RegistrySendsNodeManifest();
                         msgRSNM.unpackBytes(bytes);
                         printBytes(bytes);
+                        node.table = msgRSNM.receivedTable;
+                        System.out.println(":::::printing received table:::::::nodeId="+node.getId());
+                        node.table.printTable();
+                        System.out.println(":::::printed  received table:::::::nodeId="+node.getId());
+
                         break;
                     case 8:
                         System.out.println(">>");
@@ -171,11 +176,12 @@ public class TCPServerThread implements Runnable {
     }
     public void printBytes(byte[] bytes){
         int fourcount = 0;
+        int bytecount = 0;
         for (byte b : bytes) {
             System.out.println(Integer.toBinaryString(b & 255 | 256).substring(1));
-            fourcount++;
+            fourcount++;bytecount++;
             if(fourcount == 4) {
-                System.out.println("--------TCP S T");
+                System.out.println("--------TCP S T" + bytecount);
                 fourcount = 0;
             }
         }
