@@ -24,6 +24,9 @@ public class TCPReceiver extends TCPConnection {
         while (socket != null) {
             try {
                 System.out.println("TCPReceiver: inside tcp receiver run|0");
+                System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> :: "+din.available());
+                while(din.available() == 0);
+                System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< == "+din.available());
                 dataLength = din.readInt();
                 System.out.println("TCPReceiver: inside tcp receiver run|1");
 
@@ -43,6 +46,12 @@ public class TCPReceiver extends TCPConnection {
                 System.out.println(ioe.getMessage());
                 break;
             }
+        }
+        try {
+            din.close();
+        } catch (IOException e) {
+            System.err.println("TCPReceiver. din close error");
+            e.printStackTrace();
         }
     }
 }

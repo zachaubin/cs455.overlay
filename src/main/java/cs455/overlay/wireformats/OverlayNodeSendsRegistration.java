@@ -75,7 +75,8 @@ public class OverlayNodeSendsRegistration extends Event {
         int hostlen = hostname.length();
         byte[] hostbytes = hostname.getBytes();
 
-        dout.writeInt(-1);
+        dout.writeInt(0);
+        dout.writeByte(-1);
         dout.writeInt(type);
         dout.writeInt(hostlen);
         dout.write(hostbytes);
@@ -119,7 +120,8 @@ public class OverlayNodeSendsRegistration extends Event {
 
         //get to and eat message header
         while(din.readByte() != -1);
-        din.readByte();din.readByte();din.readByte();
+
+
 
         type = din.readInt();
         System.out.println("UNPACK:type:"+type);
@@ -149,6 +151,7 @@ public class OverlayNodeSendsRegistration extends Event {
 
         sendThread.start();
         System.out.println("this is sending event thread|3");
+
 
 
 

@@ -75,6 +75,7 @@ public class CommandInputRegistryThread implements Runnable {
         Socket response = new Socket(e.nodeHost,e.nodePort);
         System.out.println("CommandRegistryThread.sendManifest: reporting status |0");
         RegistrySendsNodeManifest reportReg = new RegistrySendsNodeManifest(response, registry.nodes);
+
         System.out.println("CommandRegistryThread.sendManifest: reporting status |1");
         reportReg.packBytes(6,registry.nodes);
 
@@ -83,6 +84,7 @@ public class CommandInputRegistryThread implements Runnable {
 
         report.start();
         System.out.println("CommandRegistryThread.sendManifest: reporting status |3");
+
     }
 
 

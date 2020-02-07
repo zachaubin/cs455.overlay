@@ -17,6 +17,8 @@ public class TCPRegistryServerThread implements Runnable {
     public static Socket listen;
     public Registry registry;
 
+    public TCPConnectionsCache cache;
+
     public TCPRegistryServerThread(Socket socket, Registry registry,int port) {
         this.listen = socket;
         this.registry = registry;
@@ -53,14 +55,14 @@ public class TCPRegistryServerThread implements Runnable {
                 System.out.println("Registry: receiver thread start");
                 //receiver thread start
                 //pass socket to read from
-                TCPConnection rec = new TCPConnection(listen,0);
-                rec.otherHost = listen.getInetAddress().getHostName();
-
-
-
-                System.out.println("Registry: TCP receive thread starting");
-                Thread receive =  new Thread(rec);
-                receive.start();
+//                TCPConnection rec = new TCPConnection(listen,0);
+//                rec.otherHost = listen.getInetAddress().getHostName();
+//
+//
+//
+//                System.out.println("Registry: TCP receive thread starting");
+//                Thread receive =  new Thread(rec);
+//                receive.start();
                 //writes to socket stream
 
 //              register;
@@ -76,6 +78,7 @@ public class TCPRegistryServerThread implements Runnable {
 //                byte[] bytes_headgarbage = is.readAllBytes();
 
 //                System.out.println("\t\t\tbyte in size::" + bytes_headgarbage.length);
+//                receive.join();
                 System.out.println("\t\t\tbyte in sizeMOD::" + bytes.length);
 
 //                // Get the slice of the Array
@@ -110,7 +113,7 @@ public class TCPRegistryServerThread implements Runnable {
 
 
 
-
+//                listen.close();
 
 
             }

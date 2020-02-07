@@ -61,11 +61,12 @@ public class TCPServerThread implements Runnable {
                 System.out.println("receiver thread start FOR NODE");
                 //receiver thread start
                 //pass socket to read from
-                TCPConnection nodeServer = new TCPConnection(listen,0);
-                //add to cache ;
-//                registry.connections.addConnection((rec));
-                Thread receive =  new Thread(nodeServer);
-                receive.start();
+//                TCPConnection nodeServer = new TCPConnection(listen,0);
+//                Thread receive =  new Thread(nodeServer);
+//                receive.start();
+//                receive.join();
+
+
                 //writes to socket stream
 
                 //read byte[] from listen.socket
@@ -92,7 +93,12 @@ public class TCPServerThread implements Runnable {
 //                System.out.println("");
 
 
-                int type = (int)bytes[0];
+
+                int findHead = 0;
+                while(bytes[findHead] != -1){
+                    findHead++;
+                }
+                int type = (int)bytes[findHead +4];
 
                 //yes this is where EventFactory should go
                 // 3 5 6 8 11
@@ -124,6 +130,7 @@ public class TCPServerThread implements Runnable {
                         System.out.println(">>");
                         RegistrySendsNodeManifest msgRSNM = new RegistrySendsNodeManifest();
                         msgRSNM.unpackBytes(bytes);
+                        printBytes(bytes);
                         break;
                     case 8:
                         System.out.println(">>");
@@ -161,5 +168,16 @@ public class TCPServerThread implements Runnable {
     }
     public int getPort(){
         return port;
+    }
+    public void printBytes(byte[] bytes){
+        int fourcount = 0;
+        for (byte b : bytes) {
+            System.out.println(Integer.toBinaryString(b & 255 | 256).substring(1));
+            fourcount++;
+            if(fourcount == 4) {
+                System.out.println("--------TCP S T");
+                fourcount = 0;
+            }
+        }
     }
 }

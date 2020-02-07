@@ -46,6 +46,11 @@ public class TCPSender extends TCPConnection {
         } catch (IOException e) {
             e.printStackTrace();
         }
+//        try {
+//            socket.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
 //    public void run(byte[] b) throws IOException {
