@@ -1,5 +1,9 @@
 package cs455.overlay.routing;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Random;
@@ -7,6 +11,7 @@ import java.util.Random;
 public class RoutingTable {
 
     public ArrayList<RoutingEntry> table;
+    public byte[] myRoutes;
 
     //position 0 should be registry
 
@@ -21,7 +26,7 @@ public class RoutingTable {
 
         //if id already in table return false
         //size is 0 ... n
-        for (int i = 1; i <= table.size(); i++) {
+        for (int i = 1; i < table.size(); i++) {
             if (nodeId == table.get(i).nodeId) {
                 nodeId = newNodeId();
                 i=0;
@@ -86,6 +91,58 @@ public class RoutingTable {
             count++;
         }
         return count;
+    }
+
+    public int getIndexOfNodeId(int id){
+        int index = 0;
+        for(RoutingEntry e : table){
+            if(e.nodeId == id){
+                break;
+            }
+            index++;
+        }
+        return index;
+    }
+
+    public byte[] packEntry(RoutingEntry e) throws IOException {
+        byte[] packed;
+        ByteArrayOutputStream baOutputStream = new ByteArrayOutputStream();
+        DataOutputStream dout = new DataOutputStream(new BufferedOutputStream(baOutputStream));
+
+        System.out.println(">table:hostname:"+e.nodeHost);
+        System.out.println(">table:portNumber:"+e.nodePort);
+        System.out.println(">tablePACK:nodeId:"+e.nodeId);
+
+
+        //type, host length, hostname, nodeId
+        int hostlen = e.nodeHost.length();
+        byte[] hostbytes = e.nodeHost.getBytes();
+
+        dout.writeInt(-1);
+        dout.writeInt(hostlen);
+        dout.write(hostbytes);
+        dout.writeInt(e.nodePort);
+
+
+        dout.flush();
+        packed = baOutputStream.toByteArray();
+
+
+        int fourcount = 0;
+        for (byte b : packed) {
+            System.out.println(Integer.toBinaryString(b & 255 | 256).substring(1));
+            fourcount++;
+            if(fourcount == 4) {
+                System.out.println("--------");
+                fourcount = 0;
+            }
+        }
+
+        baOutputStream.close();
+        dout.close();
+
+        return packed;
+
     }
 
 }

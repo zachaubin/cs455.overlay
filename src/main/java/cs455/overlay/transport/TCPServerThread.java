@@ -3,9 +3,7 @@ package cs455.overlay.transport;
 import cs455.overlay.node.MessagingNode;
 import cs455.overlay.node.Registry;
 import cs455.overlay.routing.RoutingTable;
-import cs455.overlay.wireformats.Event;
-import cs455.overlay.wireformats.OverlayNodeSendsRegistration;
-import cs455.overlay.wireformats.RegistryReportsRegistrationStatus;
+import cs455.overlay.wireformats.*;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -77,7 +75,7 @@ public class TCPServerThread implements Runnable {
 
                 System.out.println("\t\t\t\t\tbyte in sizeMOD::" + bytes.length);
 
-                System.out.println("== READ ALL BYTES INPUT STREAM IN node THREAD ==");
+                System.out.println("TCPServerThread. == READ ALL BYTES INPUT STREAM IN node THREAD ==");
                 int fourcount = 0;
                 for (byte b : bytes) {
                     System.out.println(Integer.toBinaryString(b & 255 | 256).substring(1));
@@ -88,15 +86,67 @@ public class TCPServerThread implements Runnable {
                     }
                 }
 
-                RegistryReportsRegistrationStatus marshall = new RegistryReportsRegistrationStatus();
-                marshall.unpackBytes(bytes);
+//
+//                System.out.println("");
+//                System.out.println(">>>> THIS NODE JUST RECEIVED A MESSAGE OF TYPE = "+type);
+//                System.out.println("");
 
-                if(marshall.type == 3) {
-                    System.out.println("Registration request successful. The number of messaging nodes currently constituting the overlay is <[" + marshall.numberOfNodes + "]>");
+
+                int type = (int)bytes[0];
+
+                //yes this is where EventFactory should go
+                // 3 5 6 8 11
+                switch(type){
+                    case 3:
+                        System.out.println("");
+                        System.out.println(">>>> THIS NODE JUST RECEIVED A MESSAGE OF TYPE = "+type);
+                        System.out.println("");
+                        RegistryReportsRegistrationStatus msgRRRS = new RegistryReportsRegistrationStatus();
+                        msgRRRS.unpackBytes(bytes);
+
+                        if(msgRRRS.success == 1) {
+                            System.out.println("Registration request successful. The number of messaging nodes currently constituting the overlay is <[" + msgRRRS.numberOfNodes + "]>");
+                        }
+                        if(msgRRRS.success == -1){
+                            System.out.println("Registration somehow unsuccessful. This should not happen.");
+                        }
+                        break;
+                    case 5:
+                        System.out.println(">>");
+                        System.out.println(">>>> THIS NODE JUST RECEIVED A MESSAGE OF TYPE = "+type);
+                        System.out.println(">>");
+                        RegistryReportsDeregistrationStatus msgRRDS = new RegistryReportsDeregistrationStatus();
+                        msgRRDS.unpackBytes(bytes);
+                        break;
+                    case 6:
+                        System.out.println(">>");
+                        System.out.println(">>>> THIS NODE JUST RECEIVED A MESSAGE OF TYPE = "+type);
+                        System.out.println(">>");
+                        RegistrySendsNodeManifest msgRSNM = new RegistrySendsNodeManifest();
+                        msgRSNM.unpackBytes(bytes);
+                        break;
+                    case 8:
+                        System.out.println(">>");
+                        System.out.println(">>>> THIS NODE JUST RECEIVED A MESSAGE OF TYPE = "+type);
+                        System.out.println(">>");
+                        RegistryRequestsTaskInitiate msgRRTI = new RegistryRequestsTaskInitiate();
+                        msgRRTI.unpackBytes(bytes);
+                        break;
+                    case 11:
+                        System.out.println(">>");
+                        System.out.println(">>>> THIS NODE JUST RECEIVED A MESSAGE OF TYPE = "+type);
+                        System.out.println(">>");
+                        RegistryRequestsTrafficSummary msgRRTS = new RegistryRequestsTrafficSummary();
+                        msgRRTS.unpackBytes(bytes);
+                        break;
+                    default:
+                        System.out.println(">>");
+                        System.out.println(">>>> THIS NODE JUST RECEIVED A MESSAGE OF TYPE = "+type);
+                        System.out.println(">>");
+                        System.out.println("ERROR when THIS NODE received message, INVALID TYPE!!!?!?!?:: type = "+type);
+
                 }
-                if(marshall.success == -1){
-                    System.out.println("Registration somehow unsuccessful. This should not happen.");
-                }
+
 
             }
 

@@ -3,8 +3,15 @@
   <component name="ChangeListManager">
     <list default="true" id="95b628ad-c660-4cf4-81a4-dd1020efb54b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/CommandInputMessagingNodeThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/CommandInputMessagingNodeThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/CommandInputRegistryThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/CommandInputRegistryThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/MessagingNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/MessagingNode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/routing/RoutingTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/routing/RoutingTable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPRegistryServerThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPRegistryServerThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPServerThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPServerThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/OverlayNodeSendsRegistration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/OverlayNodeSendsRegistration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/RegistryReportsDeregistrationStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/RegistryReportsDeregistrationStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/RegistryRequestsTaskInitiate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/RegistryRequestsTaskInitiate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/RegistryRequestsTrafficSummary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/RegistryRequestsTrafficSummary.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/RegistrySendsNodeManifest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/RegistrySendsNodeManifest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -79,7 +86,8 @@
       <workItem from="1580633157165" duration="18201000" />
       <workItem from="1580686863254" duration="9342000" />
       <workItem from="1580870362119" duration="4229000" />
-      <workItem from="1580918301287" duration="4713000" />
+      <workItem from="1580918301287" duration="5481000" />
+      <workItem from="1581015015945" duration="6991000" />
     </task>
     <servers />
   </component>

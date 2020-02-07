@@ -21,12 +21,11 @@ public class RegistrySendsNodeManifest extends Event {
     public RoutingTable receivedTable;
 
 
-    RegistrySendsNodeManifest(){};
+    public RegistrySendsNodeManifest(){};
 
-    public RegistrySendsNodeManifest(Socket socket, RoutingTable table, MessagingNode node){
+    public RegistrySendsNodeManifest(Socket socket, RoutingTable table){
         this.socket = socket;
         this.table = table;
-        this.node = node;
     }
 
     public void printBytes(byte[] bytes){
@@ -84,11 +83,11 @@ public class RegistrySendsNodeManifest extends Event {
         return marshalledBytes;
     }
     //unpacks primitives from byte[]
-    public RoutingTable unpackBytes(byte[] pack) throws IOException {
+    public void unpackBytes(byte[] pack) throws IOException {
         ByteArrayInputStream baInputStream = new ByteArrayInputStream(pack);
         DataInputStream din = new DataInputStream(new BufferedInputStream(baInputStream));
 
-        System.out.println("==unpackbytes==");
+        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes==");
         printBytes(pack);
 
         //get to and eat message header
@@ -128,7 +127,7 @@ public class RegistrySendsNodeManifest extends Event {
     }
 
     public byte[] packEntry(RoutingEntry e) throws IOException {
-        byte[] packed = null;
+        byte[] marshalledBytes;
         ByteArrayOutputStream baOutputStream = new ByteArrayOutputStream();
         DataOutputStream dout = new DataOutputStream(new BufferedOutputStream(baOutputStream));
 
@@ -136,6 +135,25 @@ public class RegistrySendsNodeManifest extends Event {
         dout.write(e.nodeHost.getBytes());
         dout.write(e.nodePort);
         dout.writeInt(e.nodeId);
+
+        dout.flush();
+        marshalledBytes = baOutputStream.toByteArray();
+        messageBytes = marshalledBytes;
+
+        int fourcount = 0;
+        for (byte b : messageBytes) {
+            System.out.println(Integer.toBinaryString(b & 255 | 256).substring(1));
+            fourcount++;
+            if(fourcount == 4) {
+                System.out.println("--------");
+                fourcount = 0;
+            }
+        }
+
+        baOutputStream.close();
+        dout.close();
+
+        return marshalledBytes;
     }
 
     @Override
@@ -145,7 +163,7 @@ public class RegistrySendsNodeManifest extends Event {
         System.out.println("RegistrySendsNodeManifest: before look for entries");
 
         for(RoutingEntry e : table.table){
-            System.out.println("RegistrySendsNodeManifest: starting entry send");
+            System.out.println("RegistrySendsNodeManifest: starting entry send to nodeId["+e.nodeId+"]");
 
             //should get socket from cache
             Socket tempSock = null;

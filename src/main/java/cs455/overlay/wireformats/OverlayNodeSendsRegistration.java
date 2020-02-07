@@ -91,7 +91,7 @@ public class OverlayNodeSendsRegistration extends Event {
             System.out.println(Integer.toBinaryString(b & 255 | 256).substring(1));
             fourcount++;
             if(fourcount == 4) {
-                System.out.println("--------");
+                System.out.println("<PACK> ONSR --------");
                 fourcount = 0;
             }
         }
@@ -106,13 +106,13 @@ public class OverlayNodeSendsRegistration extends Event {
         ByteArrayInputStream baInputStream = new ByteArrayInputStream(pack);
         DataInputStream din = new DataInputStream(new BufferedInputStream(baInputStream));
 
-        System.out.println("==unpackbytes==");
+        System.out.println("OverlayNodeSendsRegistration:: ==unpackbytes==");
         int fourcount = 0;
         for (byte b : pack) {
             System.out.println(Integer.toBinaryString(b & 255 | 256).substring(1));
             fourcount++;
             if(fourcount == 4) {
-                System.out.println("--------");
+                System.out.println("<UNPACK> ONSR --------");
                 fourcount = 0;
             }
         }

@@ -1,5 +1,7 @@
 package cs455.overlay.node;
 
+import cs455.overlay.routing.RoutingEntry;
+import cs455.overlay.routing.RoutingTable;
 import cs455.overlay.transport.TCPConnection;
 import cs455.overlay.transport.TCPRegistryServerThread;
 import cs455.overlay.transport.TCPSender;
@@ -17,6 +19,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.Random;
 
 //Upon starting up, each messaging node should register its IP address, and port number with the registry.
@@ -81,6 +85,8 @@ public class MessagingNode extends Node {
     public int msgsReceived = 0;
     public int msgsRelayed = 0;
 
+    public ArrayList<RoutingEntry> myRoutes;
+
 
 
 
@@ -94,6 +100,21 @@ public class MessagingNode extends Node {
         int max = 255;
         int min = 0;
         return rand.nextInt((max - min) + 1) + min;
+    }
+
+    private void buildMyRoutes(RoutingTable t){
+        //from manifest-received-table t,
+        int myIndex = t.getIndexOfNodeId(nodeId);
+        //  find=THISNODEID as index0
+
+        //  calculate i= +1,+2,+4.. such that i<n
+        //   add each i to myRoutes
+
+        for(int distance = 1; distance < t.table.size();  distance *= 2){
+            myRoutes.add(t.table.get( distance + myIndex & t.table.size()));
+        }
+
+        System.out.println(" >> built routing table");
     }
 
 
@@ -150,6 +171,8 @@ public class MessagingNode extends Node {
 
 //        currentNode.registerNode();
     }
+
+
 
 
 }

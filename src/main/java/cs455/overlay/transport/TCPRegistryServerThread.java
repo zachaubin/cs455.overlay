@@ -109,17 +109,7 @@ public class TCPRegistryServerThread implements Runnable {
 //                registry.tcpCache.add( rec, marshall.hostname,marshall.port );
 
 
-                Socket response = new Socket(marshall.hostname,marshall.port);
-                System.out.println("TCPRegistryServerThread: reporting status |0");
-                RegistryReportsRegistrationStatus reportReg = new RegistryReportsRegistrationStatus(response, registry);
-                System.out.println("TCPRegistryServerThread: reporting status |1");
-                reportReg.packBytes(3,1,registry.getNumberOfNodes());
 
-                Thread report = new Thread(reportReg);
-                System.out.println("TCPRegistryServerThread: reporting status |2");
-
-                report.start();
-                System.out.println("TCPRegistryServerThread: reporting status |3");
 
 
 
