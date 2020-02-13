@@ -151,9 +151,12 @@ public class OverlayNodeSendsRegistration extends Event {
 
         sendThread.start();
         System.out.println("this is sending event thread|3");
-
-
-
+//        try {
+//            this.socket.close();
+//        } catch (IOException e) {
+//            System.out.println("socket close error in ONSR run()");
+//            e.printStackTrace();
+//        }
 
 
     }

@@ -8,6 +8,7 @@ import cs455.overlay.transport.TCPSender;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class RegistrySendsNodeManifest extends Event {
 
@@ -17,8 +18,10 @@ public class RegistrySendsNodeManifest extends Event {
     public MessagingNode node;
     public byte[] messageBytes;
 
+
     int type;
     public RoutingTable receivedTable;
+    public ArrayList<Integer> ids;
 
 
     public RegistrySendsNodeManifest(){
@@ -27,6 +30,11 @@ public class RegistrySendsNodeManifest extends Event {
 
     public RegistrySendsNodeManifest(Socket socket, RoutingTable table){
         this.socket = socket;
+        this.table = table;
+        this.receivedTable = new RoutingTable();
+    }
+
+    public RegistrySendsNodeManifest(RoutingTable table){
         this.table = table;
         this.receivedTable = new RoutingTable();
     }
@@ -43,14 +51,7 @@ public class RegistrySendsNodeManifest extends Event {
         }
     }
 
-    /*
-        byte: Message type (REGISTRY_REPORTS_REGISTRATION_STATUS) == 3
-        int: Success status; Assigned ID if successful, -1 in case of a failure
-        byte: Length of following "Information string" field
-        byte[^^]: Information string; ASCII charset
-     */
-
-    //packs primitives into a byte[]
+    //packs primitives into a byte[], table.routes each keyId has a RoutingEntry to add
     public byte[] packBytes( int type, RoutingTable table ) throws IOException {
         byte[] marshalledBytes = null;
         ByteArrayOutputStream baOutputStream = new ByteArrayOutputStream();
@@ -167,6 +168,147 @@ public class RegistrySendsNodeManifest extends Event {
         dout.close();
 
         return marshalledBytes;
+    }
+
+    public byte[] packRoutesBytes(RoutingEntry e, int n) throws IOException {
+        byte[] marshalledBytes;
+        ByteArrayOutputStream baOutputStream = new ByteArrayOutputStream();
+        DataOutputStream dout = new DataOutputStream(new BufferedOutputStream(baOutputStream));
+
+        dout.writeInt(0);
+        dout.writeByte(-1);
+        dout.writeInt(6);//ONSM sends manifest type
+
+        dout.writeByte(n);//number of routes in this table
+
+        //table.routes has map<id,routesAsEntries>
+        ArrayList<RoutingEntry> myRoutes = e.routes;
+        /*
+#####################################################################################        this is empty?
+         */
+        System.out.println("################myRoutes.size()="+myRoutes.size());
+
+
+        // ORDER PER EACH
+        //nodeId int
+        //hostlen byte
+        //host byte[]
+        //port int
+
+        for(RoutingEntry routePoint : myRoutes){
+
+            dout.writeInt(routePoint.nodeId);
+            dout.writeInt(routePoint.nodeHost.getBytes().length);
+            dout.write(routePoint.nodeHost.getBytes());
+            dout.writeInt(routePoint.nodePort);
+
+        }
+
+        //separator
+        dout.writeInt(-1);
+
+        // second part :
+        //numNodes
+        dout.writeInt(table.getNumberOfNodes());
+        //int[] nodeIds
+        for(int id : table.manifest){
+            dout.writeInt(id);
+        }
+
+        //true tail
+        dout.writeInt(-1);
+
+        dout.flush();
+        marshalledBytes = baOutputStream.toByteArray();
+        messageBytes = marshalledBytes;
+
+        int fourcount = 0;
+        for (byte b : messageBytes) {
+            System.out.println(Integer.toBinaryString(b & 255 | 256).substring(1));
+            fourcount++;
+            if(fourcount == 4) {
+                System.out.println("--------PACK BYTES FOR EACH PACK route BYTES");
+                fourcount = 0;
+            }
+        }
+        baOutputStream.close();
+        dout.close();
+        return marshalledBytes;
+
+    }
+
+    public void unpackRoutesBytes(byte[] pack) throws IOException {
+
+        ByteArrayInputStream baInputStream = new ByteArrayInputStream(pack);
+        DataInputStream din = new DataInputStream(new BufferedInputStream(baInputStream));
+
+        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |0");
+        printBytes(pack);
+
+        //get to and eat message header
+        while(din.readByte() != -1);
+        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |1");
+        type = din.readInt();
+        System.out.println("UNPACK:type:" + type);
+
+
+        ////////////////////////
+        int hostLength;
+        byte[] hostbytes;
+        String host;
+        int port;
+        int id;
+
+        //
+
+        int numNodes = din.readByte();//number of routes in this table
+
+        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |2");
+        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |3");
+        //first entry
+        while(din.available() > 4) {
+            System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |LOOP");
+            id = din.readInt();
+            System.out.println("id: "+id);
+
+            if(id == -1) break;
+
+            hostLength = din.readInt();
+            System.out.println("hostlen: "+hostLength);
+            hostbytes = new byte[hostLength];
+            din.readFully(hostbytes, 0, hostLength);
+            host = new String(hostbytes);
+            System.out.println("host: " + host);
+            port = din.readInt();
+            System.out.println("port: " + port);
+            receivedTable.buildEntry(host, port, id);
+            System.out.println(" ^added an entry^");
+            System.out.println("");
+
+        }
+        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |4");
+
+        //broke from while loop, next is number of nodes with ids
+        int numIds = din.readInt();//for read fully, not using
+        //now all ids
+        int singleId = 1;
+
+        while(din.available() > 4) {
+            singleId = din.readInt();
+            this.ids.add(singleId);
+        }
+
+
+            //tail eat, might not need
+        while(din.readByte() != -1);
+        din.readByte();din.readByte();din.readByte();
+        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |5");
+
+        baInputStream.close();
+        din.close();
+
+
+
     }
 
     @Override

@@ -2,24 +2,57 @@ package cs455.overlay.node;
 
 import cs455.overlay.routing.RoutingEntry;
 import cs455.overlay.routing.RoutingTable;
+import cs455.overlay.transport.TCPSender;
 import cs455.overlay.wireformats.RegistryReportsRegistrationStatus;
 import cs455.overlay.wireformats.RegistrySendsNodeManifest;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class CommandInputRegistryThread implements Runnable {
 
     public Registry registry;
+    public RegistrySendsNodeManifest rsnm;
 
     public CommandInputRegistryThread(Registry registry){
+
         this.registry = registry;
+        this.rsnm = new RegistrySendsNodeManifest(registry.nodes);
     }
 
 
-    private void command(String command) throws IOException {
-        //list-messaging-nodes
+    private void command(String commands) throws IOException {
+
+
+        String command = commands;
+        int numberArg = 2;
+
+
+//        System.out.println("111111111111YOU ENTERED ["+commands+"]");
+//
+//
+//        String delims = "[ ]+";
+//        String[] part = commands.split(delims);
+//        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>.1part.length:"+part.length);
+//
+//        System.out.println("222222222222222YOU ENTERED ["+commands+"]");
+//
+//        for(String thing : part){
+//            System.out.println("args: "+thing);
+//        }
+//        String command = part[0];
+//        int numberArg = 0;
+//
+//        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>2part.length:"+part.length);
+//        if(part.length > 1){
+//            numberArg = Integer.parseInt(part[1]);
+//        }
+
+
+
         System.out.println("command function called");
         boolean good = false;
         if(  command.equalsIgnoreCase("list-messaging-nodes") ){
@@ -28,13 +61,34 @@ public class CommandInputRegistryThread implements Runnable {
             good = true;
         }
         if(  command.equalsIgnoreCase("setup-overlay") ){
-            System.out.println("setup overlay sends manifest (routing table all entries) to all nodes in manifest\n");
+            System.out.println("setup-overlay sends manifest (routing table all entries) to all nodes in manifest\n");
+            RegistrySendsNodeManifest rsnm = new RegistrySendsNodeManifest(registry.nodes);
 
-            for(RoutingEntry e : registry.nodes.table){
-                sendManifest(e);
+            if(numberArg == 0 || numberArg > registry.nodes.getNumberOfNodes()){
+                System.out.println("Cannot ask to set up route of size ["+numberArg+"] when we have ["+registry.nodes.getNumberOfNodes()+"] nodes.");
+                good = true;
+            } else {
+
+                System.out.println("CIRT DEBUG setup-overlay |0");
+                sortTable();
+                System.out.println("CIRT DEBUG setup-overlay |PRINT TABLE SORTED");
+                registry.nodes.printTable();
+                System.out.println("CIRT DEBUG setup-overlay |1");
+                buildManifest();
+                registry.nodes.printManifest();
+                System.out.println("CIRT DEBUG setup-overlay |2");
+                sendManifest(registry.nodes);
+                System.out.println("CIRT DEBUG setup-overlay |3");
+                buildRoutes(numberArg);
+//                System.out.println("buildRoutes built this:::::");
+
+                System.out.println("CIRT DEBUG setup-overlay |4");
+                sendRoutes(numberArg);
+                System.out.println("CIRT DEBUG setup-overlay |5");
+
+                good = true;
+
             }
-
-            good = true;
         }
         if(  command.equalsIgnoreCase("list-routing-tables") ){
             System.out.println("list routing tables entered...\n");
@@ -59,7 +113,7 @@ public class CommandInputRegistryThread implements Runnable {
             System.out.println("");
             System.out.println("list-messaging-nodes\n :: list all messaging nodes in routing table");
             System.out.println("");
-            System.out.println("'setup-overlay' will become setup-overlay number-of-routing-table-entries (e.g. setup-overlay 3)\n :: sets up overlay by reporting [host/port/id] table to each node in table");
+            System.out.println("setup-overlay [N]\n :: sets up overlay by sending routing table (size [N]) and manifest to each node in table");
             System.out.println("");
             System.out.println("list-routing-tables\n :: same as list-messaging nodes with note and more spacing");
             System.out.println("");
@@ -71,21 +125,65 @@ public class CommandInputRegistryThread implements Runnable {
 
     }
 
-    private void sendManifest(RoutingEntry e) throws IOException {
-        Socket response = new Socket(e.nodeHost,e.nodePort);
-        System.out.println("CommandRegistryThread.sendManifest: reporting status |0");
-        RegistrySendsNodeManifest reportReg = new RegistrySendsNodeManifest(response, registry.nodes);
+    private void sortTable(){
+        registry.nodes.sortTable();
+    }
 
-        System.out.println("CommandRegistryThread.sendManifest: reporting status |1");
-        reportReg.packBytes(6,registry.nodes);
+    private void buildManifest(){
+        registry.nodes.buildManifest();
+    }
 
-        Thread report = new Thread(reportReg);
-        System.out.println("CommandRegistryThread.sendManifest: reporting status |2");
+    private void buildRoutes(int n){
+        registry.nodes.buildRoutes(n);
+    }
 
-        report.start();
-        System.out.println("CommandRegistryThread.sendManifest: reporting status |3");
+    private void sendRoutes(int n) throws IOException {
+        for(RoutingEntry e : registry.nodes.table){
+            System.out.println("sending route to nodeId:"+e.nodeId);
+            //send to entry e, routing table size n
+            sendOneRoute(e,n);
+        }
+    }
+    private void sendOneRoute(RoutingEntry e,int n) throws IOException {
+        //pack bytes for routing entry's routes
+        System.out.println("sendOneRoute |0");
+
+        byte[] outgoingMsg;
+        System.out.println("sendOneRoute |1");
+
+        outgoingMsg = rsnm.packRoutesBytes(e,n);
+        System.out.println("sendOneRoute |2");
+
+        //socket new
+        Socket outgoingSocket = new Socket(e.nodeHost,e.nodePort);
+        System.out.println("sendOneRoute |3");
+
+        //send packed bytes
+        TCPSender sender = new TCPSender(outgoingSocket,outgoingMsg);
+        System.out.println("sendOneRoute |4");
+
+        //close connection
+        outgoingSocket.close();
+    }
+
+    private void sendManifest(RoutingTable t) throws IOException {
+
+//        Socket response = new Socket(e.nodeHost,e.nodePort);
+//        System.out.println("CommandRegistryThread.sendManifest: reporting status |0");
+//        RegistrySendsNodeManifest reportReg = new RegistrySendsNodeManifest(response, registry.nodes);
+//
+//        System.out.println("CommandRegistryThread.sendManifest: reporting status |1");
+//        reportReg.packBytes(6,registry.nodes);
+//
+//        Thread report = new Thread(reportReg);
+//        System.out.println("CommandRegistryThread.sendManifest: reporting status |2");
+//
+//        report.start();
+//        System.out.println("CommandRegistryThread.sendManifest: reporting status |3");
 
     }
+
+
 
 
     @Override
@@ -98,7 +196,7 @@ public class CommandInputRegistryThread implements Runnable {
             try {
                 command(typed);
             } catch (IOException e) {
-                System.out.println("!!!Registry command IO error?");
+                System.out.println("!!! CIRT Registry command IO error?");
                 e.printStackTrace();
             }
         }

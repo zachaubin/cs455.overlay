@@ -5,19 +5,75 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 public class RoutingTable {
 
     public ArrayList<RoutingEntry> table;
-    public byte[] myRoutes;
+
+
+//    public Map<Integer,ArrayList<RoutingEntry>> routes;
+    public ArrayList<ArrayList<RoutingEntry>> routes;
+    public ArrayList<Integer> manifest;
+
+
+
 
     //position 0 should be registry
 
     public RoutingTable(){
         table = new ArrayList<>();
+        manifest = new ArrayList<>();
+        routes = new ArrayList<>(128);
+
     }
+
+    public void sortTable(){
+
+        Collections.sort(table, new SortEntryById());
+
+    }
+    static class SortEntryById implements Comparator<RoutingEntry>
+    {
+        // Used for sorting in ascending order of nodeId
+        public int compare(RoutingEntry a, RoutingEntry b)
+        {
+            return a.nodeId - b.nodeId;
+        }
+    }
+
+    public void buildRoutes(int n){
+
+        for(int i = 0; i < table.size(); i++) {
+
+            ArrayList<RoutingEntry> myRoutes = new ArrayList<>();
+            for(int j = 1; j < n; j*=2){
+
+                //add entry just after this and then double distance
+                myRoutes.add(table.get(i-1+j));
+
+            }
+            table.get(i).routes = myRoutes;
+
+        }
+
+    }
+
+
+
+    public void buildManifest(){
+        for(RoutingEntry e : table){
+            manifest.add(e.nodeId);
+        }
+    }
+
+    public void printManifest(){
+        System.out.println("#Printing Manifest:");
+        for(int i : manifest){
+            System.out.println("#id: " + i);
+        }
+    }
+
 
     //this will generate node id
     public int addRoutingEntry(String host, int port){
@@ -46,7 +102,7 @@ public class RoutingTable {
     }
     private int newNodeId(){
         Random rand = new Random();
-        int max = 255;
+        int max = 127;
         int min = 0;
         return rand.nextInt((max - min) + 1) + min;
     }

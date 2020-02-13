@@ -2,11 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="95b628ad-c660-4cf4-81a4-dd1020efb54b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.1.1/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.1.1/fileHashes/fileHashes.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/z.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/CommandInputRegistryThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/CommandInputRegistryThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/MessagingNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/MessagingNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/routing/RoutingEntry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/routing/RoutingEntry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/routing/RoutingTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/routing/RoutingTable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPRegistryServerThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPRegistryServerThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPServerThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPServerThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/OverlayNodeSendsRegistration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/OverlayNodeSendsRegistration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/RegistrySendsNodeManifest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/RegistrySendsNodeManifest.java" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -58,18 +65,6 @@
       <recent name="$PROJECT_DIR$/src/main/java" />
     </key>
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
-  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -96,6 +91,7 @@
       <workItem from="1581062418602" duration="8070000" />
       <workItem from="1581113091679" duration="3007000" />
       <workItem from="1581120571841" duration="1319000" />
+      <workItem from="1581609523861" duration="13293000" />
     </task>
     <servers />
   </component>

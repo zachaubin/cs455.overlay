@@ -89,7 +89,7 @@ public class TCPRegistryServerThread implements Runnable {
 //                    bytes[i] = bytes_headgarbage[4 + i];
 //                }
 
-                System.out.println("==READALLBYTESINPUTSTREAMINRSTHREAD==");
+                System.out.println("==READALLBYTES INPUTSTREAMIN RS THREAD==");
                 int fourcount = 0;
                 for (byte b : bytes) {
                     System.out.println(Integer.toBinaryString(b & 255 | 256).substring(1));

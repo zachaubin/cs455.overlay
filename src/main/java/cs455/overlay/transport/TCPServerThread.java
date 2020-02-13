@@ -129,11 +129,12 @@ public class TCPServerThread implements Runnable {
                         System.out.println(">>>> THIS NODE JUST RECEIVED A MESSAGE OF TYPE = "+type);
                         System.out.println(">>");
                         RegistrySendsNodeManifest msgRSNM = new RegistrySendsNodeManifest();
-                        msgRSNM.unpackBytes(bytes);
+                        msgRSNM.unpackRoutesBytes(bytes);
                         printBytes(bytes);
-                        node.table = msgRSNM.receivedTable;
+                        node.routes = msgRSNM.receivedTable;
+                        node.idList = msgRSNM.ids;
                         System.out.println(":::::printing received table:::::::nodeId="+node.getId());
-                        node.table.printTable();
+                        node.routes.printTable();
                         System.out.println(":::::printed  received table:::::::nodeId="+node.getId());
 
                         break;

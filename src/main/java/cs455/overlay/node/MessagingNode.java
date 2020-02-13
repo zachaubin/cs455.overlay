@@ -88,6 +88,10 @@ public class MessagingNode extends Node {
     public ArrayList<RoutingEntry> myRoutes;
     public RoutingTable table;
 
+    public RoutingTable routes;
+    public ArrayList<Integer> idList;
+
+
 
 
 
