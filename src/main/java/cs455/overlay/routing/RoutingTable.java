@@ -9,12 +9,12 @@ import java.util.*;
 
 public class RoutingTable {
 
-    public ArrayList<RoutingEntry> table;
+    public volatile ArrayList<RoutingEntry> table;
 
 
 //    public Map<Integer,ArrayList<RoutingEntry>> routes;
-    public ArrayList<ArrayList<RoutingEntry>> routes;
-    public ArrayList<Integer> manifest;
+    public volatile ArrayList<ArrayList<RoutingEntry>> routes;
+    public volatile ArrayList<Integer> manifest;
 
 
 
@@ -47,10 +47,16 @@ public class RoutingTable {
         for(int i = 0; i < table.size(); i++) {
 
             ArrayList<RoutingEntry> myRoutes = new ArrayList<>();
-            for(int j = 1; j < n; j*=2){
-
+            System.out.println("RoutingTable:: buildRoutes:: new entry ");
+            int distance = 1;
+            for(int j = 0; j < n; j++){
+                System.out.println("distance:"+distance);
+                if( (i+distance) % table.size() ==i) continue;
                 //add entry just after this and then double distance
-                myRoutes.add(table.get(i-1+j));
+                System.out.println("                                                    >>adding ["+table.get((i+distance) % table.size() ).nodeId+"] to ["+table.get(i).nodeId+"]");
+                myRoutes.add(table.get( (i+distance) % table.size() ));
+                distance = distance * 2 % (table.size()-1);
+
 
             }
             table.get(i).routes = myRoutes;

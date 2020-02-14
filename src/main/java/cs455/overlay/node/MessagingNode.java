@@ -91,6 +91,8 @@ public class MessagingNode extends Node {
     public RoutingTable routes;
     public ArrayList<Integer> idList;
 
+    public int numMsgsToSend;
+
 
 
 

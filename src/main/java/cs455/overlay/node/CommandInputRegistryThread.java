@@ -24,7 +24,7 @@ public class CommandInputRegistryThread implements Runnable {
     }
 
 
-    private void command(String commands) throws IOException {
+    private void command(String commands) throws IOException, InterruptedException {
 
 
         String command = commands;
@@ -69,38 +69,56 @@ public class CommandInputRegistryThread implements Runnable {
                 good = true;
             } else {
 
-                System.out.println("CIRT DEBUG setup-overlay |0");
+                    System.out.println("CIRT DEBUG setup-overlay |0");
                 sortTable();
-                System.out.println("CIRT DEBUG setup-overlay |PRINT TABLE SORTED");
+                    System.out.println("CIRT DEBUG setup-overlay |PRINT TABLE SORTED");
                 registry.nodes.printTable();
-                System.out.println("CIRT DEBUG setup-overlay |1");
+                    System.out.println("CIRT DEBUG setup-overlay |1");
                 buildManifest();
                 registry.nodes.printManifest();
-                System.out.println("CIRT DEBUG setup-overlay |2");
+                    System.out.println("CIRT DEBUG setup-overlay |2");
                 sendManifest(registry.nodes);
-                System.out.println("CIRT DEBUG setup-overlay |3");
+                    System.out.println("CIRT DEBUG setup-overlay |3");
                 buildRoutes(numberArg);
-//                System.out.println("buildRoutes built this:::::");
+                printRoutes();
+//                  System.out.println("buildRoutes built this:::::");
 
-                System.out.println("CIRT DEBUG setup-overlay |4");
+                    System.out.println("CIRT DEBUG setup-overlay |4");
                 sendRoutes(numberArg);
-                System.out.println("CIRT DEBUG setup-overlay |5");
+                    System.out.println("CIRT DEBUG setup-overlay |5");
 
                 good = true;
 
             }
         }
         if(  command.equalsIgnoreCase("list-routing-tables") ){
-            System.out.println("list routing tables entered...\n");
-            registry.nodes.printTableSpaced();
+            System.out.println("list-routing-tables entered, printing routing tables...\n");
+
+            int nid  = 0;
+            for(ArrayList<RoutingEntry> ale : registry.nodes.routes) {
+                System.out.println("======================================");
+                System.out.println(">><< Begin routing table for nodeId: "+registry.nodes.manifest.get(nid));
+                System.out.println("======================================");
+
+
+                for(RoutingEntry e : ale){
+                    registry.nodes.printEntry(e);
+                }
+                System.out.println("======================================");
+                System.out.println("<<>> End routing table for nodeId: "+registry.nodes.manifest.get(nid));
+                System.out.println("======================================");
+                System.out.println("");
+                nid++;
+
+            }
             good = true;
         }
 
-        if(  command.equalsIgnoreCase("list-routing-tables") ){
-            System.out.println("list routing tables entered...\n");
-            good = true;
-
-        }
+//        if(  command.equalsIgnoreCase("list-routing-tables") ){
+//            System.out.println("list routing tables entered...\n");
+//            good = true;
+//
+//        }
         if(!good){
             System.out.println("");
             System.out.println(":: :: :: :: :: :: :: :: :: :: :: :: :: :: :: ::");
@@ -111,7 +129,7 @@ public class CommandInputRegistryThread implements Runnable {
 
             System.out.println("  >> Valid commands are: <<");
             System.out.println("");
-            System.out.println("list-messaging-nodes\n :: list all messaging nodes in routing table");
+            System.out.println("list-messaging-nodes\n :: list all messaging nodes in routing table for each node");
             System.out.println("");
             System.out.println("setup-overlay [N]\n :: sets up overlay by sending routing table (size [N]) and manifest to each node in table");
             System.out.println("");
@@ -137,14 +155,23 @@ public class CommandInputRegistryThread implements Runnable {
         registry.nodes.buildRoutes(n);
     }
 
-    private void sendRoutes(int n) throws IOException {
+    private void printRoutes(){
+        for(ArrayList<RoutingEntry> ale : registry.nodes.routes){
+            System.out.println("entry...");
+            for(RoutingEntry e : ale) {
+                registry.nodes.printEntry(e);
+            }
+        }
+    }
+
+    private void sendRoutes(int n) throws IOException, InterruptedException {
         for(RoutingEntry e : registry.nodes.table){
             System.out.println("sending route to nodeId:"+e.nodeId);
             //send to entry e, routing table size n
             sendOneRoute(e,n);
         }
     }
-    private void sendOneRoute(RoutingEntry e,int n) throws IOException {
+    private synchronized void sendOneRoute(RoutingEntry e,int n) throws IOException, InterruptedException {
         //pack bytes for routing entry's routes
         System.out.println("sendOneRoute |0");
 
@@ -158,12 +185,20 @@ public class CommandInputRegistryThread implements Runnable {
         Socket outgoingSocket = new Socket(e.nodeHost,e.nodePort);
         System.out.println("sendOneRoute |3");
 
-        //send packed bytes
+        //prep send packed bytes
         TCPSender sender = new TCPSender(outgoingSocket,outgoingMsg);
-        System.out.println("sendOneRoute |4");
+        System.out.println("sendOneRoute |4 , socket:"+outgoingSocket.isConnected());
+
+        //thread send start
+        Thread sendThread = new Thread(sender);
+        sendThread.start();
+        System.out.println("sendOneRoute |5 , socket:"+outgoingSocket.isConnected());
+
+        sendThread.join();
+        System.out.println("sendOneRoute |6 , socket:"+outgoingSocket.isConnected());
 
         //close connection
-        outgoingSocket.close();
+//        outgoingSocket.close();
     }
 
     private void sendManifest(RoutingTable t) throws IOException {
@@ -195,7 +230,7 @@ public class CommandInputRegistryThread implements Runnable {
             System.out.println("waiting for command");
             try {
                 command(typed);
-            } catch (IOException e) {
+            } catch (IOException | InterruptedException e) {
                 System.out.println("!!! CIRT Registry command IO error?");
                 e.printStackTrace();
             }

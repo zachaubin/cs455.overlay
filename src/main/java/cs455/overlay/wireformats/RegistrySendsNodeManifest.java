@@ -25,18 +25,24 @@ public class RegistrySendsNodeManifest extends Event {
 
 
     public RegistrySendsNodeManifest(){
+
         this.receivedTable = new RoutingTable();
+        this.ids = new ArrayList<>();
     };
 
     public RegistrySendsNodeManifest(Socket socket, RoutingTable table){
         this.socket = socket;
         this.table = table;
         this.receivedTable = new RoutingTable();
+        this.ids = new ArrayList<>();
+
     }
 
     public RegistrySendsNodeManifest(RoutingTable table){
         this.table = table;
         this.receivedTable = new RoutingTable();
+        this.ids = new ArrayList<>();
+
     }
 
     public void printBytes(byte[] bytes){
@@ -291,12 +297,14 @@ public class RegistrySendsNodeManifest extends Event {
         //broke from while loop, next is number of nodes with ids
         int numIds = din.readInt();//for read fully, not using
         //now all ids
-        int singleId = 1;
+        int singleId = -1;
 
         while(din.available() > 4) {
             singleId = din.readInt();
+            System.out.println("RSNM:Unpack:while:ids, thisId:"+singleId);
             this.ids.add(singleId);
         }
+        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |4.5");
 
 
             //tail eat, might not need

@@ -144,6 +144,7 @@ public class TCPServerThread implements Runnable {
                         System.out.println(">>");
                         RegistryRequestsTaskInitiate msgRRTI = new RegistryRequestsTaskInitiate();
                         msgRRTI.unpackBytes(bytes);
+                        node.numMsgsToSend = msgRRTI.numMsgs;
                         break;
                     case 11:
                         System.out.println(">>");
