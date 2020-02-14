@@ -55,15 +55,18 @@ public class RoutingTable {
                 //add entry just after this and then double distance
                 System.out.println("                                                    >>adding ["+table.get((i+distance) % table.size() ).nodeId+"] to ["+table.get(i).nodeId+"]");
                 myRoutes.add(table.get( (i+distance) % table.size() ));
-                distance = distance * 2 % (table.size()-1);
+                distance = distance * 2 % (table.size());
 
 
             }
             table.get(i).routes = myRoutes;
+            routes.add(myRoutes);
 
         }
 
     }
+
+
 
 
 

@@ -4,6 +4,7 @@ import cs455.overlay.routing.RoutingEntry;
 import cs455.overlay.routing.RoutingTable;
 import cs455.overlay.transport.TCPSender;
 import cs455.overlay.wireformats.RegistryReportsRegistrationStatus;
+import cs455.overlay.wireformats.RegistryRequestsTaskInitiate;
 import cs455.overlay.wireformats.RegistrySendsNodeManifest;
 
 import java.io.IOException;
@@ -96,17 +97,17 @@ public class CommandInputRegistryThread implements Runnable {
 
             int nid  = 0;
             for(ArrayList<RoutingEntry> ale : registry.nodes.routes) {
-                System.out.println("======================================");
+                System.out.println("=========================================");
                 System.out.println(">><< Begin routing table for nodeId: "+registry.nodes.manifest.get(nid));
-                System.out.println("======================================");
+                System.out.println("=========================================");
 
 
                 for(RoutingEntry e : ale){
                     registry.nodes.printEntry(e);
                 }
-                System.out.println("======================================");
-                System.out.println("<<>> End routing table for nodeId: "+registry.nodes.manifest.get(nid));
-                System.out.println("======================================");
+                System.out.println("=========================================");
+                System.out.println("<<>> End   routing table for nodeId: "+registry.nodes.manifest.get(nid));
+                System.out.println("=========================================");
                 System.out.println("");
                 nid++;
 
@@ -114,11 +115,18 @@ public class CommandInputRegistryThread implements Runnable {
             good = true;
         }
 
-//        if(  command.equalsIgnoreCase("list-routing-tables") ){
-//            System.out.println("list routing tables entered...\n");
-//            good = true;
-//
-//        }
+        if(  command.equalsIgnoreCase("start") ){
+            int numToSend = 1;
+            System.out.println("start entered, sending "+numToSend+" messages...\n");
+            RegistryRequestsTaskInitiate rrti = new RegistryRequestsTaskInitiate();
+            rrti.packBytes(8,numToSend);
+            sendTaskInitiate(rrti.messageBytes);
+
+
+
+            good = true;
+
+        }
         if(!good){
             System.out.println("");
             System.out.println(":: :: :: :: :: :: :: :: :: :: :: :: :: :: :: ::");
@@ -141,6 +149,16 @@ public class CommandInputRegistryThread implements Runnable {
 
         }
 
+    }
+
+    private void sendTaskInitiate(byte[] msg) throws IOException, InterruptedException {
+        for(RoutingEntry e : registry.nodes.table){
+            Socket socket = new Socket(e.nodeHost,e.nodePort);
+            TCPSender tcpSender = new TCPSender(socket,msg);
+            Thread tcpSenderThread = new Thread(tcpSender);
+            tcpSenderThread.start();
+            tcpSenderThread.join();
+        }
     }
 
     private void sortTable(){
@@ -173,29 +191,29 @@ public class CommandInputRegistryThread implements Runnable {
     }
     private synchronized void sendOneRoute(RoutingEntry e,int n) throws IOException, InterruptedException {
         //pack bytes for routing entry's routes
-        System.out.println("sendOneRoute |0");
+//        System.out.println("sendOneRoute |0");
 
         byte[] outgoingMsg;
-        System.out.println("sendOneRoute |1");
+//        System.out.println("sendOneRoute |1");
 
         outgoingMsg = rsnm.packRoutesBytes(e,n);
-        System.out.println("sendOneRoute |2");
+//        System.out.println("sendOneRoute |2");
 
         //socket new
         Socket outgoingSocket = new Socket(e.nodeHost,e.nodePort);
-        System.out.println("sendOneRoute |3");
+//        System.out.println("sendOneRoute |3");
 
         //prep send packed bytes
         TCPSender sender = new TCPSender(outgoingSocket,outgoingMsg);
-        System.out.println("sendOneRoute |4 , socket:"+outgoingSocket.isConnected());
+//        System.out.println("sendOneRoute |4 , socket:"+outgoingSocket.isConnected());
 
         //thread send start
         Thread sendThread = new Thread(sender);
         sendThread.start();
-        System.out.println("sendOneRoute |5 , socket:"+outgoingSocket.isConnected());
+//        System.out.println("sendOneRoute |5 , socket:"+outgoingSocket.isConnected());
 
         sendThread.join();
-        System.out.println("sendOneRoute |6 , socket:"+outgoingSocket.isConnected());
+//        System.out.println("sendOneRoute |6 , socket:"+outgoingSocket.isConnected());
 
         //close connection
 //        outgoingSocket.close();

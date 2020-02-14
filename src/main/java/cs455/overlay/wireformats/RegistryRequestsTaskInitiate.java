@@ -65,6 +65,8 @@ public class RegistryRequestsTaskInitiate extends Event {
                 fourcount = 0;
             }
         }
+        //get to and eat message header
+        while(din.readByte() != -1);
 
         type = din.readInt();
         System.out.println("UNPACK:type:"+type);

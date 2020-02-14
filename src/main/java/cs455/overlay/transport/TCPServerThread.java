@@ -132,7 +132,12 @@ public class TCPServerThread implements Runnable {
                         msgRSNM.unpackRoutesBytes(bytes);
                         printBytes(bytes);
                         node.routes = msgRSNM.receivedTable;
-                        node.idList = msgRSNM.ids;
+
+                        node.idList = new int[msgRSNM.ids.size()];
+                        for(int i = 0; i < msgRSNM.ids.size(); i++){
+                            node.idList[i] = msgRSNM.ids.get(i);
+                        }
+
                         System.out.println(":::::printing received table:::::::nodeId="+node.getId());
                         node.routes.printTable();
                         System.out.println(":::::printed  received table:::::::nodeId="+node.getId());
@@ -145,6 +150,7 @@ public class TCPServerThread implements Runnable {
                         RegistryRequestsTaskInitiate msgRRTI = new RegistryRequestsTaskInitiate();
                         msgRRTI.unpackBytes(bytes);
                         node.numMsgsToSend = msgRRTI.numMsgs;
+                        node.send_some_messages();
                         break;
                     case 11:
                         System.out.println(">>");

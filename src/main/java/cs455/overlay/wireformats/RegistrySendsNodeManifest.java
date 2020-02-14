@@ -228,15 +228,15 @@ public class RegistrySendsNodeManifest extends Event {
         marshalledBytes = baOutputStream.toByteArray();
         messageBytes = marshalledBytes;
 
-        int fourcount = 0;
-        for (byte b : messageBytes) {
-            System.out.println(Integer.toBinaryString(b & 255 | 256).substring(1));
-            fourcount++;
-            if(fourcount == 4) {
-                System.out.println("--------PACK BYTES FOR EACH PACK route BYTES");
-                fourcount = 0;
-            }
-        }
+//        int fourcount = 0;
+//        for (byte b : messageBytes) {
+//            System.out.println(Integer.toBinaryString(b & 255 | 256).substring(1));
+//            fourcount++;
+//            if(fourcount == 4) {
+//                System.out.println("--------PACK BYTES FOR EACH PACK route BYTES");
+//                fourcount = 0;
+//            }
+//        }
         baOutputStream.close();
         dout.close();
         return marshalledBytes;

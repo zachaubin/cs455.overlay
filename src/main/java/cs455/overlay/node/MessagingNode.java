@@ -10,10 +10,7 @@ import cs455.overlay.wireformats.Event;
 import cs455.overlay.wireformats.OverlayNodeSendsRegistration;
 
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -89,9 +86,13 @@ public class MessagingNode extends Node {
     public RoutingTable table;
 
     public RoutingTable routes;
-    public ArrayList<Integer> idList;
+    public int[] idList;
 
     public int numMsgsToSend;
+    public int pathLength;
+    public byte[] messageBytes;
+
+    public int[] path;
 
 
 
@@ -123,6 +124,109 @@ public class MessagingNode extends Node {
 
         System.out.println(" >> built routing table");
     }
+
+    public void send_some_messages() throws IOException {
+        int choose=0;
+        int myIndex;
+        for(int i = 0; i < idList.length; i++){
+            if(idList[i] == nodeId){
+                break;
+            }
+            choose++;
+        }
+        myIndex = choose;
+
+        //send sum
+        for(int i = 0; i < numMsgsToSend; i++){
+            while(choose == myIndex){
+                choose--;
+            }
+            send_a_message(choose,myIndex);
+            choose--;
+        }
+    }
+    private void send_a_message(int destinationIdIndex, int sourceIdIndex) throws IOException {
+        //we might need to pull in packbytes to this method
+        byte[] marshalledBytes = null;
+        ByteArrayOutputStream baOutputStream = new ByteArrayOutputStream();
+        DataOutputStream dout = new DataOutputStream(new BufferedOutputStream(baOutputStream));
+
+        System.out.println(">PACK:type:"+9);
+        System.out.println(">PACK:destinationId:"+idList[destinationIdIndex]);
+        System.out.println(">PACK:sourceId:"+idList[sourceIdIndex]);
+        System.out.println(">PACK:payload:"+-1);
+        System.out.println(">PACK:path:"+nodeId);
+
+        pathLength = 1;
+
+        dout.writeInt(0);
+        dout.writeByte(-1);
+        //size is len plus 5 ints * 4 to bytes
+        dout.writeInt((pathLength + 5 ) * 4);
+        dout.writeInt(9);//type
+
+        dout.writeInt(idList[destinationIdIndex]);
+        dout.writeInt(idList[sourceIdIndex]);
+        dout.writeInt(-1);//payload
+        dout.writeInt(pathLength);
+
+        dout.writeInt(nodeId);//path start here
+
+//        for(int id : path) { //saved for relay code
+//            dout.writeInt(id);
+//        }
+
+        dout.flush();
+        marshalledBytes = baOutputStream.toByteArray();
+        messageBytes = marshalledBytes;
+
+        int fourcount = 0;
+        for (byte b : messageBytes) {
+            System.out.println(Integer.toBinaryString(b & 255 | 256).substring(1));
+            fourcount++;
+            if(fourcount == 4) {
+                System.out.println("<PACK> RRTI --------");
+                fourcount = 0;
+            }
+        }
+
+        baOutputStream.close();
+        dout.close();
+    }//////////////////////////////////////////////////////////////////////////////////////////////need receive data next, see below for unpack
+
+//    public class msg {
+//
+//
+//        //unpacks primitives from byte[]
+//        public void unpackBytes(byte[] pack) throws IOException {
+//            ByteArrayInputStream baInputStream = new ByteArrayInputStream(pack);
+//            DataInputStream din = new DataInputStream(new BufferedInputStream(baInputStream));
+//
+//            //get to and eat message header
+//            while(din.readByte() != -1);
+//            int msgSize = din.readInt();
+//            type = din.readInt();
+//
+//            destinationId = din.readInt();
+//            sourceId = din.readInt();
+//            payload = din.readInt();
+//            pathLength = din.readInt();
+//
+//            for(int id : path) {
+//                din.readInt();
+//            }
+//            for(int i = 0; i < pathLength; i++) {
+//                path[i] = din.readInt();
+//            }
+//
+//            baInputStream.close();
+//            din.close();
+//        }
+//
+//    }
+
+
+
 
 
     public static void main(String[] args) throws IOException {
