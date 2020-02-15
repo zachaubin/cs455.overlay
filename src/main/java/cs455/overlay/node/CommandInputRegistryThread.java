@@ -65,7 +65,7 @@ public class CommandInputRegistryThread implements Runnable {
             System.out.println("setup-overlay sends manifest (routing table all entries) to all nodes in manifest\n");
             RegistrySendsNodeManifest rsnm = new RegistrySendsNodeManifest(registry.nodes);
 
-            if(numberArg == 0 || numberArg > registry.nodes.getNumberOfNodes()){
+            if(numberArg == 0 || numberArg > registry.nodes.getNumberOfNodes() || numberArg*1.0 >= Math.pow(2,(registry.nodes.getNumberOfNodes() -1)+1)){
                 System.out.println("Cannot ask to set up route of size ["+numberArg+"] when we have ["+registry.nodes.getNumberOfNodes()+"] nodes.");
                 good = true;
             } else {

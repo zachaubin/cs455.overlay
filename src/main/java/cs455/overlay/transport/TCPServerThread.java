@@ -147,17 +147,22 @@ public class TCPServerThread implements Runnable {
                         System.out.println(">>");
                         System.out.println(">>>> THIS NODE JUST RECEIVED A MESSAGE OF TYPE = "+type);
                         System.out.println(">>");
+
                         RegistryRequestsTaskInitiate msgRRTI = new RegistryRequestsTaskInitiate();
                         msgRRTI.unpackBytes(bytes);
+
                         node.numMsgsToSend = msgRRTI.numMsgs;
+
                         node.send_some_messages();
                         break;
                     case 11:
                         System.out.println(">>");
                         System.out.println(">>>> THIS NODE JUST RECEIVED A MESSAGE OF TYPE = "+type);
                         System.out.println(">>");
+
                         RegistryRequestsTrafficSummary msgRRTS = new RegistryRequestsTrafficSummary();
                         msgRRTS.unpackBytes(bytes);
+
                         break;
                     default:
                         System.out.println(">>");

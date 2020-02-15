@@ -113,7 +113,7 @@ public class MessagingNode extends Node {
     private void buildMyRoutes(RoutingTable t){
         //from manifest-received-table t,
         int myIndex = t.getIndexOfNodeId(nodeId);
-        //  find=THISNODEID as index0
+        //  find = THISNODEID as index0
 
         //  calculate i= +1,+2,+4.. such that i<n
         //   add each i to myRoutes
@@ -126,23 +126,28 @@ public class MessagingNode extends Node {
     }
 
     public void send_some_messages() throws IOException {
-        int choose=0;
-        int myIndex;
+        Random random = new Random();
+
+        int max = idList.length-1;
+        int min = 0;
+
+        int choice = random.nextInt((max - min) + 1) + min;
+
+        int myIndex = 0;
         for(int i = 0; i < idList.length; i++){
             if(idList[i] == nodeId){
                 break;
             }
-            choose++;
+            myIndex++;
         }
-        myIndex = choose;
 
-        //send sum
+        //send sumting
         for(int i = 0; i < numMsgsToSend; i++){
-            while(choose == myIndex){
-                choose--;
+            while(choice == myIndex){
+                choice = random.nextInt((max - min) + 1) + min;
             }
-            send_a_message(choose,myIndex);
-            choose--;
+            send_a_message(choice,myIndex);
+            choice = random.nextInt((max - min) + 1) + min;
         }
     }
     private void send_a_message(int destinationIdIndex, int sourceIdIndex) throws IOException {
@@ -185,14 +190,15 @@ public class MessagingNode extends Node {
             System.out.println(Integer.toBinaryString(b & 255 | 256).substring(1));
             fourcount++;
             if(fourcount == 4) {
-                System.out.println("<PACK> RRTI --------");
+                System.out.println("<PACK> sumting --------");
                 fourcount = 0;
             }
         }
 
         baOutputStream.close();
         dout.close();
-    }//////////////////////////////////////////////////////////////////////////////////////////////need receive data next, see below for unpack
+    }
+    //////////////////////////////////////////////////////////////////////////////////////////////need receive data next, see below for unpack
 
 //    public class msg {
 //
