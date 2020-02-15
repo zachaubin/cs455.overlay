@@ -51,6 +51,8 @@ public class TCPServerThread implements Runnable {
             System.out.println("NODE is listening on port[" + port + "]");
             node.nodePort = port;
 
+            OverlayNodeReceivesData onrd = new OverlayNodeReceivesData();
+            OverlayNodeSendsData onsd = new OverlayNodeSendsData();
 
             while(true) {
                 System.out.println("BEGINNING OF {NODE SERVER WHILE true ACCEPT} BLOCK");
@@ -109,6 +111,7 @@ public class TCPServerThread implements Runnable {
                         System.out.println("");
                         RegistryReportsRegistrationStatus msgRRRS = new RegistryReportsRegistrationStatus();
                         msgRRRS.unpackBytes(bytes);
+                        node.nodeId = msgRRRS.nodeId;
 
                         if(msgRRRS.success == 1) {
                             System.out.println("Registration request successful. The number of messaging nodes currently constituting the overlay is <[" + msgRRRS.numberOfNodes + "]>");
@@ -138,30 +141,49 @@ public class TCPServerThread implements Runnable {
                             node.idList[i] = msgRSNM.ids.get(i);
                         }
 
-                        System.out.println(":::::printing received table:::::::nodeId="+node.getId());
+                        System.out.println(":::::printing received table:::::::nodeId="+node.nodeId);
                         node.routes.printTable();
-                        System.out.println(":::::printed  received table:::::::nodeId="+node.getId());
+                        System.out.println(":::::printed  received table:::::::nodeId="+node.nodeId);
 
                         break;
                     case 8:
                         System.out.println(">>");
                         System.out.println(">>>> THIS NODE JUST RECEIVED A MESSAGE OF TYPE = "+type);
                         System.out.println(">>");
-
                         RegistryRequestsTaskInitiate msgRRTI = new RegistryRequestsTaskInitiate();
                         msgRRTI.unpackBytes(bytes);
-
                         node.numMsgsToSend = msgRRTI.numMsgs;
-
                         node.send_some_messages();
                         break;
                     case 11:
                         System.out.println(">>");
                         System.out.println(">>>> THIS NODE JUST RECEIVED A MESSAGE OF TYPE = "+type);
                         System.out.println(">>");
-
                         RegistryRequestsTrafficSummary msgRRTS = new RegistryRequestsTrafficSummary();
                         msgRRTS.unpackBytes(bytes);
+                        break;
+                    case 33:
+                        System.out.println(">>");
+                        System.out.println(">>>> THIS NODE JUST RECEIVED A MESSAGE OF TYPE = "+type);
+                        System.out.println(">>");
+                        // msg data in
+                        onrd.unpackBytes(bytes);
+                        int where = interpretMsg(onrd);
+                        if(where == 1){// for me
+
+                            consumeMsg(onrd);
+
+                        } else if( where == 0) {//for someone else
+
+                            passMsg(onrd);
+
+                        } else if( where == -1){//error somehow
+                            System.out.println("Error in received DATA msg?");
+
+                        }
+
+
+
 
                         break;
                     default:
@@ -180,6 +202,22 @@ public class TCPServerThread implements Runnable {
                     + port + " or listening for a connection: ");
             System.out.println(e.getMessage());
         }
+    }
+    public int interpretMsg(OverlayNodeReceivesData onrd){
+        if(onrd.idList[onrd.destinationIdIndex] == node.nodeId){
+            return 1;
+        }
+
+        return 0;
+    }
+
+    public int consumeMsg(OverlayNodeReceivesData onrd){
+
+        return 0;
+    }
+    public int passMsg(OverlayNodeReceivesData onrd){
+
+        return 0;
     }
     public Socket getSocket(){
         return listen;

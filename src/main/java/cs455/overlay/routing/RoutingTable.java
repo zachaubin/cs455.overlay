@@ -49,8 +49,8 @@ public class RoutingTable {
             ArrayList<RoutingEntry> myRoutes = new ArrayList<>();
             System.out.println("RoutingTable:: buildRoutes:: new entry ");
             int distance = 1;
-            for(int j = 0; j < n; j++){
-                System.out.println("distance:"+distance);
+            for(int j = 0; j < n; j++) {
+                System.out.println("distance:" + distance);
                 if( (i+distance) % table.size() ==i) continue;
                 //add entry just after this and then double distance
                 System.out.println("                                                    >>adding ["+table.get((i+distance) % table.size() ).nodeId+"] to ["+table.get(i).nodeId+"]");

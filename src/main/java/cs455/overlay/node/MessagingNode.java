@@ -19,6 +19,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
 
 //Upon starting up, each messaging node should register its IP address, and port number with the registry.
 /*
@@ -62,7 +63,7 @@ public class MessagingNode extends Node {
     byte ipAddressLength;
     byte[] ipAddress;
 
-    int portNumber;
+    public int portNumber;
     byte[] bytePortNumber;
 
     String hostname;
@@ -70,7 +71,7 @@ public class MessagingNode extends Node {
     byte[] byteHostNameLength;
 
     InetAddress ip;
-    int nodeId;
+    public int nodeId;
 
     Socket nodeSocket;
     public int nodePort = -2;
@@ -94,6 +95,11 @@ public class MessagingNode extends Node {
 
     public int[] path;
 
+    public AtomicLong countSent;
+    public AtomicLong countReceived;
+    public AtomicLong countRelayed;
+
+
 
 
 
@@ -113,7 +119,7 @@ public class MessagingNode extends Node {
     private void buildMyRoutes(RoutingTable t){
         //from manifest-received-table t,
         int myIndex = t.getIndexOfNodeId(nodeId);
-        //  find = THISNODEID as index0
+        //  find=THISNODEID as index0
 
         //  calculate i= +1,+2,+4.. such that i<n
         //   add each i to myRoutes
@@ -127,30 +133,42 @@ public class MessagingNode extends Node {
 
     public void send_some_messages() throws IOException {
         Random random = new Random();
-
         int max = idList.length-1;
         int min = 0;
-
-        int choice = random.nextInt((max - min) + 1) + min;
+        int choose=random.nextInt((max - min) + 1) + min;
 
         int myIndex = 0;
         for(int i = 0; i < idList.length; i++){
             if(idList[i] == nodeId){
+                System.out.println("my id index:"+i);
                 break;
             }
             myIndex++;
         }
+        System.out.println("my actual ID:: " + nodeId);
+        int payload;
 
-        //send sumting
+        //send sum
         for(int i = 0; i < numMsgsToSend; i++){
-            while(choice == myIndex){
-                choice = random.nextInt((max - min) + 1) + min;
+            while(choose == myIndex){
+                choose=random.nextInt((max - min) + 1) + min;
             }
-            send_a_message(choice,myIndex);
-            choice = random.nextInt((max - min) + 1) + min;
+            System.out.println("sending to index:"+choose);
+            payload = random.nextInt(11);
+            System.out.println("");
+            System.out.println("send_a_message("+choose+","+myIndex+","+payload+")");
+            System.out.println("");
+            System.out.println(idList[myIndex] + " ("+payload+") -> " + idList[choose]);
+            System.out.println("");
+
+
+            synchronized (this) {
+                send_a_message(choose, myIndex, payload);
+            }
+            choose=random.nextInt((max - min) + 1) + min;
         }
     }
-    private void send_a_message(int destinationIdIndex, int sourceIdIndex) throws IOException {
+    private void send_a_message(int destinationIdIndex, int sourceIdIndex, int payload) throws IOException {
         //we might need to pull in packbytes to this method
         byte[] marshalledBytes = null;
         ByteArrayOutputStream baOutputStream = new ByteArrayOutputStream();
@@ -159,20 +177,20 @@ public class MessagingNode extends Node {
         System.out.println(">PACK:type:"+9);
         System.out.println(">PACK:destinationId:"+idList[destinationIdIndex]);
         System.out.println(">PACK:sourceId:"+idList[sourceIdIndex]);
-        System.out.println(">PACK:payload:"+-1);
+        System.out.println(">PACK:payload:"+payload);
         System.out.println(">PACK:path:"+nodeId);
 
         pathLength = 1;
 
         dout.writeInt(0);
-        dout.writeByte(-1);
+        dout.write(-1);
         //size is len plus 5 ints * 4 to bytes
         dout.writeInt((pathLength + 5 ) * 4);
-        dout.writeInt(9);//type
 
+        dout.writeInt(33);//type
         dout.writeInt(idList[destinationIdIndex]);
         dout.writeInt(idList[sourceIdIndex]);
-        dout.writeInt(-1);//payload
+        dout.writeInt(payload);//payload
         dout.writeInt(pathLength);
 
         dout.writeInt(nodeId);//path start here
@@ -185,20 +203,19 @@ public class MessagingNode extends Node {
         marshalledBytes = baOutputStream.toByteArray();
         messageBytes = marshalledBytes;
 
-        int fourcount = 0;
-        for (byte b : messageBytes) {
-            System.out.println(Integer.toBinaryString(b & 255 | 256).substring(1));
-            fourcount++;
-            if(fourcount == 4) {
-                System.out.println("<PACK> sumting --------");
-                fourcount = 0;
-            }
-        }
+//        int fourcount = 0;
+//        for (byte b : messageBytes) {
+//            System.out.println(Integer.toBinaryString(b & 255 | 256).substring(1));
+//            fourcount++;
+//            if(fourcount == 4) {
+//                System.out.println("<PACK> RRTI --------");
+//                fourcount = 0;
+//            }
+//        }
 
         baOutputStream.close();
         dout.close();
-    }
-    //////////////////////////////////////////////////////////////////////////////////////////////need receive data next, see below for unpack
+    }//////////////////////////////////////////////////////////////////////////////////////////////need receive data next, see below for unpack
 
 //    public class msg {
 //
@@ -235,7 +252,7 @@ public class MessagingNode extends Node {
 
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
 
         //new node opens server on (reg host,reg port)
         System.out.println("starting a node");
@@ -256,7 +273,8 @@ public class MessagingNode extends Node {
         System.out.println("3 OF {NODE SERVER START} BLOCK");
         serverThread.start();
         while(currentNode.nodePort < 0) {
-            System.out.println("port is -2");
+//            System.out.println("port is -2");
+            sleep(69);
             port_NODE_SERVER = currentNode.nodePort;
         }
         System.out.println("after while port node server is " + port_NODE_SERVER);

@@ -18,6 +18,7 @@ public class RegistryReportsRegistrationStatus extends Event {
     byte infolen;
     byte[] infoBytes;
     public int numberOfNodes;
+    public int nodeId;
 
     int nodeReturnHost;
     int nodeReturnPort;
@@ -49,7 +50,7 @@ public class RegistryReportsRegistrationStatus extends Event {
      */
 
     //packs primitives into a byte[]
-    public byte[] packBytes( int type, int success, int numberOfNodes ) throws IOException {
+    public byte[] packBytes( int type, int success, int numberOfNodes, int nodeId ) throws IOException {
         byte[] marshalledBytes = null;
         ByteArrayOutputStream baOutputStream = new ByteArrayOutputStream();
         DataOutputStream dout = new DataOutputStream(new BufferedOutputStream(baOutputStream));
@@ -61,10 +62,11 @@ public class RegistryReportsRegistrationStatus extends Event {
         //type, host length, hostname, nodeId
         infolen = 1;//int is 4 bytes always
 
-        dout.writeInt(-1);
+        dout.write(-1);
         dout.writeInt(type);
         dout.writeInt(infolen);
         dout.writeInt(numberOfNodes);
+        dout.writeInt(nodeId);
 
 
         dout.flush();
@@ -96,7 +98,6 @@ public class RegistryReportsRegistrationStatus extends Event {
 
         //get to and eat message header
         while(din.readByte() != -1);
-        din.readByte();din.readByte();din.readByte();
 
         type = din.readInt();
         System.out.println("UNPACK:type:"+type);
@@ -104,8 +105,11 @@ public class RegistryReportsRegistrationStatus extends Event {
         int sizeofint = din.readInt();//infolen is just an int with sizeof int
         System.out.println("UNPACK:infolen:"+sizeofint);
         this.numberOfNodes = din.readInt();
+        this.nodeId = din.readInt();
 
         System.out.println("UNPACK:number of nodes:"+this.numberOfNodes);
+        System.out.println("UNPACK: my nodeId:"+this.nodeId);
+
 
         baInputStream.close();
         din.close();

@@ -28,29 +28,29 @@ public class CommandInputRegistryThread implements Runnable {
     private void command(String commands) throws IOException, InterruptedException {
 
 
-        String command = commands;
-        int numberArg = 2;
+//        String command = commands;
+//        int numberArg = 2;
 
 
-//        System.out.println("111111111111YOU ENTERED ["+commands+"]");
-//
-//
-//        String delims = "[ ]+";
-//        String[] part = commands.split(delims);
-//        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>.1part.length:"+part.length);
-//
-//        System.out.println("222222222222222YOU ENTERED ["+commands+"]");
-//
-//        for(String thing : part){
-//            System.out.println("args: "+thing);
-//        }
-//        String command = part[0];
-//        int numberArg = 0;
-//
-//        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>2part.length:"+part.length);
-//        if(part.length > 1){
-//            numberArg = Integer.parseInt(part[1]);
-//        }
+        System.out.println("111111111111YOU ENTERED ["+commands+"]");
+
+
+        String delims = "[ ]+";
+        String[] line = commands.split(delims);
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>.1part.length:"+line.length);
+
+        System.out.println("222222222222222YOU ENTERED ["+commands+"]");
+
+        for(String string : line){
+            System.out.println("args: "+string);
+        }
+        String command = line[0];
+        int numberArg = 0;
+
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>2part.length:"+line.length);
+        if(line.length > 1){
+            numberArg = Integer.parseInt(line[1]);
+        }
 
 
 
@@ -65,28 +65,28 @@ public class CommandInputRegistryThread implements Runnable {
             System.out.println("setup-overlay sends manifest (routing table all entries) to all nodes in manifest\n");
             RegistrySendsNodeManifest rsnm = new RegistrySendsNodeManifest(registry.nodes);
 
-            if(numberArg == 0 || numberArg > registry.nodes.getNumberOfNodes() || numberArg*1.0 >= Math.pow(2,(registry.nodes.getNumberOfNodes() -1)+1)){
+            if(numberArg == 0 || numberArg > registry.nodes.getNumberOfNodes()){
                 System.out.println("Cannot ask to set up route of size ["+numberArg+"] when we have ["+registry.nodes.getNumberOfNodes()+"] nodes.");
                 good = true;
             } else {
 
-                    System.out.println("CIRT DEBUG setup-overlay |0");
+//                    System.out.println("CIRT DEBUG setup-overlay |0");
                 sortTable();
-                    System.out.println("CIRT DEBUG setup-overlay |PRINT TABLE SORTED");
+//                    System.out.println("CIRT DEBUG setup-overlay |PRINT TABLE SORTED");
                 registry.nodes.printTable();
-                    System.out.println("CIRT DEBUG setup-overlay |1");
+//                    System.out.println("CIRT DEBUG setup-overlay |1");
                 buildManifest();
                 registry.nodes.printManifest();
-                    System.out.println("CIRT DEBUG setup-overlay |2");
+//                    System.out.println("CIRT DEBUG setup-overlay |2");
                 sendManifest(registry.nodes);
-                    System.out.println("CIRT DEBUG setup-overlay |3");
+//                    System.out.println("CIRT DEBUG setup-overlay |3");
                 buildRoutes(numberArg);
                 printRoutes();
 //                  System.out.println("buildRoutes built this:::::");
 
-                    System.out.println("CIRT DEBUG setup-overlay |4");
+//                    System.out.println("CIRT DEBUG setup-overlay |4");
                 sendRoutes(numberArg);
-                    System.out.println("CIRT DEBUG setup-overlay |5");
+//                    System.out.println("CIRT DEBUG setup-overlay |5");
 
                 good = true;
 
@@ -116,7 +116,7 @@ public class CommandInputRegistryThread implements Runnable {
         }
 
         if(  command.equalsIgnoreCase("start") ){
-            int numToSend = 1;
+            int numToSend = numberArg;
             System.out.println("start entered, sending "+numToSend+" messages...\n");
             RegistryRequestsTaskInitiate rrti = new RegistryRequestsTaskInitiate();
             rrti.packBytes(8,numToSend);
@@ -244,8 +244,8 @@ public class CommandInputRegistryThread implements Runnable {
         Scanner input = new Scanner(System.in);
         String typed;
         while(input.hasNextLine()){
-            typed = input.next();
             System.out.println("waiting for command");
+            typed = input.nextLine();
             try {
                 command(typed);
             } catch (IOException | InterruptedException e) {

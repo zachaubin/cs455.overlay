@@ -61,6 +61,13 @@ public class TCPRegistryServerThread implements Runnable {
 //                System.out.println("registered node with id="+nodeId);
                 registry.nodes.printTable();
 
+                RegistryReportsRegistrationStatus rrrs = new RegistryReportsRegistrationStatus();
+                byte[] packedBytes = rrrs.packBytes(3,1,registry.nodes.getNumberOfNodes(),nodeId);
+                Socket socket = new Socket(marshall.hostname,marshall.port);
+                TCPSender tcpSender = new TCPSender(socket,packedBytes);
+                Thread threadSender = new Thread(tcpSender);
+                threadSender.start();
+
             }
 
         } catch (IOException e) {

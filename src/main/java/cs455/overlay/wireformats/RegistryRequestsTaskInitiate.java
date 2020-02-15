@@ -39,7 +39,7 @@ public class RegistryRequestsTaskInitiate extends Event {
             System.out.println(Integer.toBinaryString(b & 255 | 256).substring(1));
             fourcount++;
             if(fourcount == 4) {
-                System.out.println("<PACK> RRTI --------");
+//                System.out.println("<PACK> RRTI --------");
                 fourcount = 0;
             }
         }
