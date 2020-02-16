@@ -145,7 +145,7 @@ public class MessagingNode extends Node {
         System.out.println(" >> built routing table");
     }
 
-    public void send_some_messages() throws IOException {
+    public void send_some_messages() throws IOException, InterruptedException {
         Random random = new Random();
         int max = idList.length-1;
         int min = 0;
@@ -163,23 +163,25 @@ public class MessagingNode extends Node {
         int payload;
 
         //send sum
+
         for(int i = 0; i < numMsgsToSend; i++){
-            while(choose == myIndex){
-                choose=random.nextInt((max - min) + 1) + min;
-            }
-            System.out.println("sending to index:"+choose);
-            payload = random.nextInt(11);
-            System.out.println("");
-            System.out.println("send_a_message("+choose+","+myIndex+","+payload+")");
-            System.out.println("");
-            System.out.println(idList[myIndex] + " ("+payload+") -> " + idList[choose]);
-            System.out.println("");
-
-
+            sleep(69);
             synchronized (this) {
+                while (choose == myIndex) {
+                    choose = random.nextInt((max - min) + 1) + min;
+                }
+//            System.out.println("sending to index:"+choose);
+                payload = random.nextInt(11);
+//            System.out.println("");
+//            System.out.println("send_a_message("+choose+","+myIndex+","+payload+")");
+//            System.out.println("");
+                System.out.println(idList[myIndex] + " (" + payload + ") -> " + idList[choose]);
+                System.out.println("");
+
                 send_a_message(choose, myIndex, payload);
+
+                choose = random.nextInt((max - min) + 1) + min;
             }
-            choose=random.nextInt((max - min) + 1) + min;
         }
     }
     public void send_a_message(int destinationIdIndex, int sourceIdIndex, int payload) throws IOException {

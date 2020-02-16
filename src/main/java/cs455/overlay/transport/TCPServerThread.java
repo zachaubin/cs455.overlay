@@ -149,7 +149,7 @@ public class TCPServerThread implements Runnable {
 
             try {
                 typeSwitch(type,bytes);
-            } catch (IOException e) {
+            } catch (IOException | InterruptedException e) {
                 System.out.println("TCP ST: Error: @ type switch in server thread.");
                 System.out.println("TCP ST: Error: type="+type);
                 System.out.println("TCP ST: Error: bytes[]=");
@@ -238,7 +238,7 @@ public class TCPServerThread implements Runnable {
             }
         }
     }
-    public void typeSwitch(int type, byte[] bytes) throws IOException {
+    public void typeSwitch(int type, byte[] bytes) throws IOException, InterruptedException {
         //yes this is where EventFactory should go
         // 3 5 6 8 11
         switch (type) {
