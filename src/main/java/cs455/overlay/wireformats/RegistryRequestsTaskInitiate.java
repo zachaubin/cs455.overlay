@@ -21,8 +21,8 @@ public class RegistryRequestsTaskInitiate extends Event {
         ByteArrayOutputStream baOutputStream = new ByteArrayOutputStream();
         DataOutputStream dout = new DataOutputStream(new BufferedOutputStream(baOutputStream));
 
-        System.out.println(">PACK:type:"+type);
-        System.out.println(">PACK:numMsgs:"+numMsgs);
+//        System.out.println(">PACK:type:"+type);
+//        System.out.println(">PACK:numMsgs:"+numMsgs);
 
         dout.writeInt(0);
         dout.writeByte(-1);
@@ -55,24 +55,24 @@ public class RegistryRequestsTaskInitiate extends Event {
         ByteArrayInputStream baInputStream = new ByteArrayInputStream(pack);
         DataInputStream din = new DataInputStream(new BufferedInputStream(baInputStream));
 
-        System.out.println("RegistryRequestsTaskInitiate:: ==unpackbytes==");
-        int fourcount = 0;
-        for (byte b : pack) {
-            System.out.println(Integer.toBinaryString(b & 255 | 256).substring(1));
-            fourcount++;
-            if(fourcount == 4) {
-                System.out.println("<UNPACK> RRTI --------");
-                fourcount = 0;
-            }
-        }
+//        System.out.println("RegistryRequestsTaskInitiate:: ==unpackbytes==");
+//        int fourcount = 0;
+//        for (byte b : pack) {
+//            System.out.println(Integer.toBinaryString(b & 255 | 256).substring(1));
+//            fourcount++;
+//            if(fourcount == 4) {
+//                System.out.println("<UNPACK> RRTI --------");
+//                fourcount = 0;
+//            }
+//        }
         //get to and eat message header
         while(din.readByte() != -1);
 
         type = din.readInt();
-        System.out.println("UNPACK:type:"+type);
+//        System.out.println("UNPACK:type:"+type);
 
         numMsgs = din.readInt();
-        System.out.println("UNPACK:numMsgs:"+numMsgs);
+//        System.out.println("UNPACK:numMsgs:"+numMsgs);
 
         baInputStream.close();
         din.close();
@@ -82,14 +82,14 @@ public class RegistryRequestsTaskInitiate extends Event {
         //this sends the packed bytes from messageBytes
         //we should have called packbytes by now
 
-        System.out.println("RRTI this is sending event thread");
+//        System.out.println("RRTI this is sending event thread");
         TCPSender out = new TCPSender(this.socket,messageBytes);
-        System.out.println("this is sending event thread|1");
+//        System.out.println("this is sending event thread|1");
         Thread sendThread = new Thread(out);
-        System.out.println("this is sending event thread|2");
+//        System.out.println("this is sending event thread|2");
 
         sendThread.start();
-        System.out.println("this is sending event thread|3");
+//        System.out.println("this is sending event thread|3");
 //        try {
 //            this.socket.close();
 //        } catch (IOException e) {

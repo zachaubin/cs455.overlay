@@ -16,12 +16,8 @@ public class RegistryReportsRegistrationStatus extends Event {
     public int type;
     public int success;
     byte infolen;
-    byte[] infoBytes;
     public int numberOfNodes;
     public int nodeId;
-
-    int nodeReturnHost;
-    int nodeReturnPort;
 
     public RegistryReportsRegistrationStatus(){}
 
@@ -55,9 +51,9 @@ public class RegistryReportsRegistrationStatus extends Event {
         ByteArrayOutputStream baOutputStream = new ByteArrayOutputStream();
         DataOutputStream dout = new DataOutputStream(new BufferedOutputStream(baOutputStream));
 
-        System.out.println(">PACKreport:type:"+type);
-        System.out.println(">PACKreport:success:"+success);
-        System.out.println(">PACKreport:numNodes:"+numberOfNodes);
+//        System.out.println(">PACKreport:type:"+type);
+//        System.out.println(">PACKreport:success:"+success);
+//        System.out.println(">PACKreport:numNodes:"+numberOfNodes);
 
         //type, host length, hostname, nodeId
         infolen = 1;//int is 4 bytes always
@@ -85,30 +81,32 @@ public class RegistryReportsRegistrationStatus extends Event {
         ByteArrayInputStream baInputStream = new ByteArrayInputStream(pack);
         DataInputStream din = new DataInputStream(new BufferedInputStream(baInputStream));
 
-        System.out.println("==unpackbytes==");
-        int fourcount = 0;
-        for (byte b : pack) {
-            System.out.println(Integer.toBinaryString(b & 255 | 256).substring(1));
-            fourcount++;
-            if(fourcount == 4) {
-                System.out.println("--------");
-                fourcount = 0;
-            }
-        }
+//        System.out.println("==unpackbytes==");
+//        int fourcount = 0;
+//        for (byte b : pack) {
+//            System.out.println(Integer.toBinaryString(b & 255 | 256).substring(1));
+//            fourcount++;
+//            if(fourcount == 4) {
+//                System.out.println("--------");
+//                fourcount = 0;
+//            }
+//        }
 
         //get to and eat message header
         while(din.readByte() != -1);
 
         type = din.readInt();
-        System.out.println("UNPACK:type:"+type);
+//        System.out.println("UNPACK:type:"+type);
 
         int sizeofint = din.readInt();//infolen is just an int with sizeof int
-        System.out.println("UNPACK:infolen:"+sizeofint);
+//        System.out.println("UNPACK:infolen:"+sizeofint);
         this.numberOfNodes = din.readInt();
         this.nodeId = din.readInt();
 
-        System.out.println("UNPACK:number of nodes:"+this.numberOfNodes);
-        System.out.println("UNPACK: my nodeId:"+this.nodeId);
+//        System.out.println("UNPACK:number of nodes:"+this.numberOfNodes);
+//        System.out.println("UNPACK: my nodeId:"+this.nodeId);
+
+        success = 1;
 
 
         baInputStream.close();
@@ -120,20 +118,20 @@ public class RegistryReportsRegistrationStatus extends Event {
         //this sends the packed bytes from messageBytes
         //we should have called packbytes by now
 
-        System.out.println("RegistryReportsRegistrationStatus: this is sending event thread to report status|0");
+//        System.out.println("RegistryReportsRegistrationStatus: this is sending event thread to report status|0");
 
         while(this.socket == null){
             //lookup host and port from cache to make new socket
             System.out.println("RegRepRegStatus: socket error");
         }
         TCPSender out = new TCPSender(this.socket,messageBytes);
-        System.out.println("RegistryReportsRegistrationStatus: this is sending event thread to report status|1");
+//        System.out.println("RegistryReportsRegistrationStatus: this is sending event thread to report status|1");
 
         Thread sendThread = new Thread(out);
-        System.out.println("RegistryReportsRegistrationStatus: this is sending event thread to report status|2");
+//        System.out.println("RegistryReportsRegistrationStatus: this is sending event thread to report status|2");
 
         sendThread.start();
-        System.out.println("RegistryReportsRegistrationStatus: this is sending event thread to report status|3");
+//        System.out.println("RegistryReportsRegistrationStatus: this is sending event thread to report status|3");
 
 
     }

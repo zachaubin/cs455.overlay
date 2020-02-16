@@ -66,20 +66,8 @@ public class MessagingNode extends Node {
         return instance;
     }
 
-    byte[] byteMessageLength;
-    byte byteMessageType;
-
-    byte ipAddressLength;
-    byte[] ipAddress;
 
     public int portNumber;
-    byte[] bytePortNumber;
-
-    String hostname;
-    byte[] byteHostName;
-    byte[] byteHostNameLength;
-
-    InetAddress ip;
     public int nodeId;
 
     Socket nodeSocket;
@@ -119,18 +107,28 @@ public class MessagingNode extends Node {
         portNumber  = port;
         routeArrayList = new ArrayList<Integer>();
         routeLookupSocket = new Socket[128];
+        countSent = new AtomicLong(0);
+        countReceived = new AtomicLong(0);
+        countRelayed = new AtomicLong(0);
+        sum = new AtomicLong(0);
     }
 
-    public Socket socketFinder(int id){
-        return routeLookupSocket[id];
+    public RoutingEntry socketFinder(int id){
+        for(RoutingEntry e : routes.table){
+            if(e.nodeId == id){
+                return e;
+            }
+        }
+        System.out.println("MessagingNode:socketFinder:error, routing entry not found for id="+id);
+        return null;
     }
 
-    private int newNodeId(){
-        Random rand = new Random();
-        int max = 127;
-        int min = 0;
-        return rand.nextInt((max - min) + 1) + min;
-    }
+//    private int newNodeId(){
+//        Random rand = new Random();
+//        int max = 127;
+//        int min = 0;
+//        return rand.nextInt((max - min) + 1) + min;
+//    }
 
     private void buildMyRoutes(RoutingTable t){
         //from manifest-received-table t,
@@ -201,7 +199,7 @@ public class MessagingNode extends Node {
         dout.writeInt(0);
         dout.write(-1);
         //size is len plus 5 ints * 4 to bytes
-        dout.writeInt((pathLength + 5 ) * 4);
+//        dout.writeInt((pathLength + 5 ) * 4);
 
         dout.writeInt(33);//type
         dout.writeInt(idList[destinationIdIndex]);
@@ -236,17 +234,22 @@ public class MessagingNode extends Node {
         int backstep = routeArrayList.get(i.get());
         int step = routeArrayList.get(i.get());
         while(step < idList[destinationIdIndex]) {
+
             backstep = routeArrayList.get(i.get());
             i.incrementAndGet();
+            if(i.get() >= routeArrayList.size()){
+                break;
+            };// == really
             step = routeArrayList.get(i.get());
         }
         int nextDestination = backstep;
 
         //socket to next in hop
-        TCPSender tcpSender = new TCPSender(socketFinder(nextDestination),messageBytes);
+        TCPSender tcpSender = new TCPSender(new Socket(socketFinder(nextDestination).nodeHost, socketFinder(nextDestination).nodePort),messageBytes);
         System.out.println("i'm passing to " + nextDestination);
         Thread sendThread = new Thread(tcpSender);
         sendThread.start();
+        this.countSent.incrementAndGet();
     }//////////////////////////////////////////////////////////////////////////////////////////////need receive data next, see below for unpack
 
 //    public class msg {

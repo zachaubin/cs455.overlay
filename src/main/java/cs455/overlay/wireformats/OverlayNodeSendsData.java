@@ -17,7 +17,7 @@ public class OverlayNodeSendsData extends Event {
     public int type;
     public Socket socket;
 
-        public OverlayNodeSendsData() { }
+    public OverlayNodeSendsData() { }
 
 
     // PASSING A MESSAGE!!!!!!! Originates in MessagingNode, passed here
@@ -27,18 +27,18 @@ public class OverlayNodeSendsData extends Event {
         ByteArrayOutputStream baOutputStream = new ByteArrayOutputStream();
         DataOutputStream dout = new DataOutputStream(new BufferedOutputStream(baOutputStream));
 
-        System.out.println(">PACK:type:"+type);
-        System.out.println(">PACK:destinationId:"+destinationId);
-        System.out.println(">PACK:sourceId:"+sourceId);
-        System.out.println(">PACK:payload:"+payload);
-        System.out.println(">PACK:path:"+path);
+//        System.out.println(">PACK:type:"+type);
+//        System.out.println(">PACK:destinationId:"+destinationId);
+//        System.out.println(">PACK:sourceId:"+sourceId);
+//        System.out.println(">PACK:payload:"+payload);
+//        System.out.println(">PACK:path:"+path.toString());
 
         pathLength = path.length;
 
         dout.writeInt(0);
         dout.writeByte(-1);
         //size is len plus 5 ints * 4 to bytes
-        dout.writeInt((pathLength + 5 ) * 4);
+//        dout.writeInt((pathLength + 5 ) * 4);
         dout.writeInt(type);
 
         dout.writeInt(destinationId);
@@ -56,15 +56,15 @@ public class OverlayNodeSendsData extends Event {
         marshalledBytes = baOutputStream.toByteArray();
         messageBytes = marshalledBytes;
 
-        int fourcount = 0;
-        for (byte b : messageBytes) {
-            System.out.println(Integer.toBinaryString(b & 255 | 256).substring(1));
-            fourcount++;
-            if(fourcount == 4) {
-                System.out.println("<PACK> RRTI --------");
-                fourcount = 0;
-            }
-        }
+//        int fourcount = 0;
+//        for (byte b : messageBytes) {
+//            System.out.println(Integer.toBinaryString(b & 255 | 256).substring(1));
+//            fourcount++;
+//            if(fourcount == 4) {
+//                System.out.println("<PACK> RRTI --------");
+//                fourcount = 0;
+//            }
+//        }
 
         baOutputStream.close();
         dout.close();
@@ -98,13 +98,13 @@ public class OverlayNodeSendsData extends Event {
     public void run() {
         //this sends the packed bytes from messageBytes
         //we should have called packbytes by now
-        System.out.println("ONSD this is sending event thread");
+//        System.out.println("ONSD this is sending event thread");
         TCPSender out = new TCPSender(this.socket,messageBytes);
-        System.out.println("ONSD this is sending event thread|1");
+//        System.out.println("ONSD this is sending event thread|1");
         Thread sendThread = new Thread(out);
-        System.out.println("ONSD this is sending event thread|2");
+//        System.out.println("ONSD this is sending event thread|2");
         sendThread.start();
-        System.out.println("ONSD this is sending event thread|3");
+//        System.out.println("ONSD this is sending event thread|3");
     }
 }
 

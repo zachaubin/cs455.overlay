@@ -16,7 +16,7 @@ public class MessagingNodeSingleton {
     public static void main(String[] args) throws IOException, InterruptedException {
 
         //new node opens server on (reg host,reg port)
-        System.out.println("starting a node");
+//        System.out.println("starting a node");
         String hostname_REGISTRY = args[0];
         int port_REGISTRY = Integer.parseInt(args[1]);
         MessagingNode currentNode = MessagingNode.getInstance(hostname_REGISTRY, port_REGISTRY);
@@ -25,21 +25,27 @@ public class MessagingNodeSingleton {
 //        currentNode.nodeSocket= new Socket("localhost",0);
 //        int port_NODE_SERVER = currentNode.nodeSocket.getPort();
         int port_NODE_SERVER = -1;
-        System.out.println("NODE server thread runs on loop to tcp receive and print based on msg");
+//        System.out.println("NODE server thread runs on loop to tcp receive and print based on msg");
         TCPServerThread server_thread = new TCPServerThread(currentNode.nodeSocket,currentNode);
-        System.out.println("1 OF {NODE SERVER START} BLOCK");
+//        System.out.println("1 OF {NODE SERVER START} BLOCK");
 
-        System.out.println("2 OF {NODE SERVER START} BLOCK");
+//        System.out.println("2 OF {NODE SERVER START} BLOCK");
         Thread serverThread = new Thread(server_thread);
-        System.out.println("3 OF {NODE SERVER START} BLOCK");
+//        System.out.println("3 OF {NODE SERVER START} BLOCK");
         serverThread.start();
         while(currentNode.nodePort < 0) {
 //            System.out.println("port is -2");
             sleep(69);
             port_NODE_SERVER = currentNode.nodePort;
         }
-        System.out.println("after while port node server is " + port_NODE_SERVER);
-        System.out.println("END OF {NODE SERVER START} BLOCK");
+//        System.out.println("after while port node server is " + port_NODE_SERVER);
+//        System.out.println("END OF {NODE SERVER START} BLOCK");
+
+        //command thread
+        CommandInputMessagingNodeThread cmnt = new CommandInputMessagingNodeThread(currentNode);
+        Thread cmntThread = new Thread(cmnt);
+        cmntThread.start();
+
 
 
         //// register ////

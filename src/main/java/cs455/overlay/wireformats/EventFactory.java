@@ -71,7 +71,7 @@ public class EventFactory {
         //TODO fix numbers to match those in assignment
 
         switch(type){
-            case 0: return new OverlayNodeReceivesData();
+//            case 0: return;
 //                break;
             case 1: return new OverlayNodeSendsData();
 //                break;

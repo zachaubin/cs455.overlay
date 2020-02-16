@@ -15,11 +15,13 @@ public class CommandInputMessagingNodeThread implements Runnable {
         //list-messaging-nodes
         System.out.println("command function called");
         boolean good = false;
-        if(  command.equalsIgnoreCase("print-counters-and-diagnostics") ){
-            System.out.println("print-counters-and-diagnostics entered NEED TO DO...\n");
-            System.out.println("Messages Sent     <:["+node.msgsSent + "]:>");
-            System.out.println("Messages Relayed  <:["+node.msgsRelayed + "]:>");
-            System.out.println("Messages Received <:["+node.msgsReceived + "]:>");
+        if(  command.equalsIgnoreCase("print-counters-and-diagnostics") || command.equalsIgnoreCase("print")){
+            System.out.println("print-counters-and-diagnostics entered, printing stats...\n");
+            System.out.println("Messages Sent     <:["+node.countSent + "]:>");
+            System.out.println("Messages Relayed  <:["+node.countRelayed + "]:>");
+            System.out.println("Messages Received <:["+node.countReceived + "]:>");
+            System.out.println("");
+            System.out.println("Payload Summation <:["+node.sum+"]:>");
 
 
             good = true;

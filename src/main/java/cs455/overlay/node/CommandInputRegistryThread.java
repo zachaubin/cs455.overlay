@@ -107,10 +107,10 @@ public class CommandInputRegistryThread implements Runnable {
             System.out.println("start entered, sending "+numToSend+" messages...\n");
             RegistryRequestsTaskInitiate rrti = new RegistryRequestsTaskInitiate();
             rrti.packBytes(8,numToSend);
-            for(byte b : rrti.messageBytes){
-                System.out.println("sending this message after start was called:");
-                System.out.println(b);
-            }
+//            for(byte b : rrti.messageBytes){
+//                System.out.println("sending this message after start was called:");
+//                System.out.println(b);
+//            }
             sendTaskInitiate(rrti.messageBytes);
 
 
