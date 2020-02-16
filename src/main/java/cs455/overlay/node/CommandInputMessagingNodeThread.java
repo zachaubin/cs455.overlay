@@ -28,6 +28,8 @@ public class CommandInputMessagingNodeThread implements Runnable {
         }
         if(  command.equalsIgnoreCase("exit-overlay") ){
             System.out.println("exit-overlay needs to be implemented\n");
+            //this sends node deregistration and
+            // upon successful reply it kills itself
 
             good = true;
         }

@@ -165,13 +165,13 @@ public class MessagingNode extends Node {
         //send sum
 
         for(int i = 0; i < numMsgsToSend; i++){
-            sleep(69);
+            sleep(69);// nice, this line of code solved concurrency issues
             synchronized (this) {
                 while (choose == myIndex) {
                     choose = random.nextInt((max - min) + 1) + min;
                 }
 //            System.out.println("sending to index:"+choose);
-                payload = random.nextInt(11);
+                payload = random.nextInt(11) - 1;// random intRange(1,10) 
 //            System.out.println("");
 //            System.out.println("send_a_message("+choose+","+myIndex+","+payload+")");
 //            System.out.println("");

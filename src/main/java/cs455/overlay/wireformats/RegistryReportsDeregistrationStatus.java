@@ -7,6 +7,9 @@ import java.io.IOException;
 
 public class RegistryReportsDeregistrationStatus extends Event {
 
+    //need this to update routing table of registry with remove(nodeId)
+    // and respond to tell node to kill itself
+
     public void unpackBytes(byte[] pack) throws IOException {
 //        ByteArrayInputStream baInputStream = new ByteArrayInputStream(pack);
 //        DataInputStream din = new DataInputStream(new BufferedInputStream(baInputStream));

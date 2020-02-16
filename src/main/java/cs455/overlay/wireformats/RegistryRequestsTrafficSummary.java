@@ -5,6 +5,9 @@ import java.io.IOException;
 public class RegistryRequestsTrafficSummary extends Event {
 
 
+//need this in a thread that waits for all nodes to report task complete
+    // sends to all asking for traffic summary
+
 
 
     public void unpackBytes(byte[] pack) throws IOException {

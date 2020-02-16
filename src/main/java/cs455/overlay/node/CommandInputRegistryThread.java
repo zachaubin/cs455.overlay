@@ -53,27 +53,27 @@ public class CommandInputRegistryThread implements Runnable {
             RegistrySendsNodeManifest rsnm = new RegistrySendsNodeManifest(registry.nodes);
 
             if(numberArg == 0 || numberArg > registry.nodes.getNumberOfNodes()){
-                System.out.println("Cannot ask to set up route of size ["+numberArg+"] when we have ["+registry.nodes.getNumberOfNodes()+"] nodes.");
+                System.out.println("Cannot ask to set up route of size ["+numberArg+"] (default = 0) when we have ["+registry.nodes.getNumberOfNodes()+"] nodes.");
                 good = true;
             } else {
 
-                    System.out.println("CIRT DEBUG setup-overlay |0");
+//                    System.out.println("CIRT DEBUG setup-overlay |0");
                 sortTable();
-                    System.out.println("CIRT DEBUG setup-overlay |PRINT TABLE SORTED");
-                registry.nodes.printTable();
-                    System.out.println("CIRT DEBUG setup-overlay |1");
+//                    System.out.println("CIRT DEBUG setup-overlay |PRINT TABLE SORTED");
+//                registry.nodes.printTable();
+//                    System.out.println("CIRT DEBUG setup-overlay |1");
                 buildManifest();
-                registry.nodes.printManifest();
-                    System.out.println("CIRT DEBUG setup-overlay |2");
+//                registry.nodes.printManifest();
+//                    System.out.println("CIRT DEBUG setup-overlay |2");
                 sendManifest(registry.nodes);
-                    System.out.println("CIRT DEBUG setup-overlay |3");
+//                    System.out.println("CIRT DEBUG setup-overlay |3");
                 buildRoutes(numberArg);
-                printRoutes();
-                  System.out.println("buildRoutes built this:::::");
+//                printRoutes();
+//                  System.out.println("buildRoutes built this:::::");
 
-                    System.out.println("CIRT DEBUG setup-overlay |4");
+//                    System.out.println("CIRT DEBUG setup-overlay |4");
                 sendRoutes(numberArg);
-                    System.out.println("CIRT DEBUG setup-overlay |5");
+//                    System.out.println("CIRT DEBUG setup-overlay |5");
 
                 good = true;
 
