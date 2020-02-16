@@ -3,6 +3,7 @@ package cs455.overlay.node;
 import cs455.overlay.routing.RoutingEntry;
 import cs455.overlay.routing.RoutingTable;
 import cs455.overlay.transport.TCPSender;
+import cs455.overlay.wireformats.OverlayNodeSendsRegistration;
 import cs455.overlay.wireformats.RegistryReportsRegistrationStatus;
 import cs455.overlay.wireformats.RegistryRequestsTaskInitiate;
 import cs455.overlay.wireformats.RegistrySendsNodeManifest;
@@ -56,23 +57,23 @@ public class CommandInputRegistryThread implements Runnable {
                 good = true;
             } else {
 
-//                    System.out.println("CIRT DEBUG setup-overlay |0");
+                    System.out.println("CIRT DEBUG setup-overlay |0");
                 sortTable();
-//                    System.out.println("CIRT DEBUG setup-overlay |PRINT TABLE SORTED");
+                    System.out.println("CIRT DEBUG setup-overlay |PRINT TABLE SORTED");
                 registry.nodes.printTable();
-//                    System.out.println("CIRT DEBUG setup-overlay |1");
+                    System.out.println("CIRT DEBUG setup-overlay |1");
                 buildManifest();
                 registry.nodes.printManifest();
-//                    System.out.println("CIRT DEBUG setup-overlay |2");
+                    System.out.println("CIRT DEBUG setup-overlay |2");
                 sendManifest(registry.nodes);
-//                    System.out.println("CIRT DEBUG setup-overlay |3");
+                    System.out.println("CIRT DEBUG setup-overlay |3");
                 buildRoutes(numberArg);
                 printRoutes();
-//                  System.out.println("buildRoutes built this:::::");
+                  System.out.println("buildRoutes built this:::::");
 
-//                    System.out.println("CIRT DEBUG setup-overlay |4");
+                    System.out.println("CIRT DEBUG setup-overlay |4");
                 sendRoutes(numberArg);
-//                    System.out.println("CIRT DEBUG setup-overlay |5");
+                    System.out.println("CIRT DEBUG setup-overlay |5");
 
                 good = true;
 
@@ -106,6 +107,10 @@ public class CommandInputRegistryThread implements Runnable {
             System.out.println("start entered, sending "+numToSend+" messages...\n");
             RegistryRequestsTaskInitiate rrti = new RegistryRequestsTaskInitiate();
             rrti.packBytes(8,numToSend);
+            for(byte b : rrti.messageBytes){
+                System.out.println("sending this message after start was called:");
+                System.out.println(b);
+            }
             sendTaskInitiate(rrti.messageBytes);
 
 
@@ -140,11 +145,11 @@ public class CommandInputRegistryThread implements Runnable {
     private void sendTaskInitiate(byte[] msg) throws IOException, InterruptedException {
         for(RoutingEntry e : registry.nodes.table){
             System.out.println("sending STI to nodeId:"+e.nodeId +" on port: "+e.nodePort);
-            Socket socket = new Socket(e.nodeHost,e.nodePort);
-            TCPSender tcpSender = new TCPSender(socket,msg);
+            TCPSender tcpSender = new TCPSender((new Socket(e.nodeHost,e.nodePort)),msg);
             Thread tcpSenderThread = new Thread(tcpSender);
             tcpSenderThread.start();
-//            socket.close();
+            tcpSenderThread.join();
+
         }
     }
 
@@ -189,7 +194,9 @@ public class CommandInputRegistryThread implements Runnable {
         //socket new
         Socket outgoingSocket = new Socket(e.nodeHost,e.nodePort);
 //        System.out.println("sendOneRoute |3");
-
+        registry.sockets[e.nodeId] = outgoingSocket;
+//        registry.sockets[e.nodeId].setKeepAlive(true);
+System.out.println("just added socket");
         //prep send packed bytes
         TCPSender sender = new TCPSender(outgoingSocket,outgoingMsg);
 //        System.out.println("sendOneRoute |4 , socket:"+outgoingSocket.isConnected());
@@ -200,7 +207,7 @@ public class CommandInputRegistryThread implements Runnable {
 //        System.out.println("sendOneRoute |5 , socket:"+outgoingSocket.isConnected());
 
         sendThread.join();
-//        System.out.println("sendOneRoute |6 , socket:"+outgoingSocket.isConnected());
+        System.out.println("sendOneRoute |6 , socket:"+outgoingSocket.isConnected());
 
         //close connection
 //        outgoingSocket.close();

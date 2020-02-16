@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class TCPServerThread implements Runnable {
 
     int port;
-    public static Socket listen;
+    public static volatile Socket listen;
     public MessagingNode node;
 
     int type;
@@ -32,17 +32,25 @@ public class TCPServerThread implements Runnable {
     }
 
     public static byte[] toByteArray(InputStream in) throws IOException {
+        System.out.println("to byte array tobytearray |0");
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
+        System.out.println("to byte array tobytearray |1");
 
         byte[] buffer = new byte[1024];
         int len;
 
+        System.out.println("to byte array tobytearray |2, in.available=" + in.available());
+
         // read bytes from the input stream and store them in buffer
         while ((len = in.read(buffer)) != -1) {
             // write bytes from the buffer into output stream
+            System.out.println("to byte array tobytearray |3l");
+
             os.write(buffer, 0, len);
         }
+        System.out.println("to byte array tobytearray |4");
+
 
         return os.toByteArray();
     }
@@ -63,6 +71,7 @@ public class TCPServerThread implements Runnable {
                 while (true) {
                     System.out.println("BEGINNING OF {NODE SERVER WHILE true ACCEPT} BLOCK");
                     //wait for connect
+
                     listen = serverSocket.accept();
                     //got incoming connection
 
@@ -73,7 +82,7 @@ public class TCPServerThread implements Runnable {
 //                Thread receive =  new Thread(nodeServer);
 //                receive.start();
 //                receive.join();
-
+                    listen.getInputStream().available();
 
                     //writes to socket stream
 
@@ -82,7 +91,7 @@ public class TCPServerThread implements Runnable {
 
                     System.out.println("receiver thread Medium FOR NODE");
 
-
+                    while(is.available() == 0);
                     byte[] bytes = toByteArray(is);
 
                     System.out.println("\t\t\t\t\tbyte in sizeMOD::" + bytes.length);
@@ -143,6 +152,9 @@ public class TCPServerThread implements Runnable {
                             RegistrySendsNodeManifest msgRSNM = new RegistrySendsNodeManifest();
                             msgRSNM.unpackRoutesBytes(bytes);
                             node.routes = msgRSNM.receivedTable;
+
+
+
 
                             node.idList = new int[msgRSNM.ids.size()];
                             for (int i = 0; i < msgRSNM.ids.size(); i++) {

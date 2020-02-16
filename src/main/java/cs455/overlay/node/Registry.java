@@ -26,6 +26,7 @@ public class Registry extends Node {
 
     public int port;
     public Socket socket;
+    public volatile Socket[] sockets;
 
     public volatile RoutingTable nodes;
 
@@ -40,6 +41,7 @@ public class Registry extends Node {
     private Registry(int port) {
         this.port = port;
         tcpCache = new TCPConnectionsCache();
+        sockets = new Socket[128];
     }
 
     private void command(String command){
