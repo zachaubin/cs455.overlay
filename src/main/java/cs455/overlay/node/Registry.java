@@ -24,7 +24,6 @@ public class Registry extends Node {
         return instance;
     }
 
-
     public int port;
     public Socket socket;
 

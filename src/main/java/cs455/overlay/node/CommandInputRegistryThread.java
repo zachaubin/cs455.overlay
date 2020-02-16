@@ -27,19 +27,8 @@ public class CommandInputRegistryThread implements Runnable {
 
     private void command(String commands) throws IOException, InterruptedException {
 
-
-//        String command = commands;
-//        int numberArg = 2;
-
-
-        System.out.println("111111111111YOU ENTERED ["+commands+"]");
-
-
         String delims = "[ ]+";
         String[] line = commands.split(delims);
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>.1part.length:"+line.length);
-
-        System.out.println("222222222222222YOU ENTERED ["+commands+"]");
 
         for(String string : line){
             System.out.println("args: "+string);
@@ -47,12 +36,9 @@ public class CommandInputRegistryThread implements Runnable {
         String command = line[0];
         int numberArg = 0;
 
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>2part.length:"+line.length);
         if(line.length > 1){
             numberArg = Integer.parseInt(line[1]);
         }
-
-
 
         System.out.println("command function called");
         boolean good = false;
@@ -153,11 +139,12 @@ public class CommandInputRegistryThread implements Runnable {
 
     private void sendTaskInitiate(byte[] msg) throws IOException, InterruptedException {
         for(RoutingEntry e : registry.nodes.table){
+            System.out.println("sending STI to nodeId:"+e.nodeId +" on port: "+e.nodePort);
             Socket socket = new Socket(e.nodeHost,e.nodePort);
             TCPSender tcpSender = new TCPSender(socket,msg);
             Thread tcpSenderThread = new Thread(tcpSender);
             tcpSenderThread.start();
-            tcpSenderThread.join();
+//            socket.close();
         }
     }
 

@@ -6,7 +6,9 @@ public class OverlayNodeReceivesData extends Event {
     public int type;
     public int[] idList;
     public int destinationIdIndex;
+    public int destinationId;
     public int sourceIdIndex;
+    public int sourceId;
     public int payload;
     public int nodeId;
     public int pathLength;
@@ -37,8 +39,18 @@ public class OverlayNodeReceivesData extends Event {
 
         int msgLength = din.readInt();
         this.type = din.readInt();
-        this.idList[destinationIdIndex] = din.readInt();
-        this.idList[sourceIdIndex] = din.readInt();
+        destinationId = din.readInt();
+        int index = 0;
+        for(int id : idList){
+            if(id == destinationId) break;
+        }
+        destinationIdIndex = index;
+        sourceId = din.readInt();
+        index = 0;
+        for(int id : idList){
+            if(id == sourceId) break;
+        }
+        sourceIdIndex = index;
         this.payload = din.readInt();
         this.pathLength = din.readInt();
 
@@ -55,7 +67,7 @@ public class OverlayNodeReceivesData extends Event {
 //            dout.writeInt(id);
 //        }
 
-        System.out.println("<>>unPACK:type:"+9);
+        System.out.println("<>>unPACK:type:"+type);
         System.out.println("<>>unPACK:destinationId:"+idList[destinationIdIndex]);
         System.out.println("<>>unPACK:sourceId:"+idList[sourceIdIndex]);
         System.out.println("<>>unPACK:payload:"+payload);

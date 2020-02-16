@@ -20,9 +20,9 @@ public class OverlayNodeSendsData extends Event {
         public OverlayNodeSendsData() { }
 
 
-
+    // PASSING A MESSAGE!!!!!!! Originates in MessagingNode, passed here
     //packs primitives into a byte[]
-    public byte[] packBytes(int type, int destinationId, int sourceId, int payload, int[] path) throws IOException {
+    public byte[] packBytes(int type, int destinationId, int sourceId, int payload, int[] path, int myId) throws IOException {
         byte[] marshalledBytes = null;
         ByteArrayOutputStream baOutputStream = new ByteArrayOutputStream();
         DataOutputStream dout = new DataOutputStream(new BufferedOutputStream(baOutputStream));
@@ -44,11 +44,13 @@ public class OverlayNodeSendsData extends Event {
         dout.writeInt(destinationId);
         dout.writeInt(sourceId);
         dout.writeInt(payload);
-        dout.writeInt(pathLength);
+        dout.writeInt(pathLength+1);
 
         for(int id : path) {
             dout.writeInt(id);
         }
+
+        dout.writeInt(myId);
 
         dout.flush();
         marshalledBytes = baOutputStream.toByteArray();
@@ -85,9 +87,6 @@ public class OverlayNodeSendsData extends Event {
         payload = din.readInt();
         pathLength = din.readInt();
 
-        for(int id : path) {
-            din.readInt();
-        }
         for(int i = 0; i < pathLength; i++) {
             path[i] = din.readInt();
         }

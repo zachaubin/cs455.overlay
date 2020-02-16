@@ -86,7 +86,7 @@ public class RegistrySendsNodeManifest extends Event {
         marshalledBytes = baOutputStream.toByteArray();
         messageBytes = marshalledBytes;
 
-        printBytes(messageBytes);
+//        printBytes(messageBytes);
 
         baOutputStream.close();
         dout.close();
@@ -98,12 +98,12 @@ public class RegistrySendsNodeManifest extends Event {
         ByteArrayInputStream baInputStream = new ByteArrayInputStream(pack);
         DataInputStream din = new DataInputStream(new BufferedInputStream(baInputStream));
 
-        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |0");
+//        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |0");
         printBytes(pack);
 
         //get to and eat message header
         while(din.readByte() != -1);
-        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |1");
+//        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |1");
         type = din.readInt();
         System.out.println("UNPACK:type:"+type);
 
@@ -114,12 +114,12 @@ public class RegistrySendsNodeManifest extends Event {
         int id;
 
         byte dinTrack = 0;
-        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |2");
+//        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |2");
 //        din.readInt();
-        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |3");
+//        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |3");
         //first entry
         while(din.available() > 4) {
-            System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |WWWW");
+//            System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |WWWW");
             hostLength = din.readInt();
             System.out.println("hostlen: "+hostLength);
             hostbytes = new byte[hostLength];
@@ -135,12 +135,12 @@ public class RegistrySendsNodeManifest extends Event {
 
 
         }
-        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |4");
+//        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |4");
 
         //tail, might not need
-        while(din.readByte() != -1);
-        din.readByte();din.readByte();din.readByte();
-        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |5");
+//        while(din.readByte() != -1);
+//        din.readByte();din.readByte();din.readByte();
+//        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |5");
 
         baInputStream.close();
         din.close();

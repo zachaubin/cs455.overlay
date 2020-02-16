@@ -17,6 +17,11 @@ public class CommandInputMessagingNodeThread implements Runnable {
         boolean good = false;
         if(  command.equalsIgnoreCase("print-counters-and-diagnostics") ){
             System.out.println("print-counters-and-diagnostics entered NEED TO DO...\n");
+            System.out.println("Messages Sent     <:["+node.msgsSent + "]:>");
+            System.out.println("Messages Relayed  <:["+node.msgsRelayed + "]:>");
+            System.out.println("Messages Received <:["+node.msgsReceived + "]:>");
+
+
             good = true;
         }
         if(  command.equalsIgnoreCase("exit-overlay") ){
@@ -47,6 +52,7 @@ public class CommandInputMessagingNodeThread implements Runnable {
     public void run() {
         Scanner input = new Scanner(System.in);
         String typed;
+
         while(input.hasNextLine()){
             typed = input.next();
             System.out.println("waiting for command");
