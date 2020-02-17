@@ -171,7 +171,7 @@ public class MessagingNode extends Node {
                     choose = random.nextInt((max - min) + 1) + min;
                 }
 //            System.out.println("sending to index:"+choose);
-                payload = random.nextInt(11) - 1;// random intRange(1,10) 
+                payload = random.nextInt(11) - 1;// random intRange(1,10)
 //            System.out.println("");
 //            System.out.println("send_a_message("+choose+","+myIndex+","+payload+")");
 //            System.out.println("");

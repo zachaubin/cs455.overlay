@@ -103,19 +103,22 @@ public class CommandInputRegistryThread implements Runnable {
         }
 
         if(  command.equalsIgnoreCase("start") ){
-            int numToSend = numberArg;
-            System.out.println("start entered, sending "+numToSend+" messages...\n");
-            RegistryRequestsTaskInitiate rrti = new RegistryRequestsTaskInitiate();
-            rrti.packBytes(8,numToSend);
+            if(numberArg>= 0){
+                System.out.println("Please use 'start x' for x >= 1, we do not currently support the upside-down.");
+                good = true;
+                break;
+            } else {
+                int numToSend = numberArg;
+                System.out.println("start entered, sending " + numToSend + " messages...\n");
+                RegistryRequestsTaskInitiate rrti = new RegistryRequestsTaskInitiate();
+                rrti.packBytes(8, numToSend);
 //            for(byte b : rrti.messageBytes){
 //                System.out.println("sending this message after start was called:");
 //                System.out.println(b);
 //            }
-            sendTaskInitiate(rrti.messageBytes);
-
-
-
-            good = true;
+                sendTaskInitiate(rrti.messageBytes);
+                good = true;
+            }
 
         }
         if(!good){
