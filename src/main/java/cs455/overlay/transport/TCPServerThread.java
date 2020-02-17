@@ -102,6 +102,7 @@ public class TCPServerThread implements Runnable {
             try {
                 is = listen.getInputStream();
             } catch (IOException e) {
+                System.out.println("No input stream for active socket sending to TCP ST?");
                 e.printStackTrace();
             }
 
@@ -312,8 +313,11 @@ public class TCPServerThread implements Runnable {
                 System.out.println(">>");
                 System.out.println(">>>> THIS NODE JUST RECEIVED A MESSAGE OF TYPE = " + type);
                 System.out.println(">>");
-                RegistryRequestsTrafficSummary msgRRTS = new RegistryRequestsTrafficSummary();
-                msgRRTS.unpackBytes(bytes);
+//                RegistryRequestsTrafficSummary msgRRTS = new RegistryRequestsTrafficSummary();
+//                msgRRTS.unpackBytes(bytes);
+                OverlayNodeReportsTrafficSummary onrts = new OverlayNodeReportsTrafficSummary(node);
+                Thread onrtsThread = new Thread(onrts);
+                onrtsThread.start();
                 break;
             case 33:
 //                System.out.println(">>");

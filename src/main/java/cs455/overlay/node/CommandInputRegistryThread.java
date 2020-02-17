@@ -18,6 +18,7 @@ public class CommandInputRegistryThread implements Runnable {
 
     public Registry registry;
     public RegistrySendsNodeManifest rsnm;
+    private boolean ready = false;
 
     public CommandInputRegistryThread(Registry registry){
 
@@ -74,7 +75,9 @@ public class CommandInputRegistryThread implements Runnable {
 //                    System.out.println("CIRT DEBUG setup-overlay |4");
                 sendRoutes(numberArg);
 //                    System.out.println("CIRT DEBUG setup-overlay |5");
+                registry.nodes.establishDoneYetArray();
 
+                ready = true;
                 good = true;
 
             }
@@ -103,10 +106,12 @@ public class CommandInputRegistryThread implements Runnable {
         }
 
         if(  command.equalsIgnoreCase("start") ){
-            if(numberArg>= 0){
+            if(!ready){
+                System.out.println("Please use 'setup-overlay x' before sending messages.");
+
+            } else if(numberArg <= 0){
                 System.out.println("Please use 'start x' for x >= 1, we do not currently support the upside-down.");
                 good = true;
-                break;
             } else {
                 int numToSend = numberArg;
                 System.out.println("start entered, sending " + numToSend + " messages...\n");
@@ -121,7 +126,13 @@ public class CommandInputRegistryThread implements Runnable {
             }
 
         }
-        if(!good){
+        if(  command.equalsIgnoreCase("print-done-yet") ){
+            System.out.println("print-done-yet entered, displaying active v. complete nodes:");
+            registry.nodes.printDoneYet();
+            good = true;
+        }
+
+            if(!good){
             System.out.println("");
             System.out.println(":: :: :: :: :: :: :: :: :: :: :: :: :: :: :: ::");
             System.out.println("  !!!! Invalid command [[\""+command+"\"]] !!!!");

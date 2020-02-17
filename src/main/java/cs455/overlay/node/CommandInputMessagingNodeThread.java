@@ -21,7 +21,9 @@ public class CommandInputMessagingNodeThread implements Runnable {
             System.out.println("Messages Relayed  <:["+node.countRelayed + "]:>");
             System.out.println("Messages Received <:["+node.countReceived + "]:>");
             System.out.println("");
-            System.out.println("Payload Summation <:["+node.sum+"]:>");
+            System.out.println("Payload Sent Summation <:["+node.sentSum+"]:>");
+            System.out.println("Payload Received Summation <:["+node.sum+"]:>");
+
 
 
             good = true;

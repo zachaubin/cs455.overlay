@@ -1,51 +1,77 @@
 package cs455.overlay.wireformats;
 
-import java.io.IOException;
+import cs455.overlay.node.Registry;
+import cs455.overlay.routing.RoutingEntry;
+import cs455.overlay.transport.TCPSender;
 
-public class RegistryRequestsTrafficSummary extends Event {
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+
+public class RegistryRequestsTrafficSummary extends Event implements Runnable {
 
 
 //need this in a thread that waits for all nodes to report task complete
     // sends to all asking for traffic summary
+    public Registry registry;
 
-
-
-    public void unpackBytes(byte[] pack) throws IOException {
-//        ByteArrayInputStream baInputStream = new ByteArrayInputStream(pack);
-//        DataInputStream din = new DataInputStream(new BufferedInputStream(baInputStream));
-//
-//        System.out.println("OverlayNodeSendsRegistration:: ==unpackbytes==");
-//        int fourcount = 0;
-//        for (byte b : pack) {
-//            System.out.println(Integer.toBinaryString(b & 255 | 256).substring(1));
-//            fourcount++;
-//            if(fourcount == 4) {
-//                System.out.println("--------");
-//                fourcount = 0;
-//            }
-//        }
-//
-//        //get to and eat message header
-//        while(din.readByte() != -1);
-//        din.readByte();din.readByte();din.readByte();
-//
-//        type = din.readInt();
-//        System.out.println("UNPACK:type:"+type);
-//
-//        hostLength = din.readInt();
-//        System.out.println("UNPACK:hostlen:"+hostLength);
-//        byte[] hostbytes = new byte[hostLength];
-//        din.readFully(hostbytes, 0, hostLength);
-//        hostname = new String(hostbytes);
-//        System.out.println("UNPACK:hostname:"+hostname);
-//        port =  din.readInt();
-//        System.out.println("UNPACK:port:"+port);
-//
-//        baInputStream.close();
-//        din.close();
+    public RegistryRequestsTrafficSummary(Registry registry){
+        this.registry = registry;
     }
 
+    public byte[] packBytes() throws IOException {
+        byte[] marshalledBytes = null;
+        ByteArrayOutputStream baOutputStream = new ByteArrayOutputStream();
+        DataOutputStream dout = new DataOutputStream(new BufferedOutputStream(baOutputStream));
+
+        int type = 11;
+
+        dout.writeInt(0);
+        dout.writeByte(-1);
+        dout.writeInt(type);//always 11
+
+        dout.flush();
+        marshalledBytes = baOutputStream.toByteArray();
+
+        baOutputStream.close();
+        dout.close();
+
+        return marshalledBytes;
+    }
+
+        //we do not need to unpack anything, this message only triggers action response
 
 
 
+    @Override
+    public void run() {
+        byte[] msg = null;
+        try {
+            msg = packBytes();
+        } catch (IOException e) {
+            System.out.println("RRTS: Error: could not pack simple message...");
+            e.printStackTrace();
+        }
+        Socket socket = null;
+        for(RoutingEntry e : registry.nodes.table){
+            try {
+                socket = new Socket(e.nodeHost,e.nodePort);
+            } catch (IOException ex) {
+                System.out.println("RRTS: Error: could not open socket to request traffic summary");
+                ex.printStackTrace();
+            }
+            TCPSender tcpSender = new TCPSender(socket,msg);
+            Thread tcpSenderThread = new Thread(tcpSender);
+            tcpSenderThread.start();
+            try {
+                tcpSenderThread.join();
+            } catch (InterruptedException ex) {
+                System.out.println("RRTS: Error: wouldn't send message?");
+                ex.printStackTrace();
+            }
+        }
+
+    }
 }

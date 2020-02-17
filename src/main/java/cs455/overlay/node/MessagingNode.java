@@ -7,6 +7,7 @@ import cs455.overlay.transport.TCPRegistryServerThread;
 import cs455.overlay.transport.TCPSender;
 import cs455.overlay.transport.TCPServerThread;
 import cs455.overlay.wireformats.Event;
+import cs455.overlay.wireformats.OverlayNodeReportsTaskFinished;
 import cs455.overlay.wireformats.OverlayNodeSendsRegistration;
 
 import java.awt.*;
@@ -74,7 +75,7 @@ public class MessagingNode extends Node {
     public int nodePort = -2;
 
 //    private class Registry(){
-    String registryHostname;
+    public String registryHostname;
 
     public int msgsSent = 0;
     public int msgsReceived = 0;
@@ -95,7 +96,10 @@ public class MessagingNode extends Node {
     public volatile AtomicLong countSent;
     public volatile AtomicLong countReceived;
     public volatile AtomicLong countRelayed;
+    public volatile AtomicLong sentSum;
+
     public volatile AtomicLong sum;
+
 
     public volatile ArrayList<Integer> routeArrayList;
     public volatile Socket[] routeLookupSocket;
@@ -111,6 +115,8 @@ public class MessagingNode extends Node {
         countReceived = new AtomicLong(0);
         countRelayed = new AtomicLong(0);
         sum = new AtomicLong(0);
+        sentSum = new AtomicLong(0);
+
     }
 
     public RoutingEntry socketFinder(int id){
@@ -182,7 +188,11 @@ public class MessagingNode extends Node {
 
                 choose = random.nextInt((max - min) + 1) + min;
             }
+
         }
+        sleep(3000);
+        sleep(numMsgsToSend * 2 );
+        reportStatsComplete();
     }
     public void send_a_message(int destinationIdIndex, int sourceIdIndex, int payload) throws IOException {
         //we might need to pull in packbytes to this method
@@ -285,15 +295,17 @@ public class MessagingNode extends Node {
 //
 //    }
 
-
-
-
+    public void reportStatsComplete() throws IOException {
+        OverlayNodeReportsTaskFinished onrtf = new OverlayNodeReportsTaskFinished();
+        byte[] msg = onrtf.packBytes(nodeId);
+        Socket socket = new Socket(registryHostname,portNumber);
+        TCPSender tcpSender = new TCPSender(socket,msg);
+        Thread tcpSenderThread = new Thread(tcpSender);
+        tcpSenderThread.start();
+        System.out.println("Node has reported stats and task is complete.");
+    }
 
     public static void main(String[] args) throws IOException, InterruptedException {
         MessagingNodeSingleton.main(args);
     }
-
-
-
-
 }

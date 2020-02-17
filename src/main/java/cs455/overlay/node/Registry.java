@@ -2,6 +2,7 @@ package cs455.overlay.node;
 
 import cs455.overlay.routing.RoutingEntry;
 import cs455.overlay.routing.RoutingTable;
+import cs455.overlay.routing.SummaryTable;
 import cs455.overlay.transport.*;
 import cs455.overlay.wireformats.RegistryReportsRegistrationStatus;
 
@@ -29,6 +30,7 @@ public class Registry extends Node {
     public volatile Socket[] sockets;
 
     public volatile RoutingTable nodes;
+    public SummaryTable summaryTable;
 
     public TCPConnection tcp;
 
@@ -42,6 +44,7 @@ public class Registry extends Node {
         this.port = port;
         tcpCache = new TCPConnectionsCache();
         sockets = new Socket[128];
+        summaryTable = new SummaryTable();
     }
 
     private void command(String command){

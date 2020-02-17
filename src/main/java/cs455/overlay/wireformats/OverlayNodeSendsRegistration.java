@@ -22,7 +22,6 @@ public class OverlayNodeSendsRegistration extends Event {
         this.socket = socket;
         this.regHost = regHost;
         this.port = port;
-
     }
 
     public boolean sendBytes(byte[] bytes) throws IOException {

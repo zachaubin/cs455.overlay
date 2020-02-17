@@ -6,15 +6,19 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class RoutingTable {
 
     public volatile ArrayList<RoutingEntry> table;
+    public AtomicLong nodesWorking;
 
 
-//    public Map<Integer,ArrayList<RoutingEntry>> routes;
+    //    public Map<Integer,ArrayList<RoutingEntry>> routes;
     public volatile ArrayList<ArrayList<RoutingEntry>> routes;
     public volatile ArrayList<Integer> manifest;
+
+    public int[] doneYet;
 
 
 
@@ -25,6 +29,7 @@ public class RoutingTable {
         table = new ArrayList<>();
         manifest = new ArrayList<>();
         routes = new ArrayList<>(128);
+        nodesWorking = new AtomicLong(0);
 
     }
 
@@ -216,6 +221,36 @@ public class RoutingTable {
 
         return packed;
 
+    }
+
+    public void removeRoutingEntry(int id){
+        for(RoutingEntry e : table){
+            if(id == e.nodeId){
+                table.remove(e);
+                break;
+            }
+        }
+    }
+    public void establishDoneYetArray(){
+        doneYet = new int[128];
+        for(RoutingEntry e : table){
+            doneYet[e.nodeId] = -1;
+        }
+        nodesWorking.set(getNumberOfNodes());
+    }
+    public void printDoneYet(){
+        System.out.println("_Working_ still:");
+        for(int i = 0; i< doneYet.length; i++){
+            if(doneYet[i] == -1){
+                System.out.println("! NodeId["+i+"]");
+            }
+        }
+        System.out.println("Reported as finished:");
+        for(int i = 0; i< doneYet.length; i++){
+            if(doneYet[i] == 1){
+                System.out.println(". NodeId["+i+"]");
+            }
+        }
     }
 
 }

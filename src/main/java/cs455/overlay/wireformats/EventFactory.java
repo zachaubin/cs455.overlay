@@ -93,7 +93,7 @@ public class EventFactory {
 //                break;
 //            case 10: return new RegistryRequestsTaskInitiate();
 //                break;
-            case 11: return new RegistryRequestsTrafficSummary();
+//            case 11: return new RegistryRequestsTrafficSummary();
 //                break;
             case 12: return new RegistrySendsNodeManifest();
 //                break;
