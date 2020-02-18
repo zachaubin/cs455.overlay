@@ -75,7 +75,7 @@ public class EventFactory {
 //                break;
             case 1: return new OverlayNodeSendsData();
 //                break;
-            case 2: return new NodeReportsOverlaySetupStatus();
+//            case 2: return new OverlayNodeReportsOverlaySetupStatus();
 //                break;
             case 3: return new OverlayNodeReportsTaskFinished();
 //                break;

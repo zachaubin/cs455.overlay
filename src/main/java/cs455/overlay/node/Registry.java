@@ -11,8 +11,7 @@ import java.net.Socket;
 import java.lang.Thread;
 import java.util.ArrayList;
 import java.util.Scanner;
-
-
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class Registry extends Node {
@@ -34,6 +33,10 @@ public class Registry extends Node {
 
     public TCPConnection tcp;
 
+    public volatile AtomicInteger setupCount;
+
+    public boolean overlayed = false;
+
     public TCPConnectionsCache tcpCache;
 //    public ArrayList<TCPReceiver> tcpReceiverCache;
 //    public ArrayList<TCPSender> tcpSenderCache;
@@ -45,6 +48,7 @@ public class Registry extends Node {
         tcpCache = new TCPConnectionsCache();
         sockets = new Socket[128];
         summaryTable = new SummaryTable();
+        setupCount = new AtomicInteger(0);
     }
 
     private void command(String command){

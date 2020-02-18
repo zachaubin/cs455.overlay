@@ -30,14 +30,14 @@ public class TCPRegistryServerThread implements Runnable {
 
         byte[] buffer = new byte[1024];
         int len;
-        System.out.println("REGISTRY toByteArray |1");
+//        System.out.println("REGISTRY toByteArray |1");
 
         // read bytes from the input stream and store them in buffer
         while ((len = in.read(buffer)) != -1) {
             // write bytes from the buffer into output stream
             os.write(buffer, 0, len);
         }
-        System.out.println("REGISTRY toByteArray |2");
+//        System.out.println("REGISTRY toByteArray |2");
 
 
         return os.toByteArray();
@@ -84,7 +84,7 @@ public class TCPRegistryServerThread implements Runnable {
 
         @Override
         public void run() {
-            System.out.println("REGISTRY receiver thread start FOR REGISTRY");
+//            System.out.println("REGISTRY receiver thread start FOR REGISTRY");
             //receiver thread start
             //pass socket to read from
 
@@ -97,7 +97,7 @@ public class TCPRegistryServerThread implements Runnable {
                 e.printStackTrace();
             }
 
-            System.out.println("REGISTRY receiver thread Medium FOR REGISTRY");
+//            System.out.println("REGISTRY receiver thread Medium FOR REGISTRY");
 
             while(true) {
                 try {
@@ -106,7 +106,7 @@ public class TCPRegistryServerThread implements Runnable {
                         break;
                     }
                 } catch (IOException e) {
-                    System.out.println("Registry has no input stream for active incomming socket.");
+                    System.out.println("Registry has no input stream for active incoming socket.");
                     e.printStackTrace();
                 }
                 ;
@@ -115,7 +115,7 @@ public class TCPRegistryServerThread implements Runnable {
             try {
                 bytes = toByteArray(is);
             } catch (IOException e) {
-                System.out.println("TCP REGISTRY SERVER RECEIVE THREAD: error converting registry input stream msg to byte[]");
+                System.out.println("TCP Registry ST actual receive thread: error converting registry input stream msg to byte[]");
                 e.printStackTrace();
             }
 
@@ -124,6 +124,7 @@ public class TCPRegistryServerThread implements Runnable {
                 findHead++;
             }
             int type = (int) bytes[findHead + 4];
+//            System.out.println("TYPE TYPE TYPE :: " + type);
 
             try {
                 typeSwitch(type,bytes);
@@ -164,7 +165,7 @@ public class TCPRegistryServerThread implements Runnable {
                 // host port
                 int nodeId = registry.nodes.addRoutingEntry(marshall.hostname,marshall.port);
 //                System.out.println("registered node with id="+nodeId);
-                registry.nodes.printTable();
+//                registry.nodes.printTable();
 
                 //respond
 
@@ -177,9 +178,9 @@ public class TCPRegistryServerThread implements Runnable {
 
                 break;
             case 4://node sends deregistration
-                System.out.println(">>");
-                System.out.println(">>>> Registry JUST RECEIVED A MESSAGE OF TYPE = " + type);
-                System.out.println(">>");
+//                System.out.println(">>");
+//                System.out.println(">>>> Registry JUST RECEIVED A MESSAGE OF TYPE = " + type);
+//                System.out.println(">>");
 
                 OverlayNodeSendsDeregistration dereg = new OverlayNodeSendsDeregistration();
                 dereg.unpackBytes(bytes);
@@ -188,8 +189,15 @@ public class TCPRegistryServerThread implements Runnable {
 
                 break;
             case 7://node reports overlay setup
-                //did not need, best effort
-                System.out.println("received message type 7, report overlay setup status, should not happen");
+//              System.out.println("received message type 7, report overlay setup status");
+//                System.out.println("got a msg type 7");
+                synchronized (this){
+                    registry.setupCount.incrementAndGet();
+                    if(registry.setupCount.get() == registry.nodes.getNumberOfNodes()){
+                        registry.overlayed = true;
+                        System.out.println("Overlay reported online and ready to send messages. Please enter 'start x' to send some number of messages.");
+                    }
+                }
                 break;
             case 10://node reports task finished
 //                System.out.println(">>");
@@ -205,20 +213,26 @@ public class TCPRegistryServerThread implements Runnable {
                 if((int) registry.nodes.nodesWorking.get() == 0){
                     //all done
                     System.out.println("");
-                    System.out.println("All Nodes Complete.");
+                    System.out.println("All Nodes Reported Complete. Requesting summaries and printing totals.");
                     System.out.println("");
 
+
                     //trigger stat requests, this one loops over nodes
-                        RegistryRequestsTrafficSummary rrts = new RegistryRequestsTrafficSummary(registry);
-                        Thread rrtsThread = new Thread(rrts);
-                        rrtsThread.start();
+                    RegistryRequestsTrafficSummary rrts = new RegistryRequestsTrafficSummary(registry);
+                    Thread rrtsThread = new Thread(rrts);
+                    rrtsThread.start();
+                    rrtsThread.join();
+
+//                    registry.summaryTable.printSummary();
+
+
                 }
 
                 break;
             case 12:
-                System.out.println(">>");
-                System.out.println(">>>> Registry JUST RECEIVED A MESSAGE OF TYPE = " + type);
-                System.out.println(">>");
+//                System.out.println(">>");
+//                System.out.println(">>>> Registry JUST RECEIVED A MESSAGE OF TYPE = " + type);
+//                System.out.println(">>");
                 OverlayNodeReportsTrafficSummary onrts = new OverlayNodeReportsTrafficSummary();
                 onrts.unpackBytes(bytes);
                 registry.summaryTable.addEntry(onrts.nodeId,onrts.countSent,onrts.countRelayed,onrts.countReceived,onrts.sentSum,onrts.sum);
@@ -226,14 +240,30 @@ public class TCPRegistryServerThread implements Runnable {
                 if(registry.nodes.table.size() == registry.summaryTable.table.size()){
                     //all reported, print stats
                     registry.summaryTable.printSummary();
-                    
+                    //reset registry counter
+                    registry.summaryTable.table.clear();
                 }
 
 
 //                msgRRTS.unpackBytes(bytes);
 
                 break;
-
+            case 21:
+                synchronized (this) {
+                    PingRandomNode pingRandomNode = new PingRandomNode();
+                    pingRandomNode.unpackBytesFromNode(bytes);
+                    System.out.println("");
+                    System.out.println("Received results from a ping:");
+                    System.out.println("");
+                    System.out.println("Node Id: " + pingRandomNode.nodeId);
+                    System.out.println("Sent: " + pingRandomNode.countSent);
+                    System.out.println("Relayed: " + pingRandomNode.countRelayed);
+                    System.out.println("Received: " + pingRandomNode.countReceived);
+                    System.out.println("SumOut: " + pingRandomNode.sentSum);
+                    System.out.println("SumIn: " + pingRandomNode.sum);
+                    System.out.println("");
+                }
+                break;
             default:
                 System.out.println(">>");
                 System.out.println(">>>> Registry JUST RECEIVED A MESSAGE OF TYPE = " + type);

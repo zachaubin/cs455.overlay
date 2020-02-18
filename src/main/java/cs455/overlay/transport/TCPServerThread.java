@@ -171,10 +171,10 @@ public class TCPServerThread implements Runnable {
         synchronized (this){//for me
             node.countReceived.incrementAndGet();
             node.sum.addAndGet(onrd.payload);
-            System.out.println("path to get here:");
-            for(int i : onrd.path){
-                System.out.println(i);
-            }
+//            System.out.println("path to get here:");
+//            for(int i : onrd.path){
+//                System.out.println(i);
+//            }
         }
         return 0;
     }
@@ -260,16 +260,16 @@ public class TCPServerThread implements Runnable {
                 }
                 break;
             case 5:
-                System.out.println(">>");
-                System.out.println(">>>> THIS NODE JUST RECEIVED A MESSAGE OF TYPE = " + type);
-                System.out.println(">>");
+//                System.out.println(">>");
+//                System.out.println(">>>> THIS NODE JUST RECEIVED A MESSAGE OF TYPE = " + type);
+//                System.out.println(">>");
                 RegistryReportsDeregistrationStatus msgRRDS = new RegistryReportsDeregistrationStatus();
                 msgRRDS.unpackBytes(bytes);
                 break;
             case 6:
-                System.out.println(">>");
-                System.out.println(">>>> THIS NODE JUST RECEIVED A MESSAGE OF TYPE = " + type);
-                System.out.println(">>");
+//                System.out.println(">>");
+//                System.out.println(">>>> THIS NODE JUST RECEIVED A MESSAGE OF TYPE = " + type);
+//                System.out.println(">>");
                 RegistrySendsNodeManifest msgRSNM = new RegistrySendsNodeManifest();
                 msgRSNM.unpackRoutesBytes(bytes);
                 node.routes = msgRSNM.receivedTable;
@@ -287,9 +287,16 @@ public class TCPServerThread implements Runnable {
 //                        System.out.println("trying to add sockets to routeLookupSocket, has size=" + node.routeLookupSocket.length);
                 for (RoutingEntry e : node.routes.table) {
                     node.routeArrayList.add(e.nodeId);
-                    Socket socket = new Socket(e.nodeHost, e.nodePort);
-                    node.routeLookupSocket[e.nodeId] = socket;
+//                    Socket socket = new Socket(e.nodeHost, e.nodePort);
+//                    node.routeLookupSocket[e.nodeId] = socket;
                 }
+
+                //reply with setup ok
+//                System.out.println("sending ok");
+                OverlayNodeReportsOverlaySetupStatus onross = new OverlayNodeReportsOverlaySetupStatus(node);
+                Thread onrossThread = new Thread(onross);
+                onrossThread.start();
+
 
 //                System.out.println(":::::printing received table:::::::nodeId=" + node.nodeId);
 //                node.routes.printTable();
@@ -297,48 +304,65 @@ public class TCPServerThread implements Runnable {
 
                 break;
             case 8:
-                System.out.println(">>");
-                System.out.println(">>>> THIS NODE JUST RECEIVED A MESSAGE OF TYPE = " + type);
-                System.out.println(">>");
+//                System.out.println(">>");
+//                System.out.println(">>>> THIS NODE JUST RECEIVED A MESSAGE OF TYPE = " + type);
+//                System.out.println(">>");
                 RegistryRequestsTaskInitiate msgRRTI = new RegistryRequestsTaskInitiate();
                 msgRRTI.unpackBytes(bytes);
                 node.numMsgsToSend = msgRRTI.numMsgs;
                 if (msgRRTI.numMsgs == 0) {
+                    //pretty sure this is handled elsewhere, keeping redundancy
                     System.out.println("Send zero messages? Use 'start x' for x>0.");
                     break;
                 }
                 node.send_some_messages();
                 break;
             case 11:
-                System.out.println(">>");
-                System.out.println(">>>> THIS NODE JUST RECEIVED A MESSAGE OF TYPE = " + type);
-                System.out.println(">>");
+//                System.out.println(">>");
+//                System.out.println(">>>> THIS NODE JUST RECEIVED A MESSAGE OF TYPE = " + type);
+//                System.out.println(">>");
 //                RegistryRequestsTrafficSummary msgRRTS = new RegistryRequestsTrafficSummary();
 //                msgRRTS.unpackBytes(bytes);
                 OverlayNodeReportsTrafficSummary onrts = new OverlayNodeReportsTrafficSummary(node);
                 Thread onrtsThread = new Thread(onrts);
                 onrtsThread.start();
+                onrtsThread.join();
+                node.countSent.set(0);
+                node.countRelayed.set(0);
+                node.countReceived.set(0);
+                node.sentSum.set(0);
+                node.sum.set(0);
+                break;
+            case 21:
+                PingRandomNode pingRandomNode = new PingRandomNode();
+//                pingRandomNode.nodePackBytes(node.nodeId,node.countSent.get(),node.countRelayed.get(),node.countReceived.get(),node.sentSum.get(),node.sum.get());
+                byte[] msg = pingRandomNode.nodePackBytes(node);
+                Socket socket = new Socket(node.registryHostname,node.portNumber);
+                TCPSender tcpSender = new TCPSender(socket,msg);
+                Thread tcpSenderThread = new Thread(tcpSender);
+                tcpSenderThread.start();
                 break;
             case 33:
 //                System.out.println(">>");
 //                System.out.println(">>>> THIS NODE JUST RECEIVED A MESSAGE OF TYPE = " + type);
 //                System.out.println(">>");
                 // msg data in
-                onrd.unpackBytes(bytes);
-                int where = interpretMsg(onrd);
-                if (where == 1) {// for me
+                synchronized (this) {
+                    onrd.unpackBytes(bytes);
+                    int where = interpretMsg(onrd);
+                    if (where == 1) {// for me
 
-                    consumeMsg(onrd);
+                        consumeMsg(onrd);
 
-                } else if (where == 0) {//for someone else
+                    } else if (where == 0) {//for someone else
 
-                    passMsg(onrd);
+                        passMsg(onrd);
 
-                } else if (where == -1) {//error somehow
-                    System.out.println("Error in received DATA msg?");
+                    } else if (where == -1) {//error somehow
+                        System.out.println("Error in received DATA msg?");
 
+                    }
                 }
-
 
                 break;
             default:

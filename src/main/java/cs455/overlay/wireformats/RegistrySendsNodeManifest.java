@@ -99,7 +99,7 @@ public class RegistrySendsNodeManifest extends Event {
         DataInputStream din = new DataInputStream(new BufferedInputStream(baInputStream));
 
 //        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |0");
-        printBytes(pack);
+//        printBytes(pack);
 
         //get to and eat message header
         while(din.readByte() != -1);
@@ -192,7 +192,7 @@ public class RegistrySendsNodeManifest extends Event {
         /*
 #####################################################################################        this is empty?
          */
-        System.out.println("################myRoutes.size()="+myRoutes.size());
+//        System.out.println("################myRoutes.size()="+myRoutes.size());
 
 
         // ORDER PER EACH
@@ -248,14 +248,14 @@ public class RegistrySendsNodeManifest extends Event {
         ByteArrayInputStream baInputStream = new ByteArrayInputStream(pack);
         DataInputStream din = new DataInputStream(new BufferedInputStream(baInputStream));
 
-        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |0");
-        printBytes(pack);
+//        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |0");
+//        printBytes(pack);
 
         //get to and eat message header
         while(din.readByte() != -1);
-        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |1");
+//        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |1");
         type = din.readInt();
-        System.out.println("UNPACK:type:" + type);
+//        System.out.println("UNPACK:type:" + type);
 
 
         ////////////////////////
@@ -269,30 +269,30 @@ public class RegistrySendsNodeManifest extends Event {
 
         int numNodes = din.readByte();//number of routes in this table
 
-        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |2");
-        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |3");
+//        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |2");
+//        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |3");
         //first entry
         while(din.available() > 4) {
-            System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |LOOP");
+//            System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |LOOP");
             id = din.readInt();
-            System.out.println("id: "+id);
+//            System.out.println("id: "+id);
 
             if(id == -1) break;
 
             hostLength = din.readInt();
-            System.out.println("hostlen: "+hostLength);
+//            System.out.println("hostlen: "+hostLength);
             hostbytes = new byte[hostLength];
             din.readFully(hostbytes, 0, hostLength);
             host = new String(hostbytes);
-            System.out.println("host: " + host);
+//            System.out.println("host: " + host);
             port = din.readInt();
-            System.out.println("port: " + port);
+//            System.out.println("port: " + port);
             receivedTable.buildEntry(host, port, id);
-            System.out.println(" ^added an entry^");
-            System.out.println("");
+//            System.out.println(" ^added an entry^");
+//            System.out.println("");
 
         }
-        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |4");
+//        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |4");
 
         //broke from while loop, next is number of nodes with ids
         int numIds = din.readInt();//for read fully, not using
@@ -301,16 +301,16 @@ public class RegistrySendsNodeManifest extends Event {
 
         while(din.available() > 4) {
             singleId = din.readInt();
-            System.out.println("RSNM:Unpack:while:ids, thisId:"+singleId);
+//            System.out.println("RSNM:Unpack:while:ids, thisId:"+singleId);
             this.ids.add(singleId);
         }
-        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |4.5");
+//        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |4.5");
 
 
             //tail eat, might not need
         while(din.readByte() != -1);
         din.readByte();din.readByte();din.readByte();
-        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |5");
+//        System.out.println("RegistryNodeSendsManifest:: ==unpackbytes== |5");
 
         baInputStream.close();
         din.close();
@@ -323,16 +323,16 @@ public class RegistrySendsNodeManifest extends Event {
     public void run() {
         //this sends the packed bytes from messageBytes
         //we should have called packbytes by now
-        System.out.println("RegistrySendsNodeManifest: before look for entries");
+//        System.out.println("RegistrySendsNodeManifest: before look for entries");
 
         int eCount=0;
 
         for(RoutingEntry e : table.table){
-                        System.out.println("::sending table to routing entry::"+eCount);
-                        System.out.println("::                              ::"+eCount);
-
-                        table.printEntry(e);
-                        System.out.println("::                              ::"+eCount);
+//                        System.out.println("::sending table to routing entry::"+eCount);
+//                        System.out.println("::                              ::"+eCount);
+//
+//                        table.printEntry(e);
+//                        System.out.println("::                              ::"+eCount);
                         eCount++;
             sendToEntryThread s = new sendToEntryThread(e);
             Thread sending = new Thread(s);
@@ -340,11 +340,11 @@ public class RegistrySendsNodeManifest extends Event {
             try {
                 sending.join();
             } catch (InterruptedException ex) {
-                System.out.println("JOIN ERR: error sending to entry?");
+                System.out.println("RSNM: run() JOIN ERR: error sending to entry?");
                 ex.printStackTrace();
             }
         }
-        System.out.println("RegistrySendsNodeManifest: sent table to all entries");
+//        System.out.println("RegistrySendsNodeManifest: sent table to all entries");
         
     }
 
@@ -359,7 +359,7 @@ public class RegistrySendsNodeManifest extends Event {
         @Override
         public void run() {
             synchronized (this) {
-                System.out.println("RegistrySendsNodeManifest: starting entry send to nodeId[" + e.nodeId + "]");
+//                System.out.println("RegistrySendsNodeManifest: starting entry send to nodeId[" + e.nodeId + "]");
 
                 //should get socket from cache
 //            Socket tempSock = null;
@@ -371,11 +371,11 @@ public class RegistrySendsNodeManifest extends Event {
 //                System.err.println("error making socket connection to node in routing table");
 //                ex.printStackTrace();
 //            }
-                System.out.println("RegistrySendsNodeManifest: establish tcp sender");
+//                System.out.println("RegistrySendsNodeManifest: establish tcp sender");
 
                 TCPSender tcpOut = new TCPSender(socket, messageBytes);//SENDS WHOLE TABLE TO NODE IN TABLE
                 Thread sendThread = new Thread(tcpOut);
-                System.out.println("RegistrySendsNodeManifest: start sender thread");
+//                System.out.println("RegistrySendsNodeManifest: start sender thread");
 
                 sendThread.start();
 //            try {
@@ -390,7 +390,7 @@ public class RegistrySendsNodeManifest extends Event {
 //            } catch (IOException ex) {
 //                ex.printStackTrace();
 //            }
-                System.out.println("RegistrySendsNodeManifest: FINISH sender thread");
+//                System.out.println("RegistrySendsNodeManifest: FINISH sender thread");
 
             }
         }

@@ -69,7 +69,7 @@ public class RegistryReportsRegistrationStatus extends Event {
         marshalledBytes = baOutputStream.toByteArray();
         messageBytes = marshalledBytes;
 
-        printBytes(messageBytes);
+//        printBytes(messageBytes);
 
         baOutputStream.close();
         dout.close();

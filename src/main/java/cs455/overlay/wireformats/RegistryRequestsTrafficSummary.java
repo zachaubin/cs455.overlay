@@ -10,6 +10,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
+import static java.lang.Thread.sleep;
+
 public class RegistryRequestsTrafficSummary extends Event implements Runnable {
 
 
@@ -56,6 +58,11 @@ public class RegistryRequestsTrafficSummary extends Event implements Runnable {
         }
         Socket socket = null;
         for(RoutingEntry e : registry.nodes.table){
+            try {
+                sleep(69);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
             try {
                 socket = new Socket(e.nodeHost,e.nodePort);
             } catch (IOException ex) {

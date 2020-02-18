@@ -139,7 +139,7 @@ public class MessagingNode extends Node {
     private void buildMyRoutes(RoutingTable t){
         //from manifest-received-table t,
         int myIndex = t.getIndexOfNodeId(nodeId);
-        //  find=THISNODEID as index0
+        //  find = THISNODEID as index0
 
         //  calculate i= +1,+2,+4.. such that i<n
         //   add each i to myRoutes
@@ -148,7 +148,7 @@ public class MessagingNode extends Node {
             myRoutes.add(t.table.get( distance + myIndex & t.table.size()));
         }
 
-        System.out.println(" >> built routing table");
+//        System.out.println(" >> built routing table");
     }
 
     public void send_some_messages() throws IOException, InterruptedException {
@@ -160,12 +160,12 @@ public class MessagingNode extends Node {
         int myIndex = 0;
         for(int i = 0; i < idList.length; i++){
             if(idList[i] == nodeId){
-                System.out.println("my id index:"+i);
+//                System.out.println("my id index:"+i);
                 break;
             }
             myIndex++;
         }
-        System.out.println("my actual ID:: " + nodeId);
+//        System.out.println("my actual ID:: " + nodeId);
         int payload;
 
         //send sum
@@ -177,12 +177,13 @@ public class MessagingNode extends Node {
                     choose = random.nextInt((max - min) + 1) + min;
                 }
 //            System.out.println("sending to index:"+choose);
-                payload = random.nextInt(11) - 1;// random intRange(1,10)
+                payload = random.nextInt();// random int
+                sentSum.addAndGet(payload);
 //            System.out.println("");
 //            System.out.println("send_a_message("+choose+","+myIndex+","+payload+")");
 //            System.out.println("");
-                System.out.println(idList[myIndex] + " (" + payload + ") -> " + idList[choose]);
-                System.out.println("");
+                System.out.println("Send: " + idList[myIndex] + " (" + payload + ") -> " + idList[choose]);
+//                System.out.println("");
 
                 send_a_message(choose, myIndex, payload);
 
@@ -200,11 +201,11 @@ public class MessagingNode extends Node {
         ByteArrayOutputStream baOutputStream = new ByteArrayOutputStream();
         DataOutputStream dout = new DataOutputStream(new BufferedOutputStream(baOutputStream));
 
-        System.out.println(">PACK:type:"+33);
-        System.out.println(">PACK:destinationId:"+idList[destinationIdIndex]);
-        System.out.println(">PACK:sourceId:"+idList[sourceIdIndex]);
-        System.out.println(">PACK:payload:"+payload);
-        System.out.println(">PACK:path:"+nodeId);
+//        System.out.println(">PACK:type:"+33);
+//        System.out.println(">PACK:destinationId:"+idList[destinationIdIndex]);
+//        System.out.println(">PACK:sourceId:"+idList[sourceIdIndex]);
+//        System.out.println(">PACK:payload:"+payload);
+//        System.out.println(">PACK:path:"+nodeId);
 
         pathLength = 1;
 
@@ -258,11 +259,12 @@ public class MessagingNode extends Node {
 
         //socket to next in hop
         TCPSender tcpSender = new TCPSender(new Socket(socketFinder(nextDestination).nodeHost, socketFinder(nextDestination).nodePort),messageBytes);
-        System.out.println("i'm passing to " + nextDestination);
+//        System.out.println("i'm passing to " + nextDestination);
         Thread sendThread = new Thread(tcpSender);
         sendThread.start();
         this.countSent.incrementAndGet();
-    }//////////////////////////////////////////////////////////////////////////////////////////////need receive data next, see below for unpack
+    }
+    //////////////////////////////////////////////////////////////////////////////////////////////need receive data next, see below for unpack
 
 //    public class msg {
 //
@@ -295,14 +297,24 @@ public class MessagingNode extends Node {
 //
 //    }
 
-    public void reportStatsComplete() throws IOException {
+    public void reportStatsComplete() throws IOException, InterruptedException {
         OverlayNodeReportsTaskFinished onrtf = new OverlayNodeReportsTaskFinished();
         byte[] msg = onrtf.packBytes(nodeId);
         Socket socket = new Socket(registryHostname,portNumber);
         TCPSender tcpSender = new TCPSender(socket,msg);
         Thread tcpSenderThread = new Thread(tcpSender);
         tcpSenderThread.start();
-        System.out.println("Node has reported stats and task is complete.");
+//        System.out.println("Node has reported stats and task is complete.");
+        tcpSenderThread.join();
+        resetCounters();
+    }
+
+    private void resetCounters(){
+//        countSent.set(0);
+//        countRelayed.set(0);
+//        countReceived.set(0);
+//        sentSum.set(0);
+//        sum.set(0);
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {

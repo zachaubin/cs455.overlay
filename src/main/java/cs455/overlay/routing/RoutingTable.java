@@ -52,13 +52,13 @@ public class RoutingTable {
         for(int i = 0; i < table.size(); i++) {
 
             ArrayList<RoutingEntry> myRoutes = new ArrayList<>();
-            System.out.println("RoutingTable:: buildRoutes:: new entry ");
+//            System.out.println("RoutingTable:: buildRoutes:: new entry ");
             int distance = 1;
             for(int j = 0; j < n; j++) {
-                System.out.println("distance:" + distance);
+//                System.out.println("distance:" + distance);
                 if( (i+distance) % table.size() ==i) continue;
                 //add entry just after this and then double distance
-                System.out.println("                                                    >>adding ["+table.get((i+distance) % table.size() ).nodeId+"] to ["+table.get(i).nodeId+"]");
+//                System.out.println("                                                    >>adding ["+table.get((i+distance) % table.size() ).nodeId+"] to ["+table.get(i).nodeId+"]");
                 myRoutes.add(table.get( (i+distance) % table.size() ));
                 distance = distance * 2 % (table.size());
 
@@ -187,9 +187,9 @@ public class RoutingTable {
         ByteArrayOutputStream baOutputStream = new ByteArrayOutputStream();
         DataOutputStream dout = new DataOutputStream(new BufferedOutputStream(baOutputStream));
 
-        System.out.println(">table:hostname:"+e.nodeHost);
-        System.out.println(">table:portNumber:"+e.nodePort);
-        System.out.println(">tablePACK:nodeId:"+e.nodeId);
+//        System.out.println(">table:hostname:"+e.nodeHost);
+//        System.out.println(">table:portNumber:"+e.nodePort);
+//        System.out.println(">tablePACK:nodeId:"+e.nodeId);
 
 
         //type, host length, hostname, nodeId
@@ -206,15 +206,15 @@ public class RoutingTable {
         packed = baOutputStream.toByteArray();
 
 
-        int fourcount = 0;
-        for (byte b : packed) {
-            System.out.println(Integer.toBinaryString(b & 255 | 256).substring(1));
-            fourcount++;
-            if(fourcount == 4) {
-                System.out.println("--------");
-                fourcount = 0;
-            }
-        }
+//        int fourcount = 0;
+//        for (byte b : packed) {
+//            System.out.println(Integer.toBinaryString(b & 255 | 256).substring(1));
+//            fourcount++;
+//            if(fourcount == 4) {
+//                System.out.println("--------");
+//                fourcount = 0;
+//            }
+//        }
 
         baOutputStream.close();
         dout.close();

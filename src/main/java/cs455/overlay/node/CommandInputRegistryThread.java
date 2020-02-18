@@ -3,15 +3,13 @@ package cs455.overlay.node;
 import cs455.overlay.routing.RoutingEntry;
 import cs455.overlay.routing.RoutingTable;
 import cs455.overlay.transport.TCPSender;
-import cs455.overlay.wireformats.OverlayNodeSendsRegistration;
-import cs455.overlay.wireformats.RegistryReportsRegistrationStatus;
-import cs455.overlay.wireformats.RegistryRequestsTaskInitiate;
-import cs455.overlay.wireformats.RegistrySendsNodeManifest;
+import cs455.overlay.wireformats.*;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 public class CommandInputRegistryThread implements Runnable {
@@ -19,6 +17,9 @@ public class CommandInputRegistryThread implements Runnable {
     public Registry registry;
     public RegistrySendsNodeManifest rsnm;
     private boolean ready = false;
+    public boolean isReady(){
+        return ready;
+    }
 
     public CommandInputRegistryThread(Registry registry){
 
@@ -32,28 +33,41 @@ public class CommandInputRegistryThread implements Runnable {
         String delims = "[ ]+";
         String[] line = commands.split(delims);
 
-        for(String string : line){
-            System.out.println("args: "+string);
-        }
+//        for(String string : line){
+////            System.out.println("args: "+string);
+//        }
         String command = line[0];
         int numberArg = 0;
 
         if(line.length > 1){
-            numberArg = Integer.parseInt(line[1]);
+            try {
+                numberArg = Integer.parseInt(line[1]);
+            } catch (NumberFormatException e){
+                System.out.println("Enter an actual positive integer for x.");
+                command = "not_a_number";
+            }
         }
 
-        System.out.println("command function called");
+//        System.out.println("command function called");
         boolean good = false;
         if(  command.equalsIgnoreCase("list-messaging-nodes") ){
+            System.out.println("");
             System.out.println("list messaging nodes entered...\n");
             registry.nodes.printTable();
             good = true;
         }
         if(  command.equalsIgnoreCase("setup-overlay") ){
-            System.out.println("setup-overlay sends manifest (routing table all entries) to all nodes in manifest\n");
+            System.out.println("");
+            System.out.println("Setting up overlay...");
+            System.out.println("");
+//            System.out.println("setup-overlay sends manifest (routing table all entries) to all nodes in manifest\n");
             RegistrySendsNodeManifest rsnm = new RegistrySendsNodeManifest(registry.nodes);
 
-            if(numberArg == 0 || numberArg > registry.nodes.getNumberOfNodes()){
+
+            if(ready) {
+               System.out.println("Overlay has already been set up, on this version you will need to restart all nodes for a new overlay.");
+               good = true;
+            } else if(numberArg <= 0 || numberArg > registry.nodes.getNumberOfNodes() || numberArg > Math.pow(2,registry.nodes.getNumberOfNodes() - 1) + 1){
                 System.out.println("Cannot ask to set up route of size ["+numberArg+"] (default = 0) when we have ["+registry.nodes.getNumberOfNodes()+"] nodes.");
                 good = true;
             } else {
@@ -75,15 +89,16 @@ public class CommandInputRegistryThread implements Runnable {
 //                    System.out.println("CIRT DEBUG setup-overlay |4");
                 sendRoutes(numberArg);
 //                    System.out.println("CIRT DEBUG setup-overlay |5");
-                registry.nodes.establishDoneYetArray();
+                registry.nodes.establishDoneYetArray();//for printing doneYet while running
 
-                ready = true;
+
+                ready = true;// we can now call start
                 good = true;
 
             }
         }
         if(  command.equalsIgnoreCase("list-routing-tables") ){
-            System.out.println("list-routing-tables entered, printing routing tables...\n");
+            System.out.println("list-routing-tables entered, printing routing tables for each node...\n");
 
             int nid  = 0;
             for(ArrayList<RoutingEntry> ale : registry.nodes.routes) {
@@ -106,13 +121,22 @@ public class CommandInputRegistryThread implements Runnable {
         }
 
         if(  command.equalsIgnoreCase("start") ){
+            System.out.println("");
+
             if(!ready){
                 System.out.println("Please use 'setup-overlay x' before sending messages.");
-
-            } else if(numberArg <= 0){
-                System.out.println("Please use 'start x' for x >= 1, we do not currently support the upside-down.");
+                good = true;
+            } else if(numberArg == 0){
+                System.out.println("Thank you, zero messages were sent before you finished pressing enter.");
+                good=true;
+            } else if(numberArg < 0){
+                System.out.println("Please use 'start x' for x >= 0, we do not currently support the upside-down.");
                 good = true;
             } else {
+                registry.nodes.nodesWorking.set(registry.nodes.getNumberOfNodes());
+                for(int i = 0 ; i < registry.nodes.doneYet.length; i++) {
+                    registry.nodes.doneYet[i] = 0;
+                }
                 int numToSend = numberArg;
                 System.out.println("start entered, sending " + numToSend + " messages...\n");
                 RegistryRequestsTaskInitiate rrti = new RegistryRequestsTaskInitiate();
@@ -127,10 +151,60 @@ public class CommandInputRegistryThread implements Runnable {
 
         }
         if(  command.equalsIgnoreCase("print-done-yet") ){
+            System.out.println("");
             System.out.println("print-done-yet entered, displaying active v. complete nodes:");
             registry.nodes.printDoneYet();
             good = true;
         }
+        if(  command.equalsIgnoreCase("status") ){
+            System.out.println("");
+
+            System.out.println("Status: ");
+            if (registry.summaryTable.table.size() == 0) {
+                System.out.println("Overlay looks done. Ready to send messages. If 'start x' fails, restart Registry and Overlay.");
+            }
+            registry.nodes.printDoneYet();
+            System.out.println("in-progress summary stats should be empty");
+            registry.summaryTable.printSummary();
+            good = true;
+
+
+        }
+        if(  command.equalsIgnoreCase("ping") ) {
+            //pings a random node for their counters, can be done hot
+            Random rand = new Random();
+            int max = registry.nodes.getNumberOfNodes()-1;
+            int min = 0;
+
+            int entry = rand.nextInt((max - min) + 1) + min;
+
+            PingRandomNode pingRandomNode = new PingRandomNode();
+            byte[] msg = pingRandomNode.packBytes();
+            Socket socket = new Socket(registry.nodes.table.get(entry).nodeHost, registry.nodes.table.get(entry).nodePort);
+            TCPSender tcpSender = new TCPSender(socket,msg);
+            Thread tcpSenderThread = new Thread(tcpSender);
+            tcpSenderThread.start();
+
+
+            good = true;
+
+        }
+        if(  command.equalsIgnoreCase("ping-all") ) {
+            //pings all nodes for their counters, can be done hot
+            for(RoutingEntry e : registry.nodes.table) {
+                synchronized (this) {
+                    PingRandomNode pingRandomNode = new PingRandomNode();
+                    byte[] msg = pingRandomNode.packBytes();
+                    Socket socket = new Socket(e.nodeHost, e.nodePort);
+                    TCPSender tcpSender = new TCPSender(socket, msg);
+                    Thread tcpSenderThread = new Thread(tcpSender);
+                    tcpSenderThread.start();
+                    tcpSenderThread.join();
+                }
+            }
+            good = true;
+        }
+
 
             if(!good){
             System.out.println("");
@@ -150,7 +224,11 @@ public class CommandInputRegistryThread implements Runnable {
             System.out.println("");
             System.out.println("start number-of-messages (e.g. start 25000)\n :: asks each node to send this many messages to random other nodes");
             System.out.println("");
+            System.out.println("print-done-yet\n :: prints running nodes (! Node[id]) vs. complete nodes (. Node[id])");
             System.out.println("");
+            System.out.println("ping\n :: pings a random node for their counters");
+            System.out.println("");
+            System.out.println("ping-all\n :: pings all nodes for their counters\n :: :: if you want, you can hammer this at an actively sending system to see if it breaks");
 
         }
 
@@ -158,7 +236,7 @@ public class CommandInputRegistryThread implements Runnable {
 
     private void sendTaskInitiate(byte[] msg) throws IOException, InterruptedException {
         for(RoutingEntry e : registry.nodes.table){
-            System.out.println("sending STI to nodeId:"+e.nodeId +" on port: "+e.nodePort);
+//            System.out.println("sending STI to nodeId:"+e.nodeId +" on port: "+e.nodePort);
             TCPSender tcpSender = new TCPSender((new Socket(e.nodeHost,e.nodePort)),msg);
             Thread tcpSenderThread = new Thread(tcpSender);
             tcpSenderThread.start();
@@ -190,7 +268,7 @@ public class CommandInputRegistryThread implements Runnable {
 
     private void sendRoutes(int n) throws IOException, InterruptedException {
         for(RoutingEntry e : registry.nodes.table){
-            System.out.println("sending route to nodeId:"+e.nodeId);
+//            System.out.println("sending route to nodeId:"+e.nodeId);
             //send to entry e, routing table size n
             sendOneRoute(e,n);
         }
@@ -210,7 +288,7 @@ public class CommandInputRegistryThread implements Runnable {
 //        System.out.println("sendOneRoute |3");
         registry.sockets[e.nodeId] = outgoingSocket;
 //        registry.sockets[e.nodeId].setKeepAlive(true);
-System.out.println("just added socket");
+//System.out.println("just added socket");
         //prep send packed bytes
         TCPSender sender = new TCPSender(outgoingSocket,outgoingMsg);
 //        System.out.println("sendOneRoute |4 , socket:"+outgoingSocket.isConnected());
@@ -221,7 +299,7 @@ System.out.println("just added socket");
 //        System.out.println("sendOneRoute |5 , socket:"+outgoingSocket.isConnected());
 
         sendThread.join();
-        System.out.println("sendOneRoute |6 , socket:"+outgoingSocket.isConnected());
+//        System.out.println("sendOneRoute |6 , socket:"+outgoingSocket.isConnected());
 
         //close connection
 //        outgoingSocket.close();
@@ -251,8 +329,9 @@ System.out.println("just added socket");
     public void run() {
         Scanner input = new Scanner(System.in);
         String typed;
+
         while(input.hasNextLine()){
-            System.out.println("waiting for command");
+//            System.out.println("");
             typed = input.nextLine();
             try {
                 command(typed);

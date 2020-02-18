@@ -37,11 +37,26 @@ public class SummaryTable {
     }
 
     public void printSummary(){
+        long[] sums;
+        SummaryEntry summaryEntryForTotals = new SummaryEntry(0,0,0,0,0,0);
         System.out.println("-= NODE [id] =- | -= Packets Sent =- | -= Packets Received =- | -= Packets Relayed =- | -= Sum Values Sent =- | -= Sum Values Received =- ");
         for(SummaryEntry e : table){
             System.out.println(" << >> << >> << >> << >> << >> << >> << >> << >> << >> << >> << >> << >> << >> << >> << >> << >> << >> << >> << >> << >> << >> << >> << >> ");
-            System.out.println(" -= Node["+e.nodeId+"] =- | -= "+e.sent+" =- | -= "+e.received+" =- | -= "+e.relayed+" =- | -= "+e.sumsent+" =- | -= "+e.sumreceived+"=- ");
+            System.out.println(" -# Node["+e.nodeId+"] #- | -# "+e.sent+" #- | -# "+e.received+" #- | -# "+e.relayed+" #- | -# "+e.sumsent+" #- | -# "+e.sumreceived+" #- ");
+            summaryEntryForTotals.sent += e.sent;
+            summaryEntryForTotals.relayed += e.relayed;
+            summaryEntryForTotals.received += e.received;
+            summaryEntryForTotals.sumsent += e.sumsent;
+            summaryEntryForTotals.sumreceived += e.sumreceived;
+
         }
+        System.out.println(" == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == ");
+        System.out.println(" -= Totals =- | " +
+                "-= "+summaryEntryForTotals.sent+" =- | " +
+                "-= "+summaryEntryForTotals.received+" =- | " +
+                "-= "+summaryEntryForTotals.relayed+" =- | " +
+                "-= "+summaryEntryForTotals.sumsent+" =- | " +
+                "-= "+summaryEntryForTotals.sumreceived+" =- ");
     }
 
 }
