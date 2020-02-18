@@ -182,7 +182,7 @@ public class MessagingNode extends Node {
 //            System.out.println("");
 //            System.out.println("send_a_message("+choose+","+myIndex+","+payload+")");
 //            System.out.println("");
-                System.out.println("Send: " + idList[myIndex] + " (" + payload + ") -> " + idList[choose]);
+//                System.out.println("Send: " + idList[myIndex] + " (" + payload + ") -> " + idList[choose]);
 //                System.out.println("");
 
                 send_a_message(choose, myIndex, payload);
