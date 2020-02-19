@@ -41,10 +41,4 @@ public class OverlayNodeReportsTaskFinished extends Event {
         baInputStream.close();
         din.close();
     }
-
-
-
-    //need this in end of send_msgs method after for loop
-
-
 }

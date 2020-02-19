@@ -4,7 +4,6 @@ import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -13,24 +12,17 @@ public class RoutingTable {
     public volatile ArrayList<RoutingEntry> table;
     public AtomicLong nodesWorking;
 
-
     //    public Map<Integer,ArrayList<RoutingEntry>> routes;
     public volatile ArrayList<ArrayList<RoutingEntry>> routes;
     public volatile ArrayList<Integer> manifest;
 
     public int[] doneYet;
 
-
-
-
-    //position 0 should be registry
-
     public RoutingTable(){
         table = new ArrayList<>();
         manifest = new ArrayList<>();
         routes = new ArrayList<>(128);
         nodesWorking = new AtomicLong(0);
-
     }
 
     public void sortTable(){
@@ -52,28 +44,17 @@ public class RoutingTable {
         for(int i = 0; i < table.size(); i++) {
 
             ArrayList<RoutingEntry> myRoutes = new ArrayList<>();
-//            System.out.println("RoutingTable:: buildRoutes:: new entry ");
             int distance = 1;
             for(int j = 0; j < n; j++) {
-//                System.out.println("distance:" + distance);
                 if( (i+distance) % table.size() ==i) continue;
                 //add entry just after this and then double distance
-//                System.out.println("                                                    >>adding ["+table.get((i+distance) % table.size() ).nodeId+"] to ["+table.get(i).nodeId+"]");
                 myRoutes.add(table.get( (i+distance) % table.size() ));
                 distance = distance * 2 % (table.size());
-
-
             }
             table.get(i).routes = myRoutes;
             routes.add(myRoutes);
-
         }
-
     }
-
-
-
-
 
     public void buildManifest(){
         for(RoutingEntry e : table){
@@ -88,10 +69,8 @@ public class RoutingTable {
         }
     }
 
-
     //this will generate node id
     public int addRoutingEntry(String host, int port){
-
         int nodeId = newNodeId();
 
         //if id already in table return false
@@ -102,10 +81,8 @@ public class RoutingTable {
                 i=0;
             }
         }
-
-            RoutingEntry entry = new RoutingEntry(host, port,nodeId);
-            table.add(entry);
-
+        RoutingEntry entry = new RoutingEntry(host, port,nodeId);
+        table.add(entry);
         //success
         return nodeId;
 
@@ -187,11 +164,6 @@ public class RoutingTable {
         ByteArrayOutputStream baOutputStream = new ByteArrayOutputStream();
         DataOutputStream dout = new DataOutputStream(new BufferedOutputStream(baOutputStream));
 
-//        System.out.println(">table:hostname:"+e.nodeHost);
-//        System.out.println(">table:portNumber:"+e.nodePort);
-//        System.out.println(">tablePACK:nodeId:"+e.nodeId);
-
-
         //type, host length, hostname, nodeId
         int hostlen = e.nodeHost.length();
         byte[] hostbytes = e.nodeHost.getBytes();
@@ -201,20 +173,8 @@ public class RoutingTable {
         dout.write(hostbytes);
         dout.writeInt(e.nodePort);
 
-
         dout.flush();
         packed = baOutputStream.toByteArray();
-
-
-//        int fourcount = 0;
-//        for (byte b : packed) {
-//            System.out.println(Integer.toBinaryString(b & 255 | 256).substring(1));
-//            fourcount++;
-//            if(fourcount == 4) {
-//                System.out.println("--------");
-//                fourcount = 0;
-//            }
-//        }
 
         baOutputStream.close();
         dout.close();

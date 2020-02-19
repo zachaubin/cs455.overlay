@@ -1,8 +1,8 @@
 Table of Contents
 1. Usage
 2. Commands
-3. Note on running in cs120 while it's clogged
-4. Wait time for completion and design decisions
+3. Note on running in cs120 while its network clogged
+4. Wait time for completion and Design decisions
 5. Grading like an Expert
 
 ################################################################################################################################################
@@ -71,7 +71,7 @@ I have a set of errors and how I would fix them if this needed to be robust enou
  -fix: special identifier in header for each message, some constant int value, that marks the message as ok or disregardable
 
  -due to socket errors: likely due to other students code connecting to my clients
- +fix: authentication for connecting or more robust socket channels with sleep() in places to slow things down
+ +fix: authentication for connecting or more robust socket channels
 
 If we were indeed supposed to handle these situations, my hope is that by addressing these I may qualify for partial credit.
 It was late and errors were inconsistent, it would take considerable time/luck to test them without setting up a manual network clogger.

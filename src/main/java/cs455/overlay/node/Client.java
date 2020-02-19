@@ -5,6 +5,8 @@ import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
+//this is left over from when i started playing with nio
+
 public class Client {
     private static SocketChannel client;
     private static ByteBuffer buffer;

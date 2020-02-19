@@ -41,9 +41,6 @@ public class Registry extends Node {
     public volatile TCPConnectionsCache cache = new TCPConnectionsCache();
     public volatile Thread cacheThread = null;
 
-//    public ArrayList<TCPReceiver> tcpReceiverCache;
-//    public ArrayList<TCPSender> tcpSenderCache;
-
     private Registry() { }
     //when started, it listens on a given port
     private Registry(int port) {

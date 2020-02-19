@@ -28,18 +28,11 @@ public class OverlayNodeReportsOverlaySetupStatus extends Event implements Runna
         dout.writeInt(node.nodeId);
 
         dout.flush();
-//        marshalledBytes = baOutputStream.toByteArray();
-//        messageBytes = marshalledBytes;
-
         msg = baOutputStream.toByteArray();
-
-
         baOutputStream.close();
         dout.close();
 
         return msg;
-
-
     }
 
     @Override

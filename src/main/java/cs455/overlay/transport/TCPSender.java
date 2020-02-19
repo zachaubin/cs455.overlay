@@ -40,25 +40,13 @@ public class TCPSender extends TCPConnection {
     public void run(){
         synchronized (this) {
             try {
-//                System.out.println("TCPSender: data sending...");
                 this.sendData(msg);
-//                System.out.println("TCPSender: data sent");
                 dout.close();
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
-//        try {
-//            socket.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
         }
     }
 
-//    public void run(byte[] b) throws IOException {
-//        System.out.println("TCPSender: data sending...");
-//        sendData(b);
-//        System.out.println("TCPSender: data sent");
-//    }
 }

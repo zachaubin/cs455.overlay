@@ -11,6 +11,10 @@ import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.Set;
 
+
+//this is left over from when i started playing with nio
+
+
 public class Server {
 
 

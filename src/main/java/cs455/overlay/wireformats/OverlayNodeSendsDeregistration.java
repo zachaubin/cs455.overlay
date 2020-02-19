@@ -4,9 +4,6 @@ import java.io.*;
 
 public class OverlayNodeSendsDeregistration extends Event {
 
-    //need this to say "i'm out of routing table" and then
-    // call system exit or whichever kills
-
     public int nodeId;
     int type;//5
 
@@ -17,7 +14,6 @@ public class OverlayNodeSendsDeregistration extends Event {
         DataOutputStream dout = new DataOutputStream(new BufferedOutputStream(baOutputStream));
 
         //type, host length, hostname, nodeId
-
         dout.writeInt(0);
         dout.writeByte(-1);
         dout.writeInt(4);//type

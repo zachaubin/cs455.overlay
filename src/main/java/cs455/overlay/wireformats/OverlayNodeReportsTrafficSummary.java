@@ -8,11 +8,6 @@ import java.net.Socket;
 
 public class OverlayNodeReportsTrafficSummary extends Event {
 
-
-
-//    need this as instant response to registry requests traffic summary
-
-    //need this in a thread that waits for all nodes to report task complete
     // sends to all asking for traffic summary
     public MessagingNode node;
     public int nodeId;
@@ -23,7 +18,6 @@ public class OverlayNodeReportsTrafficSummary extends Event {
     public long sum;
 
     public OverlayNodeReportsTrafficSummary() { }
-
 
     public OverlayNodeReportsTrafficSummary(MessagingNode node){
         this.node = node;
@@ -76,8 +70,6 @@ public class OverlayNodeReportsTrafficSummary extends Event {
         baInputStream.close();
         din.close();
     }
-
-
 
     @Override
     public void run() {

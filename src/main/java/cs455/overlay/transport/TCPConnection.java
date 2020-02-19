@@ -15,7 +15,6 @@ public class TCPConnection implements Runnable {
     public String host;
     public int port;
 
-    //add switch to say if send or rec
     public TCPConnection(){}
     public TCPConnection(Socket socket, int rec0send1) throws IOException {
         this.socket = socket;

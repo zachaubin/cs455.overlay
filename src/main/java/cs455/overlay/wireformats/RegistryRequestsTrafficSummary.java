@@ -14,7 +14,6 @@ import static java.lang.Thread.sleep;
 
 public class RegistryRequestsTrafficSummary extends Event implements Runnable {
 
-
 //need this in a thread that waits for all nodes to report task complete
     // sends to all asking for traffic summary
     public Registry registry;
@@ -42,10 +41,6 @@ public class RegistryRequestsTrafficSummary extends Event implements Runnable {
 
         return marshalledBytes;
     }
-
-        //we do not need to unpack anything, this message only triggers action response
-
-
 
     @Override
     public void run() {

@@ -214,7 +214,6 @@ public class TCPServerThread implements Runnable {
         byte[] msg = this.onsd.packBytes(onrd.type,node.idList[onrd.destinationIdIndex], node.nodeId,onrd.payload,onrd.path,node.nodeId);
         //socket to next in hop
         TCPSender tcpSender = new TCPSender(new Socket(node.socketFinder(nextDestination).nodeHost,node.socketFinder(nextDestination).nodePort),msg);
-//        System.out.println("i'm passing to "+nextDestination);
         Thread sendThread = new Thread(tcpSender);
         sendThread.start();
 
@@ -244,13 +243,9 @@ public class TCPServerThread implements Runnable {
         // 3 5 6 8 11
         switch (type) {
             case 3:
-//                System.out.println("");
-//                System.out.println(">>>> THIS NODE JUST RECEIVED A MESSAGE OF TYPE = " + type);
-//                System.out.println("");
                 RegistryReportsRegistrationStatus msgRRRS = new RegistryReportsRegistrationStatus();
                 msgRRRS.unpackBytes(bytes);
                 node.nodeId = msgRRRS.nodeId;
-
 
                 if (msgRRRS.success == 1) {
                     System.out.println("Registration request successful. The number of messaging nodes currently constituting the overlay is <[" + msgRRRS.numberOfNodes + "]>");
@@ -260,53 +255,26 @@ public class TCPServerThread implements Runnable {
                 }
                 break;
             case 5:
-//                System.out.println(">>");
-//                System.out.println(">>>> THIS NODE JUST RECEIVED A MESSAGE OF TYPE = " + type);
-//                System.out.println(">>");
                 RegistryReportsDeregistrationStatus msgRRDS = new RegistryReportsDeregistrationStatus();
                 msgRRDS.unpackBytes(bytes);
                 break;
             case 6:
-//                System.out.println(">>");
-//                System.out.println(">>>> THIS NODE JUST RECEIVED A MESSAGE OF TYPE = " + type);
-//                System.out.println(">>");
                 RegistrySendsNodeManifest msgRSNM = new RegistrySendsNodeManifest();
                 msgRSNM.unpackRoutesBytes(bytes);
                 node.routes = msgRSNM.receivedTable;
-
-//                System.out.println("#####################################");
-//                System.out.println("#####################################print table start");
-//                node.routes.printTable();
-//                System.out.println("#####################################print table end");
-//                System.out.println("#####################################");
-
                 node.idList = new int[msgRSNM.ids.size()];
                 for (int i = 0; i < msgRSNM.ids.size(); i++) {
                     node.idList[i] = msgRSNM.ids.get(i);
                 }
-//                        System.out.println("trying to add sockets to routeLookupSocket, has size=" + node.routeLookupSocket.length);
                 for (RoutingEntry e : node.routes.table) {
                     node.routeArrayList.add(e.nodeId);
-//                    Socket socket = new Socket(e.nodeHost, e.nodePort);
-//                    node.routeLookupSocket[e.nodeId] = socket;
                 }
-
                 //reply with setup ok
-//                System.out.println("sending ok");
                 OverlayNodeReportsOverlaySetupStatus onross = new OverlayNodeReportsOverlaySetupStatus(node);
                 Thread onrossThread = new Thread(onross);
                 onrossThread.start();
-
-
-//                System.out.println(":::::printing received table:::::::nodeId=" + node.nodeId);
-//                node.routes.printTable();
-//                System.out.println(":::::printed  received table:::::::nodeId=" + node.nodeId);
-
                 break;
             case 8:
-//                System.out.println(">>");
-//                System.out.println(">>>> THIS NODE JUST RECEIVED A MESSAGE OF TYPE = " + type);
-//                System.out.println(">>");
                 RegistryRequestsTaskInitiate msgRRTI = new RegistryRequestsTaskInitiate();
                 msgRRTI.unpackBytes(bytes);
                 node.numMsgsToSend = msgRRTI.numMsgs;
@@ -318,11 +286,6 @@ public class TCPServerThread implements Runnable {
                 node.send_some_messages();
                 break;
             case 11:
-//                System.out.println(">>");
-//                System.out.println(">>>> THIS NODE JUST RECEIVED A MESSAGE OF TYPE = " + type);
-//                System.out.println(">>");
-//                RegistryRequestsTrafficSummary msgRRTS = new RegistryRequestsTrafficSummary();
-//                msgRRTS.unpackBytes(bytes);
                 OverlayNodeReportsTrafficSummary onrts = new OverlayNodeReportsTrafficSummary(node);
                 Thread onrtsThread = new Thread(onrts);
                 onrtsThread.start();
@@ -335,7 +298,6 @@ public class TCPServerThread implements Runnable {
                 break;
             case 21:
                 PingRandomNode pingRandomNode = new PingRandomNode();
-//                pingRandomNode.nodePackBytes(node.nodeId,node.countSent.get(),node.countRelayed.get(),node.countReceived.get(),node.sentSum.get(),node.sum.get());
                 byte[] msg = pingRandomNode.nodePackBytes(node);
                 Socket socket = new Socket(node.registryHostname,node.portNumber);
                 TCPSender tcpSender = new TCPSender(socket,msg);
@@ -343,9 +305,6 @@ public class TCPServerThread implements Runnable {
                 tcpSenderThread.start();
                 break;
             case 33:
-//                System.out.println(">>");
-//                System.out.println(">>>> THIS NODE JUST RECEIVED A MESSAGE OF TYPE = " + type);
-//                System.out.println(">>");
                 // msg data in
                 synchronized (this) {
                     onrd.unpackBytes(bytes);
@@ -360,19 +319,16 @@ public class TCPServerThread implements Runnable {
 
                     } else if (where == -1) {//error somehow
                         System.out.println("Error in received DATA msg?");
-
                     }
                 }
-
                 break;
-            default:
+            default:// this was for debugging, but will trigger if a random program tries to connect
                 System.out.println(">>");
                 System.out.println(">>>> THIS NODE JUST RECEIVED A MESSAGE OF TYPE = " + type);
                 System.out.println(">>");
                 System.out.println("ERROR when THIS NODE received message, INVALID TYPE!!!?!?!?:: type = " + type);
                 System.out.println("ERROR: printing bytes msg...");
                 printBytes(bytes);
-
         }
     }
 
