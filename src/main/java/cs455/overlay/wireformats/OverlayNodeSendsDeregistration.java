@@ -20,7 +20,7 @@ public class OverlayNodeSendsDeregistration extends Event {
 
         dout.writeInt(0);
         dout.writeByte(-1);
-        dout.writeInt(5);//type
+        dout.writeInt(4);//type
         dout.writeInt(nodeId);
 
         dout.flush();

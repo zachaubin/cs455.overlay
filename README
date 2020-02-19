@@ -1,0 +1,171 @@
+Table of Contents
+1. Usage
+2. Commands
+3. Note on running in cs120 while it's clogged
+4. Wait time for completion and design decisions
+5. Grading like an Expert
+
+################################################################################################################################################
+
+
+1. Usage
+
+Registry is initiated on some host by typing this command for some specified port. Port must be specified.
+Summation table requires fullscreen terminal for readable results. It's just an ascii-based table, but it's aligned.
+
+"
+java -cp ./build/libs/cs455.overlay-1.0-SNAPSHOT.jar cs455.overlay.node.Registry [port]
+"
+
+
+MessagingNode is initiated on some host by typing this command with [host]='host where registry is active' and [port]='registry port specified'
+"
+java -cp ./build/libs/cs455.overlay-1.0-SNAPSHOT.jar cs455.overlay.node.MessagingNode [host] [port]
+"
+
+################################################################################################################################################
+
+
+2. Commands
+
+Registry:
+
+list-messaging-nodes
+ :: list all messaging nodes in routing table for each node
+setup-overlay [N]
+ :: sets up overlay by sending routing table (size [N]) and manifest to each node in table
+list-routing-tables
+ :: same as list-messaging nodes with note and more spacing
+start number-of-messages (e.g. start 25000)
+ :: asks each node to send this many messages to random other nodes
+print-done-yet
+ :: prints running nodes (! Node[id]) vs. complete nodes (. Node[id])
+ping
+ :: pings a random node for their counters
+ping-all
+:: pings all nodes for their counters
+
+MessagingNode:
+
+print-counters-and-diagnostics
+ :: prints number messages ( sent, received, relayed ), and total *values* ( sent, received ).
+print
+ :: same as print-counters-and-diagnostics but takes less to type
+exit-overlay
+ :: deregisters the node from the registry, must be run before overlay is set up.
+
+################################################################################################################################################
+
+
+3. Note on running in lab while network is clogged and machines are overloaded
+
+
+This ran scaled just fine over the weekend in the lab and at home.
+Last night, the night before the project is due, it started crashing when the lab had a ton of overlays being used.
+I have a set of errors and how I would fix them if this needed to be robust enough for that. I'm nearly certain it does not from what Dr. Pallickara said in class.
+
+ -due to "out of memory error": couldn't create threads
+ +fix: allocate enough memory for all threads based on number of messages to send
+
+ -due to garbage messages received: will cause server thread to crash
+ -fix: special identifier in header for each message, some constant int value, that marks the message as ok or disregardable
+
+ -due to socket errors: likely due to other students code connecting to my clients
+ +fix: authentication for connecting or more robust socket channels with sleep() in places to slow things down
+
+If we were indeed supposed to handle these situations, my hope is that by addressing these I may qualify for partial credit.
+It was late and errors were inconsistent, it would take considerable time/luck to test them without setting up a manual network clogger.
+
+################################################################################################################################################
+
+
+4. Waiting and Design
+
+Waiting
+:: :: basically three seconds plus 2 seconds for every thousand messages
+:: :: sleep(3000 + numMsgs*2) is called after "send complete" in each node
+
+Nodes wait for residual messages that may be bouncing around after they have finished sending.
+This time to wait kept varying so I'm using a dynamic sleep function.
+ex. If you 'start 100000' it will take 3m23s after it is complete.
+
+Using the 'ping' function from the registry will help with monitoring status, as will 'print' from a node.
+
+Design
+Now that I'm done I see why the original class structure is the way it is. My code does not line up with the original suggestion.
+I wrote this all from the ground up because I didn't know we had the recorded labs available for viewing. As a result,
+everything was designed incrementally and the final project (as of now) looks like a large beginner's java project which it is.
+If you want to sift through the code, start in Registry.java or MessagingNode.java and their singletons to see basic structure.
+I changed conventions throughout the project as I learned what things did and could use more descriptive (or more redundant) variable
+names. Command controllers are in ..node/ and servers have their own classes since they read the type of message and call an
+internal switch to deal with that message.
+
+################################################################################################################################################
+
+
+5. Grading like an Expert
+
+In this section I try to clearly outline how I interpreted and addressed each of the items in the rubric.
+I also say how I would explain to someone that they can prove to themselves that some given feature is included.
+
+|||Registry Breakdown: 6 points + BONUS / 6 points|||
+
+>1 point:
+>The registry is functional with support for
+:: Start registry as in 1. above
+>registration and
+::start a node (it will automatically register), node will display total number of nodes registered,
+>de-registration of nodes.
+:: type 'exit-overlay' to deregister BEFORE using 'setup-overlay' in the registry
+
+>3 points:
+> Setting up of the overlay with the correct routing tables
+:: :: Start registry, start N nodes for N>1, type 'setup-overlay x' in registry for x>0. Upon success, message printed in registry.
+>while ensuring that there are no network partitions i.e. all nodes can be reached.
+:: :: routing tables take care of this
+>Successful initiation of the message exchange process at all nodes.
+:: :: after overlay has been set up, enter 'start x' for x>0
+>A node will not start sending messages until the overlay setup has completed successfully.
+:: :: Start registry, type 'start x' for x>0. Blocked! Helpful message! Nodes cannot initiate message batches themselves.
+>1 point:
+>Successful retrieval of task summaries from the messaging nodes
+:: :: Start registry, start N nodes, setup-overlay in registry,
+>1 point:
+>Traffic summaries are collated and printed out as depicted in the example table. This feature will assist in testing the program as well as during grading.
+:: :: table is printed automatically upon completion
+
+>BONUS points (up to 10):
+>ping a random node using 'ping' from registry to check node progress, prints out counters
+:: :: start registry, start N nodes, setup overlay, start x, then type 'ping' before 'All nodes reported complete.' appears.
+>ping-all pings all nodes, prints out all counters
+:: :: same as ping, just type ping-all
+
+
+|||Messaging node Breakdown: 6 points|||
+
+>1 point
+>Establishing connections based on the REGISTRY_SENDS_NODE_MANIFEST
+:: :: all sockets are established based on node manifest specific to each node that is sent by registry
+>2 points
+>Routing data packets successfully within the overlay without duplication and complete reachability.
+:: :: data is passed and relayed through routing table as specified in class/lab/assignment, summation table shows accuracy
+>1 point
+>The mechanism for task completion
+:: :: code is in MessagingNode.java in method called "send_some_messages"
+:: :: you'll see the sleep mentioned in part 4. above and send task complete info
+>and retrieval of traffic summaries works correctly
+:: :: registry has a counter of how many have nodes have reported complete,
+:: :: a message will display in registry when all nodes have checked in
+:: :: :: code is in TCPRegistryServer.java with message of type=12 in the type-switch
+>2 points:
+>Message totals for send and receive match. This includes both the message counts and the content summation counts.
+:: :: summary table is printed upon completion
+:: :: code for its printing is in ..routing/SummaryTable.java, you'll see nothing is hard-coded
+
+
+I'm going crazy because this worked for test after test after test... until last night when running while the lab network was overloaded.
+Please don't test in a overloaded network, it wasn't designed for that. Many errors will stop everything. If something doesn't
+work as specified, try killing registry/nodes and running fresh. This does support multiple 'start x' commands with fresh counters.
+If something is not working as outlined above and you need any assistance, email aubin@rams.colostate.edu or text 9709994983.
+
+Thank you for your time.

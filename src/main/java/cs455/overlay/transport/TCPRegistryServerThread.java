@@ -93,7 +93,7 @@ public class TCPRegistryServerThread implements Runnable {
             try {
                 is = listen.getInputStream();
             } catch (IOException e) {
-                System.out.println("No input stream for active socket sending to TCP ST?");
+                System.out.println("No input stream for active socket sending to TCP ST?\n");
                 e.printStackTrace();
             }
 
@@ -106,7 +106,7 @@ public class TCPRegistryServerThread implements Runnable {
                         break;
                     }
                 } catch (IOException e) {
-                    System.out.println("Registry has no input stream for active incoming socket.");
+                    System.out.println("Registry has no input stream for active incoming socket.\n");
                     e.printStackTrace();
                 }
                 ;
@@ -172,6 +172,7 @@ public class TCPRegistryServerThread implements Runnable {
                 RegistryReportsRegistrationStatus rrrs = new RegistryReportsRegistrationStatus();
                 byte[] packedBytes = rrrs.packBytes(3,1,registry.nodes.getNumberOfNodes(),nodeId);
                 Socket socket = new Socket(marshall.hostname,marshall.port);
+                registry.cache.sockets[nodeId] = socket;
                 TCPSender tcpSender = new TCPSender(socket,packedBytes);
                 Thread threadSender = new Thread(tcpSender);
                 threadSender.start();
@@ -195,7 +196,7 @@ public class TCPRegistryServerThread implements Runnable {
                     registry.setupCount.incrementAndGet();
                     if(registry.setupCount.get() == registry.nodes.getNumberOfNodes()){
                         registry.overlayed = true;
-                        System.out.println("Overlay reported online and ready to send messages. Please enter 'start x' to send some number of messages.");
+                        System.out.println("Overlay reported online and ready to send messages. Please enter 'start x' to send some number of messages.\n\n");
                     }
                 }
                 break;
@@ -242,6 +243,7 @@ public class TCPRegistryServerThread implements Runnable {
                     registry.summaryTable.printSummary();
                     //reset registry counter
                     registry.summaryTable.table.clear();
+                    registry.running = false;
                 }
 
 

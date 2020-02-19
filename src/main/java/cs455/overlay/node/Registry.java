@@ -36,8 +36,11 @@ public class Registry extends Node {
     public volatile AtomicInteger setupCount;
 
     public boolean overlayed = false;
+    public volatile boolean running = false;
 
-    public TCPConnectionsCache tcpCache;
+    public volatile TCPConnectionsCache cache = new TCPConnectionsCache();
+    public volatile Thread cacheThread = null;
+
 //    public ArrayList<TCPReceiver> tcpReceiverCache;
 //    public ArrayList<TCPSender> tcpSenderCache;
 
@@ -45,7 +48,6 @@ public class Registry extends Node {
     //when started, it listens on a given port
     private Registry(int port) {
         this.port = port;
-        tcpCache = new TCPConnectionsCache();
         sockets = new Socket[128];
         summaryTable = new SummaryTable();
         setupCount = new AtomicInteger(0);

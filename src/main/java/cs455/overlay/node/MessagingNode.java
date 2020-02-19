@@ -2,10 +2,7 @@ package cs455.overlay.node;
 
 import cs455.overlay.routing.RoutingEntry;
 import cs455.overlay.routing.RoutingTable;
-import cs455.overlay.transport.TCPConnection;
-import cs455.overlay.transport.TCPRegistryServerThread;
-import cs455.overlay.transport.TCPSender;
-import cs455.overlay.transport.TCPServerThread;
+import cs455.overlay.transport.*;
 import cs455.overlay.wireformats.Event;
 import cs455.overlay.wireformats.OverlayNodeReportsTaskFinished;
 import cs455.overlay.wireformats.OverlayNodeSendsRegistration;
@@ -103,6 +100,9 @@ public class MessagingNode extends Node {
 
     public volatile ArrayList<Integer> routeArrayList;
     public volatile Socket[] routeLookupSocket;
+
+    public volatile TCPConnectionsCache cache = new TCPConnectionsCache();
+    public volatile Thread cacheThread = null;
 
     private MessagingNode(){}
 

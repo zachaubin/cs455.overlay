@@ -44,6 +44,7 @@ public class TCPSender extends TCPConnection {
                 this.sendData(msg);
 //                System.out.println("TCPSender: data sent");
                 dout.close();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

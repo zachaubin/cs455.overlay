@@ -43,7 +43,7 @@ public class CommandInputRegistryThread implements Runnable {
             try {
                 numberArg = Integer.parseInt(line[1]);
             } catch (NumberFormatException e){
-                System.out.println("Enter an actual positive integer for x.");
+                System.out.println("Enter an actual positive integer for x.\n");
                 command = "not_a_number";
             }
         }
@@ -65,10 +65,16 @@ public class CommandInputRegistryThread implements Runnable {
 
 
             if(ready) {
-               System.out.println("Overlay has already been set up, on this version you will need to restart all nodes for a new overlay.");
+               System.out.println("Overlay has already been set up, on this version you will need to restart all nodes for a new overlay.\n");
                good = true;
-            } else if(numberArg <= 0 || numberArg > registry.nodes.getNumberOfNodes() || numberArg > Math.pow(2,registry.nodes.getNumberOfNodes() - 1) + 1){
+            } else if(registry.nodes.getNumberOfNodes() ==1 ){
+                System.out.println("Only one node has registered. Nodes cannot send messages to themselves, please register more nodes.\n");
+                good = true;
+            }
+
+            else if(numberArg <= 0 || numberArg > registry.nodes.getNumberOfNodes() || numberArg > Math.pow(2,registry.nodes.getNumberOfNodes() - 1) + 1){
                 System.out.println("Cannot ask to set up route of size ["+numberArg+"] (default = 0) when we have ["+registry.nodes.getNumberOfNodes()+"] nodes.");
+                System.out.println("Please setup-overlay with another value.\n");
                 good = true;
             } else {
 
@@ -120,28 +126,28 @@ public class CommandInputRegistryThread implements Runnable {
             good = true;
         }
 
-        if(  command.equalsIgnoreCase("start") ){
-            //////////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////////
-            /////////////////////////////////// need halter flag, one start at a time until complete
-            //////////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////////
+        if(  command.equalsIgnoreCase("start" ) ){
+
             System.out.println("");
 
-            if(!ready){
-                System.out.println("Please use 'setup-overlay x' before sending messages.");
+            if(!ready) {
+                System.out.println("Please use 'setup-overlay x' before sending messages.\n");
+                good = true;
+            } else if(registry.running){
+                System.out.println("Overlay currently occupied, please wait for this round to complete before starting again. \n");
+                        System.out.println("Enter 'ping' for live message counters of a hot node.\n");
+
+
                 good = true;
             } else if(numberArg == 0){
-                System.out.println("Thank you, zero messages were sent before you finished pressing enter.");
+                System.out.println("Thank you, zero messages were sent before you finished pressing enter.\n");
                 good=true;
             } else if(numberArg < 0){
-                System.out.println("Please use 'start x' for x >= 0, we do not currently support the upside-down.");
+                System.out.println("Please use 'start x' for x >= 0, we do not currently support the upside-down.\n");
                 good = true;
             } else {
+                registry.running = true;
+
                 registry.nodes.nodesWorking.set(registry.nodes.getNumberOfNodes());
                 for(int i = 0 ; i < registry.nodes.doneYet.length; i++) {
                     registry.nodes.doneYet[i] = 0;
@@ -237,7 +243,7 @@ public class CommandInputRegistryThread implements Runnable {
             System.out.println("");
             System.out.println("ping\n :: pings a random node for their counters");
             System.out.println("");
-            System.out.println("ping-all\n :: pings all nodes for their counters\n :: :: if you want, you can hammer this at an actively sending system to see if it breaks");
+            System.out.println("ping-all\n :: pings all nodes for their counters\n :: :: if you want, you can hammer this at an actively sending system to see if it breaks\n\n");
 
         }
 

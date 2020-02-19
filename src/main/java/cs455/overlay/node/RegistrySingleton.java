@@ -22,6 +22,8 @@ public class RegistrySingleton {
         System.out.println("");
         registry.nodes = new RoutingTable();
         registry.socket = null;
+        registry.cacheThread = new Thread(registry.cache);
+        registry.cacheThread.start();
 
         //listen server
 //        System.out.println("server thread runs on loop to tcp receive and register nodes");

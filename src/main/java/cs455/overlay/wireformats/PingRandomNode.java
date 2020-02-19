@@ -4,7 +4,7 @@ import cs455.overlay.node.MessagingNode;
 
 import java.io.*;
 
-public class PingRandomNode {
+public class PingRandomNode {//only random if called once, used for ping-all as well
     public long countSent;
     public long countRelayed;
     public long countReceived;

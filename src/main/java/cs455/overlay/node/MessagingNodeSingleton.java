@@ -6,6 +6,7 @@ import cs455.overlay.transport.TCPServerThread;
 import cs455.overlay.wireformats.OverlayNodeSendsRegistration;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.Socket;
 
@@ -20,6 +21,10 @@ public class MessagingNodeSingleton {
         String hostname_REGISTRY = args[0];
         int port_REGISTRY = Integer.parseInt(args[1]);
         MessagingNode currentNode = MessagingNode.getInstance(hostname_REGISTRY, port_REGISTRY);
+
+        //connections cache
+        currentNode.cacheThread = new Thread(currentNode.cache);
+        currentNode.cacheThread.start();
 
         //NODE SERVER START
 //        currentNode.nodeSocket= new Socket("localhost",0);
@@ -51,7 +56,14 @@ public class MessagingNodeSingleton {
         //// register ////
 
         //socket for registration
-        Socket regSock = new Socket(hostname_REGISTRY,port_REGISTRY);
+        Socket regSock = null;
+        currentNode.cache.sockets[128] = regSock;
+        try {
+            regSock = new Socket(hostname_REGISTRY,port_REGISTRY);
+        }catch (ConnectException e){
+            System.out.println("\nCould not contact registry, bring that online first. \n\nExiting...\n");
+            System.exit(1);
+        }
         TCPConnection registerMe = new TCPConnection(regSock,1);
 
         //pack info

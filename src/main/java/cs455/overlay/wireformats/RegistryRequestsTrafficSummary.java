@@ -66,9 +66,9 @@ public class RegistryRequestsTrafficSummary extends Event implements Runnable {
             try {
                 socket = new Socket(e.nodeHost,e.nodePort);
             } catch (IOException ex) {
-                System.out.println("RRTS: Error: could not open socket to request traffic summary");
                 ex.printStackTrace();
             }
+//            socket = registry.cache.sockets[e.nodeId];
             TCPSender tcpSender = new TCPSender(socket,msg);
             Thread tcpSenderThread = new Thread(tcpSender);
             tcpSenderThread.start();
