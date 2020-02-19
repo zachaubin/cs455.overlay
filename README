@@ -100,6 +100,96 @@ I changed conventions throughout the project as I learned what things did and co
 names. Command controllers are in ..node/ and servers have their own classes since they read the type of message and call an
 internal switch to deal with that message.
 
+Below is a basic description of the classes.
+node
+CommandInputMessagingNodeThread
+> This controls commands input for the MessagingNodes. It takes a string and uses a switch statement to execute commands
+
+CommandInputRegistryThread
+> Same as above except for the Registry.
+
+MessagingNode (and singleton)
+> Peer node for messaging. Lots of variables because this was built one step at a time. Has loop for sending messages. Sends first message from code in here. Also reports stats complete. This runs its own TCPServerThread on a random open thread, registers itself with the registry, and runs a command input thread.
+
+Node
+> This was a superclass that didn't turn out useful, but changing things now is a bad idea.
+
+Registry (and singleton)
+> Has routing tables, manifest, summary table, counters for nodes. This runs a TCPRegistryServerThread to receive messages and a command input thread for user input.
+
+
+routing
+RoutingEntry
+> just items to go in RoutingTable, has host/port/id for each entry
+
+RoutingTable
+> holds routing entries, detailed manifest (as 'table'), counter for number of nodes working, table 'routes' for all routing tables per node. Includes helper methods to create, remove, delete.
+
+SummaryTable
+> For printing summary statistics. Printing ascii table method included.
+
+
+transport
+TCPConnection
+> This was going to be used as a superclass for sending and receiving, but it only got used that way once. It is largely unused.
+
+TCPConnectionsCache
+> This holds active connections as sockets in a socket array. They all close when they go out of scope, even if they are referenced elsewhere in singleton classes as volatile etc. I think it's because din.close() closes the socket, but if I don't call it then nothing is written.
+
+TCPReceiver
+> One of the few methods that basically works the way it was intended to by Dr. P. Takes a socket and reads from it.
+
+TCPRegistryServerThread
+> This is a large class because it takes messages, opens them, processes based on type using a switch, and then calls all sorts of other actions. One of the most complicated classes. toByteArray was modified from something I saw on StackOverflow so I could see the bits going in and out (giving credit).
+
+TCPSender
+> One of the few methods that works as suggested. Writes a byte[] msg to a socket.
+
+TCPServerThread
+> The other very large class. Hears connection via .accept(), starts thread to process message, calls switch based on msg type and invokes a lot of things. Also handles consuming, relaying, sending (bulk), and updating counters.
+
+util
+>Did not use.
+
+wireformats
+Driver
+> did not use
+Event
+> superclass for events, only used the success variable one time in one method (I think).
+Event Factory
+> this is handled by switch statements in the servers. I'm leaving it (and others) to help with design planning for HW2.
+
+ONRD
+> only unpacks a message of magic type data, the bulk of message sending
+ONROSS
+> reports successful overlay setup from sending node
+ONRTF
+> pack and unpack bytes for messages relating to task being finished
+ONRTS
+> Packs, unpacks messages relating to traffic summary. Also is a runnable thread for this action.
+ONSData
+> Used for passing messages, initial send is handled in MessagingNode. Also runnable thread.
+ONSDereg
+> Asks to be removed from consideration for setup-overlay
+ONSReg
+> pack and unpack for message of type registration of messaging node
+PingRandomNode
+> Used to ping a random node for its sending status. Two different pack methods, registry can ask, node can reply. Also used for ping-all which is not random.
+Protocl
+> unused.
+RRDeregS
+> for reporting a node as deregistered
+RRRegS
+> pack unpack and runnable for telling a node it's been registered
+RRTI
+> simple pack and unpack telling nodes how many messages to send
+RRTS
+> this packs the request for traffic summary sent from registry to node. also is runnable.
+RSNM
+> sends manifest and routing table for specific node to that node. has two versions of pack, unpack, run.
+WFW
+> the original template from class
+
 ################################################################################################################################################
 
 
@@ -163,7 +253,7 @@ I also say how I would explain to someone that they can prove to themselves that
 :: :: code for its printing is in ..routing/SummaryTable.java, you'll see nothing is hard-coded
 
 
-I'm going crazy because this worked for test after test after test... until last night when running while the lab network was overloaded.
+This worked for test after test after test... until last night when running while the lab network was overloaded.
 Please don't test in a overloaded network, it wasn't designed for that. Many errors will stop everything. If something doesn't
 work as specified, try killing registry/nodes and running fresh. This does support multiple 'start x' commands with fresh counters.
 If something is not working as outlined above and you need any assistance, email aubin@rams.colostate.edu or text 9709994983.

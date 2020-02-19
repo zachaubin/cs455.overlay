@@ -4,33 +4,9 @@
     <list default="true" id="95b628ad-c660-4cf4-81a4-dd1020efb54b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README" beforeDir="false" afterPath="$PROJECT_DIR$/README" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README_FOR_USAGE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/CommandInputRegistryThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/CommandInputRegistryThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/MessagingNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/MessagingNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/MessagingNodeSingleton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/MessagingNodeSingleton.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/Node.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/Node.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/Registry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/Registry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/RegistrySingleton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/RegistrySingleton.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/Server.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/routing/RoutingTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/routing/RoutingTable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPConnection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPReceiver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPRegistryServerThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPRegistryServerThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPSender.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPServerThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/transport/TCPServerThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/EventFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/EventFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/OverlayNodeReceivesData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/OverlayNodeReceivesData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/OverlayNodeReportsOverlaySetupStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/OverlayNodeReportsOverlaySetupStatus.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/OverlayNodeReportsTaskFinished.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/OverlayNodeReportsTaskFinished.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/OverlayNodeReportsTrafficSummary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/OverlayNodeReportsTrafficSummary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/OverlayNodeSendsData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/OverlayNodeSendsData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/OverlayNodeSendsDeregistration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/OverlayNodeSendsDeregistration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/RegistryReportsDeregistrationStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/RegistryReportsDeregistrationStatus.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/RegistryReportsRegistrationStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/RegistryReportsRegistrationStatus.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/RegistryRequestsTaskInitiate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/RegistryRequestsTaskInitiate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/RegistryRequestsTrafficSummary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/RegistryRequestsTrafficSummary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/RegistrySendsNodeManifest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cs455/overlay/wireformats/RegistrySendsNodeManifest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/Client.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/Server.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/start-nodes.sh" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,7 +51,7 @@
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/src/main/java/cs455/overlay" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -120,7 +96,10 @@
       <workItem from="1581826784370" duration="8567000" />
       <workItem from="1581870070535" duration="44378000" />
       <workItem from="1582078910892" duration="599000" />
-      <workItem from="1582123742369" duration="13036000" />
+      <workItem from="1582123742369" duration="13253000" />
+      <workItem from="1582145343368" duration="592000" />
+      <workItem from="1582149349967" duration="430000" />
+      <workItem from="1582152475734" duration="181000" />
     </task>
     <servers />
   </component>
@@ -156,10 +135,10 @@
       <screen x="0" y="0" width="1920" height="1047" />
     </state>
     <state x="571" y="122" width="774" height="802" key="CommitChangelistDialog2/0.0.1920.1047@0.0.1920.1047" timestamp="1580660923017" />
-    <state x="464" y="160" key="SettingsEditor" timestamp="1580402497878">
+    <state x="464" y="160" key="SettingsEditor" timestamp="1582145837660">
       <screen x="0" y="0" width="1920" height="1047" />
     </state>
-    <state x="464" y="160" key="SettingsEditor/0.0.1920.1047@0.0.1920.1047" timestamp="1580402497878" />
+    <state x="464" y="160" key="SettingsEditor/0.0.1920.1047@0.0.1920.1047" timestamp="1582145837660" />
     <state x="768" y="305" width="380" height="436" key="chooseDestDirectoryDialog" timestamp="1580186276744">
       <screen x="0" y="0" width="1920" height="1047" />
     </state>
