@@ -2,11 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="95b628ad-c660-4cf4-81a4-dd1020efb54b" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gradle/4.4.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.4.1/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.4.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.4.1/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.4.1/taskHistory/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.4.1/taskHistory/taskHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.4.1/taskHistory/taskHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.4.1/taskHistory/taskHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README" beforeDir="false" afterPath="$PROJECT_DIR$/README" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/Client.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cs455/overlay/node/Server.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/start-nodes.sh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/cs455/overlay/node/Client.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/cs455/overlay/node/Server.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/distributions/cs455.overlay-1.0-SNAPSHOT.tar" beforeDir="false" afterPath="$PROJECT_DIR$/build/distributions/cs455.overlay-1.0-SNAPSHOT.tar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/distributions/cs455.overlay-1.0-SNAPSHOT.zip" beforeDir="false" afterPath="$PROJECT_DIR$/build/distributions/cs455.overlay-1.0-SNAPSHOT.zip" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/cs455.overlay-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/cs455.overlay-1.0-SNAPSHOT.jar" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,7 +106,8 @@
       <workItem from="1582123742369" duration="13253000" />
       <workItem from="1582145343368" duration="592000" />
       <workItem from="1582149349967" duration="430000" />
-      <workItem from="1582152475734" duration="181000" />
+      <workItem from="1582152475734" duration="3167000" />
+      <workItem from="1582652317901" duration="398000" />
     </task>
     <servers />
   </component>
@@ -143,13 +151,17 @@
       <screen x="0" y="0" width="1920" height="1047" />
     </state>
     <state x="768" y="305" width="380" height="436" key="chooseDestDirectoryDialog/0.0.1920.1047@0.0.1920.1047" timestamp="1580186276744" />
+    <state x="335" y="129" width="1245" height="789" key="new project wizard" timestamp="1582652368703">
+      <screen x="0" y="0" width="1920" height="1047" />
+    </state>
+    <state x="335" y="129" width="1245" height="789" key="new project wizard/0.0.1920.1047@0.0.1920.1047" timestamp="1582652368703" />
     <state x="621" y="240" key="run.anything.popup" timestamp="1582005001580">
       <screen x="0" y="0" width="1920" height="1047" />
     </state>
     <state x="621" y="240" key="run.anything.popup/0.0.1920.1047@0.0.1920.1047" timestamp="1582005001580" />
-    <state x="623" y="231" width="672" height="678" key="search.everywhere.popup" timestamp="1582140623636">
+    <state x="623" y="231" width="672" height="678" key="search.everywhere.popup" timestamp="1582652320199">
       <screen x="0" y="0" width="1920" height="1047" />
     </state>
-    <state x="623" y="231" width="672" height="678" key="search.everywhere.popup/0.0.1920.1047@0.0.1920.1047" timestamp="1582140623636" />
+    <state x="623" y="231" width="672" height="678" key="search.everywhere.popup/0.0.1920.1047@0.0.1920.1047" timestamp="1582652320199" />
   </component>
 </project>

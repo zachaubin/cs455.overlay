@@ -5,7 +5,7 @@ Table of Contents
 4. Wait time for completion and Design decisions
 5. Grading like an Expert
 
-################################################################################################################################################
+###################################################################################################################################
 
 
 1. Usage
@@ -23,7 +23,7 @@ MessagingNode is initiated on some host by typing this command with [host]='host
 java -cp ./build/libs/cs455.overlay-1.0-SNAPSHOT.jar cs455.overlay.node.MessagingNode [host] [port]
 "
 
-################################################################################################################################################
+###################################################################################################################################
 
 
 2. Commands
@@ -54,7 +54,7 @@ print
 exit-overlay
  :: deregisters the node from the registry, must be run before overlay is set up.
 
-################################################################################################################################################
+###################################################################################################################################
 
 
 3. Note on running in lab while network is clogged and machines are overloaded
@@ -76,7 +76,7 @@ I have a set of errors and how I would fix them if this needed to be robust enou
 If we were indeed supposed to handle these situations, my hope is that by addressing these I may qualify for partial credit.
 It was late and errors were inconsistent, it would take considerable time/luck to test them without setting up a manual network clogger.
 
-################################################################################################################################################
+###################################################################################################################################
 
 
 4. Waiting and Design
@@ -190,7 +190,7 @@ RSNM
 WFW
 > the original template from class
 
-################################################################################################################################################
+###################################################################################################################################
 
 
 5. Grading like an Expert
@@ -256,6 +256,6 @@ I also say how I would explain to someone that they can prove to themselves that
 This worked for test after test after test... until last night when running while the lab network was overloaded.
 Please don't test in a overloaded network, it wasn't designed for that. Many errors will stop everything. If something doesn't
 work as specified, try killing registry/nodes and running fresh. This does support multiple 'start x' commands with fresh counters.
-If something is not working as outlined above and you need any assistance, email aubin@rams.colostate.edu or text 9709994983.
+If something is not working as outlined above and you need any assistance, contact me.
 
 Thank you for your time.
